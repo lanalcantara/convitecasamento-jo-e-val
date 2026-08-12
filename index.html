@@ -3,197 +3,259 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Josalva & Valtair | Convite de Casamento</title>
+  <title>Josalva & Valtair — Convite de Casamento Boho Chic</title>
+
+  <!-- Google Fonts de Alta Costura -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
-  <!-- SEO & Meta Tags -->
-  <meta name="description" content="Convite oficial para a Recepção de Comemoração de Josalva & Valtair. Confirme sua presença e venha celebrar conosco!">
-  <meta name="keywords" content="Josalva, Valtair, Convite de Casamento, Recepção de Comemoração, Confirmação de Presença, Boho Chic">
-  <meta name="theme-color" content="#8C3F2B">
-
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
-
-  <!-- Stylesheet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Supabase Client SDK -->
+  <!-- Supabase Client SDK e Configuração -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Configuração Central -->
   <script src="config.js"></script>
+
+  <style>
+    :root {
+      --bg-main: #F7F4EF;
+      --bg-card: #FFFFFF;
+      --primary: #8C3F2B;
+      --primary-hover: #723222;
+      --gold: #C59B4E;
+      --border-color: #E5D9CC;
+      --text-dark: #2C221F;
+      --text-muted: #78716C;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-script: 'Great Vibes', cursive;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+  </style>
 </head>
-<body style="background-color: #F7F4EF; overflow-y: auto;">
+<body>
 
-  <!-- 🎵 ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
-  <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
+  <!-- 🎵 PLAYER DA MÚSICA DO YOUTUBE (Oasis - Live Forever) -->
+  <div id="youtube-player" style="display:none;"></div>
+  <script src="https://www.youtube.com/iframe_api"></script>
 
-  <!-- 🎵 PLAYER DE ÁUDIO FLUTUANTE NO CANTO INFERIOR DIREITO -->
-  <div class="floating-music-widget">
-    <button class="music-btn" id="musicBtn" title="Tocar / Pausar Live Forever — Oasis 🎵" aria-label="Tocar ou pausar música de fundo">
-      <i class="fa-solid fa-music" id="musicIcon"></i>
-      <span id="musicText">Live Forever — Oasis 🎵</span>
-      <div class="equalizer-bars" id="eqBars">
-        <div class="eq-bar"></div>
-        <div class="eq-bar"></div>
-        <div class="eq-bar"></div>
-      </div>
-    </button>
+  <!-- ✉️ 1. CAPA INICIAL DO CONVITE (#cover / #cover-overlay) -->
+  <div id="cover">
+    <div class="card-capa">
+      
+      <!-- Arranjo Floral Boho no Topo do Convite de Papel (SEM A FOTO DO CASAL) -->
+      <img src="convite.jpg" alt="Flores Boho" class="img-floral-capa">
+      
+      <!-- Selo de Cera Rústico com Monograma J&V -->
+      <div class="wax-seal">J&amp;V</div>
+
+      <p class="envelope-subtitle-script">Você está convidado</p>
+      <h1 class="envelope-title">Josalva &amp; Valtair</h1>
+      <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
+
+      <button class="btn-abrir" id="btn-abrir" onclick="abrirConviteComAnimacao()">
+        <span>Abrir Convite</span>
+      </button>
+
+    </div>
   </div>
 
-  <!-- 🌐 CONTEÚDO PRINCIPAL DO SITE (EXIBIÇÃO DIRETA 100% VISÍVEL) -->
-  <div id="mainContent" style="display: block !important; opacity: 1 !important; visibility: visible !important;">
-
-    <!-- Header / Navbar -->
-    <header class="navbar" id="navbar">
-      <a href="#" class="nav-brand">J & V</a>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="font-size: 0.75rem; color: #78716C; font-weight: 500;">🎵 Live Forever — Oasis</span>
-        <nav class="nav-links" id="navLinks">
-          <a href="#comemoracao" class="nav-link">O Evento</a>
-          <a href="#confirmacao" class="nav-link">Confirmar</a>
-          <a href="#mural" class="nav-link">Mural</a>
-          <a href="#presentes" class="nav-link">Presentes</a>
-        </nav>
+  <!-- 🌐 2. SITE PRINCIPAL BOHO RÚSTICO-CHIQUE -->
+  <div id="site-principal">
+    
+    <header class="main-header">
+      <a href="#" class="brand-logo">J &amp; V</a>
+      <div class="header-music-info">
+        <i class="fa-solid fa-music" style="color: var(--primary);"></i>
+        <span>Live Forever — Oasis</span>
       </div>
     </header>
 
-    <!-- 📸 FOTO DO CASAL NO MARCO ZERO & HERO SECTION -->
-    <section class="hero">
-      <img 
-        src="foto-marco-zero.jpg" 
-        alt="Josalva e Valtair" 
-        class="foto-casal"
-        onError="this.onerror=null; this.src='assets/foto-marco-zero.jpg';"
-      />
+    <div class="container">
 
-      <div class="hero-text-content">
-        <span class="hero-tag">VOCÊ É NOSSO CONVIDADO ESPECIAL</span>
-        <h1 class="hero-names-script">Josalva & Valtair</h1>
-        <p class="hero-welcome-text">
-          "Venha comemorar conosco esse momento de muita alegria e união entre amigos e familiares!"
-        </p>
-
-        <div class="hero-date-badge" style="margin-bottom: 0;">
-          <i class="fa-regular fa-calendar-heart"></i>
-          <span>18 de Outubro de 2026 • 13:00h</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Detalhes do Evento & Mapa -->
-    <section id="comemoracao" class="details-section">
-      <div class="details-card">
-        <h2>Recepção de Comemoração</h2>
-        <div class="details-flex">
-          <div class="details-box">
-            <p class="details-box-tag">Data</p>
-            <p class="details-box-val">18 de Outubro de 2026</p>
-          </div>
-          <div class="details-box">
-            <p class="details-box-tag">Horário</p>
-            <p class="details-box-val">13:00h</p>
+      <!-- HERO LADO A LADO COM A FOTO DO CASAL NO MARCO ZERO -->
+      <section class="hero-card">
+        <img src="foto-marco-zero.jpg" alt="Josalva e Valtair no Marco Zero" class="foto-casal" onError="this.onerror=null; this.src='assets/foto-marco-zero.jpg';">
+        
+        <div class="hero-content">
+          <span class="hero-tag">Você é nosso convidado especial</span>
+          <h1 class="hero-names">Josalva &amp; Valtair</h1>
+          <p class="hero-phrase">"Venha comemorar conosco esse momento de muita alegria e união entre amigos e familiares!"</p>
+          
+          <div class="hero-date-badge">
+            <i class="fa-regular fa-calendar-check" style="color: var(--primary);"></i>
+            <span>18 de Outubro de 2026 • 13:00h</span>
           </div>
         </div>
-        <div>
-          <a 
-            href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="btn-map"
-          >
-            📍 Abrir Localização no Google Maps
+      </section>
+
+      <!-- BLOCO LADO A LADO 1: LOCALIZAÇÃO & RSVP -->
+      <div class="grid-2-col">
+        
+        <!-- CARD 1: LOCALIZAÇÃO & RECEPÇÃO -->
+        <div class="card-box">
+          <h2 class="card-title">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Recepção de Comemoração</span>
+          </h2>
+          
+          <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
+            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1;">
+              <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Data</p>
+              <p style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 2px;">18/10/2026</p>
+            </div>
+            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1;">
+              <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Horário</p>
+              <p style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 2px;">13:00h</p>
+            </div>
+          </div>
+
+          <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+            <button class="btn-acao">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <span>Abrir no Google Maps</span>
+            </button>
           </a>
         </div>
-      </div>
-    </section>
 
-    <!-- Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
-    <section id="confirmacao" class="rsvp-section">
-      <div class="rsvp-card">
-        <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px; text-align: center;">Confirmação de Presença</h2>
-        <p style="font-size: 0.75rem; text-align: center; color: #78716C; margin-bottom: 20px;">Por favor, confirme sua presença. A notificação será enviada para os noivos (patriciajosalva@gmail.com).</p>
-        
-        <div id="formStatusBox" style="display:none; margin-bottom:16px; padding:12px; border-radius:12px; text-align:center; font-size:0.85rem;"></div>
+        <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP -> SUPABASE TABELA PRESENCAS + WEB3FORMS EMAIL) -->
+        <div class="card-box">
+          <h2 class="card-title">
+            <i class="fa-regular fa-envelope-open"></i>
+            <span>Confirmação de Presença</span>
+          </h2>
+          <p style="font-size: 0.825rem; color: var(--text-muted); margin-bottom: 1.2rem;">Notificação enviada para: patriciajosalva@gmail.com</p>
 
-        <form id="rsvpForm">
-          <div class="form-group">
-            <label class="form-label" for="guestName">Nome Completo *</label>
-            <input type="text" id="guestName" class="form-control" placeholder="Digite seu nome completo" required />
-          </div>
+          <div id="rsvpStatusAlert" style="display: none; padding: 1rem; background: #F9EFEA; border: 1px solid var(--primary); color: var(--primary); border-radius: 0.85rem; margin-bottom: 1.2rem; font-size: 0.9rem; text-align: left;"></div>
 
-          <div class="form-group">
-            <label class="form-label">Irá comparecer?</label>
-            <select id="guestAttendance" class="form-control">
-              <option value="sim">Sim, com certeza!</option>
-              <option value="nao">Infelizmente não poderei</option>
+          <form id="form-rsvp" style="text-align: left;">
+            <label class="form-label" for="rsvp-nome">Nome Completo *</label>
+            <input type="text" id="rsvp-nome" class="form-input" placeholder="Digite seu nome completo" required />
+
+            <label class="form-label" for="rsvp-status">Irá comparecer? *</label>
+            <select id="rsvp-status" class="form-input" required>
+              <option value="Sim, estarei presente!">Sim, estarei presente!</option>
+              <option value="Infelizmente não poderei comparecer">Infelizmente não poderei comparecer</option>
             </select>
-          </div>
 
-          <button type="submit" id="btnSubmitRsvp" class="btn-submit-rsvp">
-            <span id="btnSubmitText">Enviar Confirmação</span>
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <!-- 🧹 MURAL DE RECADOS (CONTÊINER 100% VAZIO NO HTML) -->
-    <section id="mural" class="messages-section">
-      <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 16px;">Mural de Recados</h2>
-      
-      <div style="background: #FFF; padding: 20px; border-radius: 20px; border: 1px solid #D9C3B0; margin-bottom: 20px; text-align: left;">
-        <form id="messageForm">
-          <div class="form-group">
-            <label class="form-label" for="msgAuthor">Seu Nome *</label>
-            <input type="text" id="msgAuthor" class="form-control" placeholder="Digite seu nome" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="msgContent">Sua Mensagem *</label>
-            <textarea id="msgContent" class="form-control" rows="3" placeholder="Escreva uma mensagem carinhosa..." required></textarea>
-          </div>
-          <button type="submit" class="btn-submit-rsvp" style="width: auto; padding: 10px 24px;">Publicar Mensagem</button>
-        </form>
-      </div>
-
-      <!-- Contêiner do mural contendo APENAS a div limpa para preenchimento dinâmico via Supabase -->
-      <div id="mural-lista"></div>
-    </section>
-
-    <!-- Presentes Pix (CPF: 091.602.964-61 / Beneficiário: Josalva / Valtair) -->
-    <section id="presentes" class="pix-section">
-      <div class="pix-card">
-        <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px;">Presentes em Dinheiro (Pix)</h2>
-        <p style="font-size: 0.75rem; color: #57534E; margin-bottom: 16px;">
-          Caso deseje nos presentear, preferimos contribuições em dinheiro via Pix para que possamos comprar o que quisermos para a nossa nova jornada!
-        </p>
-        
-        <div id="qrcodeCanvas" style="display: flex; justify-content: center; margin-bottom: 12px;"></div>
-        
-        <div class="pix-key-box">
-          Chave Pix (CPF): 091.602.964-61
+            <button type="submit" id="btn-rsvp" class="btn-acao">Confirmar Presença</button>
+          </form>
         </div>
-        <p style="font-size: 11px; color: #78716C; margin-bottom: 16px;">Beneficiário: Josalva / Valtair</p>
 
-        <button class="btn-map" id="btnCopyPixMain" style="cursor: pointer; border: none;">
-          📋 Copiar Chave Pix
-        </button>
       </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <p style="font-family: var(--font-script); font-size: 2.8rem; color: #C59B4E;">Josalva & Valtair</p>
-      <p style="font-size: 0.8rem; color: rgba(250,247,242,0.7); margin-top: 8px;">© 2026 Recepção de Comemoração. Feito com amor ❤️</p>
+      <!-- BLOCO LADO A LADO 2: PRESENTES PIX & MURAL DE RECADOS -->
+      <div class="grid-2-col">
+
+        <!-- CARD 3: PRESENTES VIA PIX COM QR CODE EMV E BOTÃO DE COPIAR EMBUTIDO -->
+        <div class="card-box">
+          <h2 class="card-title">
+            <i class="fa-solid fa-gift"></i>
+            <span>Presentes em Dinheiro (Pix)</span>
+          </h2>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Caso deseje nos presentear, preferimos contribuições em dinheiro via Pix para nos ajudar nessa nova fase!
+          </p>
+
+          <!-- 1. IMAGEM DO QR CODE DO BANCO -->
+          <div style="text-align: center; margin: 1rem 0;">
+            <img 
+              src="qrcode-pix.png" 
+              alt="QR Code Pix - Josalva Patricia" 
+              style="width: 180px; height: 180px; border-radius: 0.75rem; border: 1px solid #D9C3B0; padding: 0.5rem; background: #ffffff; display: inline-block;"
+              onError="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva%20Patricia%20Alexandr6009SAO%20PAULO62140510eBqAbNLnNd6304A435';"
+            >
+            <p style="font-size: 0.75rem; color: #78716C; margin-top: 0.4rem;">Aponte a câmera do aplicativo do seu banco para pagar</p>
+          </div>
+
+          <div class="pix-box">
+            <p style="font-size: 0.8rem; color: #78716C; margin-bottom: 0.2rem;">Chave Pix (CPF)</p>
+            <p style="font-size: 1.1rem; font-weight: bold; color: #8C3F2B; margin: 0;">091.602.964-61</p>
+            <p style="font-size: 0.8rem; color: #78716C; margin-top: 0.2rem;">Beneficiária: Josalva Patricia</p>
+          </div>
+
+          <button 
+            id="btn-copiar-pix" 
+            class="btn-acao" 
+            style="width: 100%; padding: 0.85rem; background-color: #8C3F2B; color: white; border: none; border-radius: 0.75rem; font-weight: bold; cursor: pointer;"
+          >
+            <i class="fa-regular fa-copy"></i>
+            <span>Copiar Pix Copia e Cola</span>
+          </button>
+        </div>
+
+        <!-- CARD 4: MURAL DE RECADOS -->
+        <div class="card-box">
+          <h2 class="card-title">
+            <i class="fa-regular fa-comments"></i>
+            <span>Mural de Recados</span>
+          </h2>
+          
+          <form id="messageForm" style="text-align: left; margin-bottom: 1.5rem;">
+            <label class="form-label" for="msgAuthor">Seu Nome *</label>
+            <input type="text" id="msgAuthor" class="form-input" placeholder="Digite seu nome" required />
+
+            <label class="form-label" for="msgContent">Sua Mensagem *</label>
+            <textarea id="msgContent" class="form-input" rows="2" placeholder="Escreva uma mensagem carinhosa..." required></textarea>
+
+            <button type="submit" class="btn-acao">Publicar Mensagem</button>
+          </form>
+
+          <div id="mural-lista">
+            <div style="border: 2px dashed var(--border-color); padding: 1.5rem 1rem; border-radius: 1rem;">
+              <p style="color: var(--text-muted); font-style: italic; font-size: 0.9rem;">Seja o primeiro a deixar um recado carinhoso para os noivos!</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <footer class="main-footer">
+      <p class="footer-script">Josalva &amp; Valtair</p>
+      <p style="font-size: 0.85rem; color: rgba(250,247,242,0.7); margin-top: 0.4rem;">© 2026 Recepção de Comemoração. Feito com amor</p>
     </footer>
 
   </div>
 
-  <!-- Toast Notifications -->
-  <div class="toast-container" id="toastContainer"></div>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-msg"></div>
 
-  <!-- Lógica JavaScript -->
   <script src="script.js"></script>
+  <script>
+    let ytPlayer = null;
+
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('youtube-player', {
+        height: '0', width: '0', videoId: 'TDe1DqxwJoc',
+        playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'TDe1DqxwJoc' }
+      });
+    }
+
+    function abrirConviteComAnimacao() {
+      const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
+      if (cover) {
+        cover.classList.add('envelope-opening');
+        setTimeout(() => { cover.style.display = 'none'; }, 1000);
+      }
+      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+        try {
+          ytPlayer.setVolume(20);
+          ytPlayer.playVideo();
+        } catch(e) {}
+      }
+    }
+  </script>
 </body>
 </html>
