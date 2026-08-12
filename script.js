@@ -9,16 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initAudioPlayer();
   initQRCodeAndPixKey();
   initRSVP();
-  initCotasModal();
   initGuestbook();
   initNavigation();
-  initCalendarAdd();
 });
 
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. TELA DE CAPA (ENVELOPE COVER - ESTRUTURA ESTRITA DE ABERTURA)
+   1. TELA DE CAPA (ENVELOPE COVER - ESTADO isOpened)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
@@ -41,25 +39,25 @@ function initEnvelopeOpening() {
     if (isOpened) return;
     isOpened = true;
 
-    // Transição suave da Capa
+    // Ocultar Capa
     if (envelopeOverlay) {
-      envelopeOverlay.classList.add('opened');
+      envelopeOverlay.style.opacity = '0';
       setTimeout(() => {
         envelopeOverlay.style.display = 'none';
-      }, 750);
+      }, 500);
     }
 
-    // Exibir Conteúdo do Site
+    // Exibir Site Principal
     if (mainContent) {
       mainContent.style.display = 'block';
       setTimeout(() => {
         mainContent.style.opacity = '1';
-      }, 100);
+      }, 50);
     }
 
     document.body.classList.remove('envelope-active');
 
-    // Reproduzir áudio "Stop Crying Your Heart Out" (Acústico) - Oasis com volume 0.2
+    // Reproduzir áudio em volume 0.2 (20%)
     if (bgAudio) {
       bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
@@ -88,14 +86,6 @@ function initSupabaseAndEmailJS() {
       console.log('Conectado ao Supabase com sucesso!');
     } catch (e) {
       console.error('Erro ao conectar ao Supabase:', e);
-    }
-  }
-
-  if (window.emailjs && cfg.EMAILJS_PUBLIC_KEY && !cfg.EMAILJS_PUBLIC_KEY.includes('your_public_key')) {
-    try {
-      window.emailjs.init(cfg.EMAILJS_PUBLIC_KEY);
-    } catch (e) {
-      console.warn('Configuração do EmailJS pendente:', e);
     }
   }
 }
@@ -167,7 +157,7 @@ function initAudioPlayer() {
       bgAudio.pause();
       musicBtn.classList.remove('playing');
       if (musicIcon) musicIcon.className = 'fa-solid fa-music';
-      if (musicText) musicText.innerText = 'Stop Crying Your Heart Out 🎵';
+      if (musicText) musicText.innerText = 'Oasis 🎵';
       isPlaying = false;
       showToast('Música de fundo pausada 🎵');
     } else {
@@ -193,21 +183,15 @@ function initAudioPlayer() {
 function initQRCodeAndPixKey() {
   const cfg = window.CONFIG || {};
   const pixKeyText = document.getElementById('pixKeyText');
-  const modalPixKeyText = document.getElementById('modalPixKeyText');
-  const pixKeyLabel = document.getElementById('pixKeyLabel');
 
   const chavePix = cfg.CHAVE_PIX || 'SUA-CHAVE-PIX-AQUI';
-  const chavePixLabel = cfg.CHAVE_PIX_LABEL || 'Chave Pix em breve / Exemplo';
 
   if (pixKeyText) pixKeyText.innerText = chavePix;
-  if (modalPixKeyText) modalPixKeyText.innerText = chavePix;
-  if (pixKeyLabel) pixKeyLabel.innerText = chavePixLabel + ':';
 
-  const qrContainers = [document.getElementById('qrcodeCanvas'), document.getElementById('modalQrcodeCanvas')];
+  const qrContainer = document.getElementById('qrcodeCanvas');
   
-  qrContainers.forEach(container => {
-    if (!container) return;
-    container.innerHTML = `
+  if (qrContainer) {
+    qrContainer.innerHTML = `
       <svg width="180" height="180" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <rect width="200" height="200" fill="#FFFFFF"/>
         <rect x="15" y="15" width="45" height="45" rx="6" fill="#8C3F2B"/>
@@ -238,7 +222,7 @@ function initQRCodeAndPixKey() {
         <rect x="148" y="148" width="24" height="24" rx="2" fill="#FFFFFF"/>
       </svg>
     `;
-  });
+  }
 
   const btnCopyPixMain = document.getElementById('btnCopyPixMain');
   if (btnCopyPixMain) {
@@ -251,40 +235,9 @@ function initQRCodeAndPixKey() {
    -------------------------------------------------------------------------- */
 function initRSVP() {
   const rsvpForm = document.getElementById('rsvpForm');
-  const attYes = document.getElementById('attYes');
-  const attNo = document.getElementById('attNo');
-  const companionsContainer = document.getElementById('companionsContainer');
-  const companionsCount = document.getElementById('companionsCount');
-  const companionNamesWrapper = document.getElementById('companionNamesWrapper');
   const btnSubmitRsvp = document.getElementById('btnSubmitRsvp');
   const btnSubmitText = document.getElementById('btnSubmitText');
   const formStatusBox = document.getElementById('formStatusBox');
-  const btnViewRSVPList = document.getElementById('btnViewRSVPList');
-  const rsvpListModal = document.getElementById('rsvpListModal');
-  const btnCloseRsvpListModal = document.getElementById('btnCloseRsvpListModal');
-
-  if (attYes && attNo && companionsContainer) {
-    attYes.addEventListener('change', () => companionsContainer.classList.add('active'));
-    attNo.addEventListener('change', () => companionsContainer.classList.remove('active'));
-  }
-
-  if (companionsCount && companionNamesWrapper) {
-    companionsCount.addEventListener('change', () => {
-      const count = parseInt(companionsCount.value);
-      companionNamesWrapper.innerHTML = '';
-      
-      for (let i = 1; i <= count; i++) {
-        const div = document.createElement('div');
-        div.className = 'form-group';
-        div.style.marginTop = '10px';
-        div.innerHTML = `
-          <label class="form-label">Nome do Acompanhante ${i}</label>
-          <input type="text" class="form-control companion-input" placeholder="Ex: Nome Completo do Acompanhante ${i}">
-        `;
-        companionNamesWrapper.appendChild(div);
-      }
-    });
-  }
 
   if (rsvpForm) {
     rsvpForm.addEventListener('submit', async (e) => {
@@ -292,24 +245,20 @@ function initRSVP() {
 
       const name = document.getElementById('guestName').value.trim();
       const phone = document.getElementById('guestPhone').value.trim();
-      const attendanceVal = document.querySelector('input[name="attendance"]:checked').value;
+      const attendanceVal = document.getElementById('guestAttendance').value;
       const vaiComparecer = attendanceVal === 'sim' ? 'Sim' : 'Não';
       const count = parseInt(document.getElementById('companionsCount').value || '0');
       const rsvpMessage = document.getElementById('rsvpMessage').value.trim();
 
-      const companionInputs = document.querySelectorAll('.companion-input');
-      const companions = Array.from(companionInputs).map(input => input.value.trim()).filter(val => val !== '');
-      const nomesAcompanhantesStr = companions.join(', ');
-
       if (btnSubmitRsvp) btnSubmitRsvp.disabled = true;
-      if (btnSubmitText) btnSubmitText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando sua confirmação...`;
+      if (btnSubmitText) btnSubmitText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando...`;
       if (formStatusBox) formStatusBox.style.display = 'none';
 
       const payload = {
         nome_completo: name,
         vai_comparecer: vaiComparecer,
         quantidade_acompanhantes: count,
-        nomes_acompanhantes: nomesAcompanhantesStr,
+        nomes_acompanhantes: '',
         mensagem_noivos: rsvpMessage,
         criado_em: new Date().toISOString()
       };
@@ -324,8 +273,6 @@ function initRSVP() {
 
           if (error) {
             console.error('Erro ao gravar no Supabase:', error);
-          } else {
-            console.log('Gravado no Supabase com sucesso:', data);
           }
         }
 
@@ -342,146 +289,28 @@ function initRSVP() {
       }
 
       if (btnSubmitRsvp) btnSubmitRsvp.disabled = false;
-      if (btnSubmitText) btnSubmitText.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Enviar Confirmação`;
+      if (btnSubmitText) btnSubmitText.innerText = 'Enviar Confirmação';
 
       if (success) {
         if (formStatusBox) {
           formStatusBox.style.display = 'block';
-          formStatusBox.style.background = 'var(--primary-light)';
-          formStatusBox.style.color = 'var(--primary)';
-          formStatusBox.style.border = '1px solid var(--primary)';
+          formStatusBox.style.background = '#F9EFEA';
+          formStatusBox.style.color = '#8C3F2B';
+          formStatusBox.style.border = '1px solid #8C3F2B';
           formStatusBox.innerHTML = `
-            <i class="fa-solid fa-circle-check" style="font-size:1.8rem; margin-bottom:8px; display:block;"></i>
             ✨ <strong>Muito obrigado, ${name}!</strong><br>
             Sua confirmação de presença na nossa comemoração foi registrada com sucesso! Esperamos por você! ❤️
           `;
         }
         showToast(`Confirmação enviada com sucesso, ${name}! ✨`);
         rsvpForm.reset();
-        if (companionNamesWrapper) companionNamesWrapper.innerHTML = '';
       }
-    });
-  }
-
-  if (btnViewRSVPList && rsvpListModal) {
-    btnViewRSVPList.addEventListener('click', async () => {
-      await renderRSVPList();
-      rsvpListModal.classList.add('active');
-    });
-
-    if (btnCloseRsvpListModal) {
-      btnCloseRsvpListModal.addEventListener('click', () => {
-        rsvpListModal.classList.remove('active');
-      });
-    }
-  }
-}
-
-async function renderRSVPList() {
-  const content = document.getElementById('rsvpListContent');
-  if (!content) return;
-
-  let rsvps = [];
-
-  if (supabaseClient) {
-    try {
-      const { data, error } = await supabaseClient
-        .from('confirmacoes')
-        .select('*')
-        .order('id', { ascending: false });
-
-      if (!error && data && data.length > 0) {
-        rsvps = data;
-      } else {
-        rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-      }
-    } catch (e) {
-      rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-    }
-  } else {
-    rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-  }
-
-  if (!rsvps || rsvps.length === 0) {
-    content.innerHTML = `
-      <div class="empty-state-box">
-        <i class="fa-regular fa-folder-open"></i>
-        <p>Nenhuma confirmação registrada até o momento.</p>
-      </div>
-    `;
-    return;
-  }
-
-  content.innerHTML = rsvps.map(item => `
-    <div style="background: var(--bg-main); padding: 14px 18px; border-radius: var(--radius-sm); border-left: 4px solid ${item.vai_comparecer === 'Sim' ? '#8C3F2B' : '#6E5D57'}">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <strong style="color: var(--text-dark); font-size: 1rem;">${item.nome_completo}</strong>
-        <span style="font-size: 0.8rem; font-weight: 600; padding: 4px 10px; border-radius: 12px; background: ${item.vai_comparecer === 'Sim' ? 'var(--primary-light)' : '#EAEAEA'}; color: ${item.vai_comparecer === 'Sim' ? 'var(--primary)' : '#6E5D57'}">
-          Comparece: ${item.vai_comparecer}
-        </span>
-      </div>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-        <i class="fa-solid fa-user-group"></i> ${item.quantidade_acompanhantes > 0 ? `${item.quantidade_acompanhantes} acompanhante(s): ${item.nomes_acompanhantes}` : 'Apenas o convidado'}
-      </p>
-      ${item.mensagem_noivos ? `<p style="font-size: 0.85rem; font-style: italic; color: var(--text-dark); margin-top: 6px; background: #FFF; padding: 8px; border-radius: 6px;">"${item.mensagem_noivos}"</p>` : ''}
-    </div>
-  `).join('');
-}
-
-/* --------------------------------------------------------------------------
-   7. COTAS DE PRESENTES PIX (MODAL)
-   -------------------------------------------------------------------------- */
-function initCotasModal() {
-  const cotaModal = document.getElementById('cotaModal');
-  const btnCloseCotaModal = document.getElementById('btnCloseCotaModal');
-  const modalCotaTitle = document.getElementById('modalCotaTitle');
-  const modalCotaPrice = document.getElementById('modalCotaPrice');
-  const modalCotaIcon = document.getElementById('modalCotaIcon');
-  const modalSuggestedPrice = document.getElementById('modalSuggestedPrice');
-  const btnCopyModalPix = document.getElementById('btnCopyModalPix');
-
-  const cotaBtns = document.querySelectorAll('.btn-cota');
-
-  cotaBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.cota-card');
-      const title = btn.getAttribute('data-title') || 'Cota de Presente';
-      const price = btn.getAttribute('data-price') || 'Livre';
-      const icon = card ? card.querySelector('.cota-icon').innerText : '🎁';
-
-      if (modalCotaTitle) modalCotaTitle.innerText = title;
-      if (modalCotaIcon) modalCotaIcon.innerText = icon;
-      
-      if (price === 'Livre') {
-        if (modalCotaPrice) modalCotaPrice.innerText = 'Valor Livre';
-        if (modalSuggestedPrice) modalSuggestedPrice.innerText = 'qualquer valor desejado';
-      } else {
-        const formattedPrice = `R$ ${parseFloat(price).toFixed(2).replace('.', ',')}`;
-        if (modalCotaPrice) modalCotaPrice.innerText = formattedPrice;
-        if (modalSuggestedPrice) modalSuggestedPrice.innerText = formattedPrice;
-      }
-
-      if (cotaModal) cotaModal.classList.add('active');
-    });
-  });
-
-  if (btnCloseCotaModal && cotaModal) {
-    btnCloseCotaModal.addEventListener('click', () => cotaModal.classList.remove('active'));
-    cotaModal.addEventListener('click', (e) => {
-      if (e.target === cotaModal) cotaModal.classList.remove('active');
-    });
-  }
-
-  if (btnCopyModalPix) {
-    btnCopyModalPix.addEventListener('click', () => {
-      const cfg = window.CONFIG || {};
-      copyToClipboard(cfg.CHAVE_PIX || 'SUA-CHAVE-PIX-AQUI');
     });
   }
 }
 
 /* --------------------------------------------------------------------------
-   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE
+   7. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (SEM DADOS MOCADOS)
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -548,62 +377,29 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
+  // SEM DADOS MOCADOS: Exibe mensagem de estado vazio
   if (!messages || messages.length === 0) {
     messagesWall.innerHTML = `
       <div class="empty-state-box">
-        <i class="fa-regular fa-comment-dots"></i>
-        <p>Seja o primeiro a deixar uma mensagem carinhosa para os noivos! ❤️</p>
+        <p>Seja o primeiro a deixar uma mensagem carinhosa para Josalva & Valtair! ❤️</p>
       </div>
     `;
     return;
   }
 
   messagesWall.innerHTML = messages.map(msg => `
-    <div class="message-card" id="msg-${msg.id}">
+    <div class="message-card">
       <div class="message-header">
         <span class="message-author">${msg.autor || msg.author}</span>
-        <span class="message-date">${msg.criado_em ? new Date(msg.criado_em).toLocaleDateString('pt-BR') : (msg.date || 'Hoje')}</span>
+        <span class="message-date">${msg.criado_em ? new Date(msg.criado_em).toLocaleDateString('pt-BR') : 'Hoje'}</span>
       </div>
       <p class="message-text">"${msg.mensagem || msg.text}"</p>
-      <div class="message-actions">
-        <button class="like-btn" onclick="likeMessage(${msg.id})">
-          <i class="fa-solid fa-heart"></i> <span id="like-count-${msg.id}">${msg.curtidas || msg.likes || 1}</span>
-        </button>
-      </div>
     </div>
   `).join('');
 }
 
-window.likeMessage = async function(id) {
-  let countEl = document.getElementById(`like-count-${id}`);
-  let currentLikes = countEl ? parseInt(countEl.innerText || '1') : 1;
-  let newLikes = currentLikes + 1;
-
-  if (countEl) countEl.innerText = newLikes;
-
-  if (supabaseClient) {
-    try {
-      await supabaseClient
-        .from('recados')
-        .update({ curtidas: newLikes })
-        .eq('id', id);
-    } catch(e) {
-      console.warn('Erro ao atualizar curtidas no Supabase:', e);
-    }
-  }
-
-  let savedMessages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
-  const msgIndex = savedMessages.findIndex(m => m.id === id);
-  if (msgIndex !== -1) {
-    savedMessages[msgIndex].curtidas = newLikes;
-    localStorage.setItem('wedding_messages', JSON.stringify(savedMessages));
-  }
-
-  showToast('Você enviou amor para este recado! ❤️');
-};
-
 /* --------------------------------------------------------------------------
-   9. UTILS & SISTEMA DE TOAST & NAVEGAÇÃO
+   8. UTILS & SISTEMA DE TOAST & NAVEGAÇÃO
    -------------------------------------------------------------------------- */
 function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -640,7 +436,6 @@ function showToast(message) {
   const toast = document.createElement('div');
   toast.className = 'toast';
   toast.innerHTML = `
-    <i class="fa-solid fa-sparkles text-gold" style="font-size: 1.2rem;"></i>
     <span>${message}</span>
   `;
 
@@ -648,7 +443,7 @@ function showToast(message) {
 
   setTimeout(() => {
     toast.style.opacity = '0';
-    toast.style.transform = 'translateX(100%)';
+    toast.style.transform = 'translateX(-100%)';
     toast.style.transition = 'all 0.3s ease';
     setTimeout(() => toast.remove(), 300);
   }, 4000);
@@ -668,45 +463,6 @@ function initNavigation() {
   links.forEach(link => {
     link.addEventListener('click', () => {
       if (navLinks) navLinks.classList.remove('active');
-      links.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
     });
-  });
-
-  window.addEventListener('scroll', () => {
-    let current = '';
-    const sections = document.querySelectorAll('section, header');
-    
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      if (pageYOffset >= (sectionTop - 150)) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    links.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
-  });
-}
-
-function initCalendarAdd() {
-  const btnCalendar = document.getElementById('btnCalendar');
-  if (!btnCalendar) return;
-
-  btnCalendar.addEventListener('click', () => {
-    const title = encodeURIComponent("Recepção de Comemoração - Josalva & Valtair");
-    const details = encodeURIComponent("Recepção de comemoração com amigos e familiares de Josalva & Valtair. Esperamos por você!");
-    const location = encodeURIComponent("https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8");
-    const startDate = "20261018T160000Z";
-    const endDate = "20261018T220000Z";
-
-    const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}`;
-    
-    window.open(googleUrl, '_blank');
-    showToast('Redirecionando para o Google Agenda... 📅');
   });
 }
