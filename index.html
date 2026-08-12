@@ -45,7 +45,7 @@
   <!-- 🌐 SITE PRINCIPAL BOHO RÚSTICO-CHIQUE -->
   <div id="site-principal">
     
-    <header class="main-header">
+    <header>
       <a href="#" class="logo-header">J &amp; V</a>
       <div class="header-music-info">
         <i class="fa-solid fa-music" style="color: #8C3F2B;"></i>
@@ -53,7 +53,7 @@
       </div>
     </header>
 
-    <main class="container">
+    <main class="main-content">
 
       <!-- HERO SECTION COM A FOTO DO CASAL NO MARCO ZERO -->
       <section class="hero-section">
@@ -109,23 +109,23 @@
           <p style="font-size: 0.8rem; color: #78716C; margin-bottom: 1rem; text-align: center;">Notificação enviada para: patriciajosalva@gmail.com</p>
 
           <form id="form-rsvp" style="text-align: left;">
-            <label class="form-label" for="rsvp-nome">Nome Completo *</label>
+            <label for="rsvp-nome">Nome Completo *</label>
             <input type="text" id="rsvp-nome" class="form-input" placeholder="Digite seu nome completo" required />
 
-            <label class="form-label" for="rsvp-status">Irá comparecer? *</label>
+            <label for="rsvp-status">Irá comparecer? *</label>
             <select id="rsvp-status" class="form-input" required>
               <option value="Sim, estarei presente!">Sim, estarei presente!</option>
               <option value="Infelizmente não poderei comparecer">Infelizmente não poderei comparecer</option>
             </select>
 
-            <label class="form-label">Vai levar acompanhante? *</label>
+            <label>Vai levar acompanhante? *</label>
             <select id="rsvp-tem-acompanhante" onchange="toggleAcompanhantes(this.value)">
               <option value="Não">Não, irei sozinho(a)</option>
               <option value="Sim">Sim, irei acompanhado(a)</option>
             </select>
 
             <div id="box-qtd-acompanhantes" style="display: none; margin-bottom: 0.8rem;">
-              <label class="form-label">Quantos acompanhantes? *</label>
+              <label>Quantos acompanhantes? *</label>
               <input type="number" id="rsvp-qtd-acompanhantes" min="1" max="5" value="1">
             </div>
 
@@ -173,10 +173,10 @@
           </h2>
           
           <form id="messageForm" style="text-align: left; margin-bottom: 1.2rem;">
-            <label class="form-label" for="msgAuthor">Seu Nome *</label>
+            <label for="msgAuthor">Seu Nome *</label>
             <input type="text" id="msgAuthor" class="form-input" placeholder="Digite seu nome" required />
 
-            <label class="form-label" for="msgContent">Sua Mensagem *</label>
+            <label for="msgContent">Sua Mensagem *</label>
             <textarea id="msgContent" class="form-input" rows="2" placeholder="Escreva uma mensagem carinhosa..." required></textarea>
 
             <button type="submit" class="btn-primary" style="margin-top: 0.4rem;">Publicar Mensagem</button>

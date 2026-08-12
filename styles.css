@@ -1,350 +1,321 @@
-/* ==========================================================================
-   JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO-RÚSTICO CHIQUE
-   ========================================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-
-* {
-  box-sizing: border-box;
+/* RESET ABSOLUTO DE CSS */
+*, *::before, *::after {
+  box-sizing: border-box !important;
   margin: 0;
   padding: 0;
 }
 
 body {
-  background-color: #F7F4EF;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  color: #444;
-  overflow-x: hidden;
+  background-color: #F7F4EF !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  color: #444 !important;
+  overflow-x: hidden !important;
+  position: relative !important;
 }
 
-/* Header */
-header, .main-header {
-  width: 100%;
-  padding: 1.2rem 2rem;
-  background: #FFFDF9;
-  border-bottom: 1px solid #D9C3B0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 10;
+/* HEADER FIXO NO TOPO */
+header {
+  width: 100% !important;
+  padding: 1rem 2rem !important;
+  background: #FFFDF9 !important;
+  border-bottom: 1px solid #D9C3B0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  position: relative !important;
+  z-index: 100 !important;
 }
 
 .logo-header, .brand-logo {
-  font-family: 'Playfair Display', 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #8C3F2B;
-  text-decoration: none;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  color: #8C3F2B !important;
+  text-decoration: none !important;
 }
 
 .header-music-info {
-  font-size: 0.85rem;
-  color: #78716C;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-size: 0.85rem !important;
+  color: #78716C !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
 }
 
-/* Layout Principal */
-main.container, .container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  box-sizing: border-box;
+/* MAIN CONTAINER (FLUXO NORMAL) */
+main.main-content, main.container, .container {
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 2rem 1rem !important;
+  display: block !important;
+  position: relative !important;
 }
 
-/* Hero Card / Section */
+/* HERO SECTION */
 .hero-section, .hero-card {
-  background: #FFFDF9;
-  border: 1px solid #D9C3B0;
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: 0 8px 20px rgba(140, 63, 43, 0.06);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  align-items: center;
-  margin-bottom: 2rem;
+  background: #FFFDF9 !important;
+  border: 1px solid #D9C3B0 !important;
+  border-radius: 1.25rem !important;
+  padding: 2rem !important;
+  box-shadow: 0 8px 20px rgba(140, 63, 43, 0.06) !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 2rem !important;
+  align-items: center !important;
+  margin-bottom: 2rem !important;
 }
 
 @media (min-width: 768px) {
   .hero-section, .hero-card {
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 360px 1fr !important;
   }
 }
 
 .foto-casal {
-  width: 100%;
-  max-width: 360px;
-  height: 440px;
-  object-fit: cover;
-  object-position: center top;
-  border-radius: 1.25rem;
-  border: 5px solid #FFFFFF;
-  box-shadow: 0 10px 25px rgba(140, 63, 43, 0.12);
-  margin: 0 auto;
-  display: block;
+  width: 100% !important;
+  max-width: 360px !important;
+  height: 440px !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  border-radius: 1.25rem !important;
+  border: 5px solid #FFFFFF !important;
+  box-shadow: 0 10px 25px rgba(140, 63, 43, 0.12) !important;
+  margin: 0 auto !important;
+  display: block !important;
 }
 
 .hero-content {
-  text-align: left;
+  text-align: left !important;
 }
 
 .hero-tag {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #8C3F2B;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 0.5rem;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  color: #8C3F2B !important;
+  font-weight: 600 !important;
+  display: block !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .hero-names {
-  font-family: 'Playfair Display', 'Cormorant Garamond', serif;
-  font-size: clamp(2.4rem, 4.5vw, 3.5rem);
-  font-weight: 700;
-  color: #8C3F2B;
-  line-height: 1.1;
-  margin-bottom: 0.6rem;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(2.4rem, 4.5vw, 3.5rem) !important;
+  font-weight: 700 !important;
+  color: #8C3F2B !important;
+  line-height: 1.1 !important;
+  margin-bottom: 0.6rem !important;
 }
 
 .hero-phrase {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
-  font-style: italic;
-  color: #78716C;
-  margin-bottom: 1.5rem;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1.15rem !important;
+  font-style: italic !important;
+  color: #78716C !important;
+  margin-bottom: 1.5rem !important;
 }
 
 .hero-date-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #F7F4EF;
-  padding: 0.7rem 1.4rem;
-  border-radius: 9999px;
-  border: 1px solid #D9C3B0;
-  font-weight: 600;
-  color: #8C3F2B;
-  font-size: 0.95rem;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #F7F4EF !important;
+  padding: 0.7rem 1.4rem !important;
+  border-radius: 9999px !important;
+  border: 1px solid #D9C3B0 !important;
+  font-weight: 600 !important;
+  color: #8C3F2B !important;
+  font-size: 0.95rem !important;
 }
 
-/* Grid de Seções Limpo */
+/* GRID DOS CARDS - 100% ALINHADOS E ORGANIZADOS */
 .sections-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-  align-items: start;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  gap: 1.5rem !important;
+  align-items: start !important;
+  margin-top: 2rem !important;
+  width: 100% !important;
 }
 
-/* Estilização dos Cards */
 .card-section, .card-box {
-  background: #FFFDF9;
-  border: 1px solid #D9C3B0;
-  border-radius: 1.25rem;
-  padding: 1.8rem;
-  box-shadow: 0 8px 20px rgba(140, 63, 43, 0.06);
-  width: 100%;
+  background: #FFFDF9 !important;
+  border: 1px solid #D9C3B0 !important;
+  border-radius: 1.25rem !important;
+  padding: 1.8rem !important;
+  box-shadow: 0 8px 20px rgba(140, 63, 43, 0.06) !important;
+  width: 100% !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
 }
 
 .card-title {
-  color: #8C3F2B;
-  font-family: 'Playfair Display', 'Cormorant Garamond', serif;
-  font-size: 1.35rem;
-  margin-bottom: 1rem;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  color: #8C3F2B !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.35rem !important;
+  margin-bottom: 1rem !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
 }
 
-/* Formulários e Inputs */
-label, .form-label {
-  display: block;
-  text-align: left;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #444;
-  margin-top: 0.5rem;
-  margin-bottom: 0.2rem;
+/* INPUTS E BOTÕES */
+input, select, textarea, .form-input {
+  width: 100% !important;
+  padding: 0.75rem !important;
+  border: 1px solid #D9C3B0 !important;
+  border-radius: 0.6rem !important;
+  background-color: #F7F4EF !important;
+  font-size: 0.95rem !important;
+  margin-top: 0.3rem !important;
+  margin-bottom: 0.8rem !important;
+  font-family: inherit !important;
 }
 
-input[type="text"], input[type="number"], select, textarea, .form-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #D9C3B0;
-  border-radius: 0.6rem;
-  background-color: #F7F4EF;
-  font-size: 0.95rem;
-  color: #444;
-  margin-top: 0.3rem;
-  margin-bottom: 0.8rem;
-  outline: none;
-  font-family: inherit;
+button.btn-primary, button.btn-abrir, .btn-acao {
+  width: 100% !important;
+  padding: 0.85rem !important;
+  background-color: #8C3F2B !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 0.75rem !important;
+  font-weight: bold !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
 }
 
-input[type="text"]:focus, select:focus, textarea:focus {
-  border-color: #8C3F2B;
-}
-
-button.btn-primary, .btn-acao {
-  width: 100%;
-  padding: 0.85rem;
-  background-color: #8C3F2B;
-  color: white;
-  border: none;
-  border-radius: 0.75rem;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-button.btn-primary:hover, .btn-acao:hover {
-  background-color: #723222;
+button.btn-primary:hover, button.btn-abrir:hover, .btn-acao:hover {
+  background-color: #723222 !important;
 }
 
 .pix-box {
-  background: #F7F4EF;
-  border: 1px dashed #8C3F2B;
-  padding: 0.8rem 1rem;
-  border-radius: 0.75rem;
-  text-align: center;
-  margin-bottom: 1rem;
+  background: #F7F4EF !important;
+  border: 1px dashed #8C3F2B !important;
+  padding: 0.8rem 1rem !important;
+  border-radius: 0.75rem !important;
+  text-align: center !important;
+  margin-bottom: 1rem !important;
 }
 
-/* Cover (Capa do Convite) */
-#cover {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background-color: #F7F4EF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+/* COVER OVERLAY */
+#cover, #cover-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  background-color: #F7F4EF !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1.5rem !important;
 }
 
-#cover.aberto {
+#cover.aberto, #cover-overlay.aberto {
+  display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
 
 .card-capa {
-  width: 100%;
-  max-width: 420px;
-  background: #FFFDF9;
-  border: 1px solid #D9C3B0;
-  border-radius: 1.5rem;
-  padding: 2.2rem 1.8rem;
-  box-shadow: 0 20px 40px rgba(140, 63, 43, 0.15);
-  text-align: center;
+  width: 100% !important;
+  max-width: 420px !important;
+  background: #FFFDF9 !important;
+  border: 1px solid #D9C3B0 !important;
+  border-radius: 1.5rem !important;
+  padding: 2.2rem 1.8rem !important;
+  box-shadow: 0 20px 40px rgba(140, 63, 43, 0.15) !important;
+  text-align: center !important;
 }
 
 .img-floral-capa {
-  width: 100%;
-  max-width: 280px;
-  height: auto;
-  object-fit: contain;
-  margin: 0 auto 0.8rem auto;
-  display: block;
-  mix-blend-mode: multiply;
+  width: 100% !important;
+  max-width: 280px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  margin: 0 auto 0.8rem auto !important;
+  display: block !important;
+  mix-blend-mode: multiply !important;
 }
 
 .wax-seal {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 0.8rem auto;
-  background: radial-gradient(circle, #A34A33 0%, #8C3F2B 100%);
-  border: 2px solid #C59B4E;
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(140, 63, 43, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FAF4E8;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  font-weight: bold;
+  width: 48px !important;
+  height: 48px !important;
+  margin: 0 auto 0.8rem auto !important;
+  background: radial-gradient(circle, #A34A33 0%, #8C3F2B 100%) !important;
+  border: 2px solid #C59B4E !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 12px rgba(140, 63, 43, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #FAF4E8 !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1rem !important;
+  font-weight: bold !important;
 }
 
 .envelope-subtitle-script {
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.2rem;
-  color: #C59B4E;
-  margin-bottom: 0.2rem;
-  line-height: 1;
+  font-family: 'Great Vibes', cursive !important;
+  font-size: 2.2rem !important;
+  color: #C59B4E !important;
+  margin-bottom: 0.2rem !important;
+  line-height: 1 !important;
 }
 
 .envelope-title {
-  font-family: 'Playfair Display', 'Cormorant Garamond', serif;
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #8C3F2B;
-  margin-bottom: 0.4rem;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 2.2rem !important;
+  font-weight: bold !important;
+  color: #8C3F2B !important;
+  margin-bottom: 0.4rem !important;
 }
 
 .envelope-concept {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.95rem;
-  font-style: italic;
-  color: #78716C;
-  margin-bottom: 1.5rem;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 0.95rem !important;
+  font-style: italic !important;
+  color: #78716C !important;
+  margin-bottom: 1.5rem !important;
 }
 
-.btn-abrir {
-  width: 100%;
-  padding: 0.9rem;
-  background: #8C3F2B;
-  color: white;
-  border: none;
-  border-radius: 9999px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.btn-abrir:hover {
-  background: #723222;
-}
-
-/* Footer */
+/* FOOTER */
 footer.main-footer {
-  background: #2C221F;
-  color: #FAF7F2;
-  padding: 3rem 1rem;
-  text-align: center;
-  margin-top: 3rem;
+  background: #2C221F !important;
+  color: #FAF7F2 !important;
+  padding: 3rem 1rem !important;
+  text-align: center !important;
+  margin-top: 3rem !important;
 }
 
 .footer-script {
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.6rem;
-  color: #C59B4E;
+  font-family: 'Great Vibes', cursive !important;
+  font-size: 2.6rem !important;
+  color: #C59B4E !important;
 }
 
 .toast-msg {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: #2C221F;
-  color: #FFFFFF;
-  padding: 12px 20px;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  border-left: 4px solid #C59B4E;
-  z-index: 99999;
-  display: none;
-  font-size: 0.9rem;
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  background: #2C221F !important;
+  color: #FFFFFF !important;
+  padding: 12px 20px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25) !important;
+  border-left: 4px solid #C59B4E !important;
+  z-index: 99999 !important;
+  display: none !important;
+  font-size: 0.9rem !important;
 }
