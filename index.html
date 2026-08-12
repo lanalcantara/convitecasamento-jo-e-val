@@ -29,7 +29,6 @@
 
   <!-- 🎵 4. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
   <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
-  <audio id="bgAudio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
 
   <!-- ✉️ CAPA DE ENTRADA (COVER / ENVELOPE) -->
   <div id="cover" class="envelope-overlay">
@@ -56,10 +55,10 @@
 
       <p class="envelope-instruction">Clique abaixo para abrir o nosso convite</p>
 
-      <!-- Botão em Destaque "Abrir Convite" com evento inline infalível de fallback -->
+      <!-- Botão em Destaque "Abrir Convite" com evento inline exatamente como solicitado -->
       <button 
         id="btn-abrir" 
-        onclick="document.querySelectorAll('#cover, .cover, #envelopeOverlay, .envelope-overlay').forEach(el => el.style.display='none'); document.body.classList.remove('envelope-active'); const m = document.getElementById('mainContent'); if(m){ m.style.display='block'; m.style.opacity='1'; } const a = document.getElementById('bg-music') || document.getElementById('bgAudio'); if(a){ a.volume=0.2; a.play().catch(()=>{}); }" 
+        onclick="document.querySelectorAll('#cover, .cover, #envelopeOverlay, .envelope-overlay').forEach(el => el.style.display='none'); document.body.classList.remove('envelope-active');" 
         class="btn-open-envelope"
       >
         <span>❤️</span> <span>Abrir Convite</span>
@@ -81,8 +80,8 @@
     </button>
   </div>
 
-  <!-- 🌐 CONTEÚDO PRINCIPAL DO SITE (REVELADO APÓS ABERTURA) -->
-  <div id="mainContent" style="display: block; opacity: 1;">
+  <!-- 🌐 CONTEÚDO PRINCIPAL DO SITE -->
+  <div id="mainContent">
 
     <!-- Header / Navbar -->
     <header class="navbar" id="navbar">
@@ -197,7 +196,6 @@
 
       <!-- Contêiner do mural contendo APENAS a div limpa para preenchimento dinâmico via Supabase -->
       <div id="mural-lista"></div>
-      <div id="messagesWall"></div>
     </section>
 
     <!-- Presentes Pix (CPF: 091.602.964-61 / Beneficiário: Josalva / Valtair) -->

@@ -3,7 +3,33 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initEnvelopeOpening();
+  // Procura qualquer elemento que seja a capa
+  const covers = document.querySelectorAll('#cover, .cover, #envelope, #envelopeOverlay, .envelope-overlay');
+  const btns = document.querySelectorAll('#btn-abrir, .btn-abrir, #btnOpenInvite, button');
+  const audio = document.getElementById('bg-music') || document.getElementById('bgAudio') || document.querySelector('audio');
+
+  btns.forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      
+      // Esconde TODAS as camadas de capa encontradas
+      covers.forEach(c => {
+        c.style.display = 'none';
+        c.style.opacity = '0';
+      });
+      
+      // Remove a trava de scroll do body
+      document.body.style.overflow = 'auto';
+      document.body.classList.remove('envelope-active', 'overflow-hidden');
+
+      // Inicia a música
+      if (audio) {
+        audio.volume = 0.2;
+        audio.play().catch(err => console.log("Aguardando áudio:", err));
+      }
+    };
+  });
+
   initSupabaseAndEmailJS();
   initCountdown();
   initAudioPlayer();
@@ -14,57 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let supabaseClient = null;
-
-/* --------------------------------------------------------------------------
-   EVENTO DE ABERTURA DA CAPA INFALÍVEL
-   -------------------------------------------------------------------------- */
-function initEnvelopeOpening() {
-  const btnAbrir = document.getElementById('btn-abrir') || document.querySelector('.btn-abrir') || document.getElementById('btnOpenInvite') || document.querySelector('button');
-  const covers = document.querySelectorAll('#cover, .cover, #envelopeOverlay, .envelope-overlay');
-  const mainContent = document.getElementById('mainContent');
-  const audio = document.getElementById('bg-music') || document.getElementById('bgAudio');
-  const musicBtn = document.getElementById('musicBtn');
-  const musicIcon = document.getElementById('musicIcon');
-  const musicText = document.getElementById('musicText');
-
-  document.body.classList.add('envelope-active');
-
-  function triggerOpen() {
-    // Esconde a capa na hora
-    covers.forEach(el => {
-      if (el) el.style.display = 'none';
-    });
-
-    // Exibir site principal
-    if (mainContent) {
-      mainContent.style.display = 'block';
-      mainContent.style.opacity = '1';
-    }
-
-    // Desbloquear rolagem
-    document.body.classList.remove('envelope-active');
-
-    // Reproduzir áudio
-    if (audio) {
-      audio.volume = 0.2;
-      audio.play().then(() => {
-        if (musicBtn) musicBtn.classList.add('playing');
-        if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
-        if (musicText) musicText.innerText = 'Pausar';
-        showToast('Tocando "Live Forever" — Oasis 🎶');
-      }).catch(err => {
-        console.log("Áudio aguardando interação:", err);
-      });
-    }
-  }
-
-  if (btnAbrir) {
-    btnAbrir.addEventListener('click', (e) => {
-      e.preventDefault();
-      triggerOpen();
-    });
-  }
-}
 
 /* --------------------------------------------------------------------------
    CONEXÃO COM O SUPABASE ( ssfgxswkdbrjvqcpxcfp )
@@ -424,6 +399,24 @@ function fallbackCopyTextToClipboard(text) {
   }
 
   document.body.removeChild(textArea);
+}
+
+function showToast(message) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<span>${message}</span>`;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-100%)';
+    toast.style.transition = 'all 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
 }
 
 function initNavigation() {
