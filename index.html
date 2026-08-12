@@ -8,7 +8,7 @@
   <!-- Google Fonts de Alta Costura -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
@@ -16,32 +16,6 @@
   <!-- Supabase Client SDK e Configuração -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
-
-  <style>
-    :root {
-      --bg-main: #F7F4EF;
-      --bg-card: #FFFFFF;
-      --primary: #8C3F2B;
-      --primary-hover: #723222;
-      --gold: #C59B4E;
-      --border-color: #E5D9CC;
-      --text-dark: #2C221F;
-      --text-muted: #78716C;
-      --font-serif: 'Cormorant Garamond', serif;
-      --font-script: 'Great Vibes', cursive;
-      --font-sans: 'Inter', sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-dark);
-      font-family: var(--font-sans);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-  </style>
 </head>
 <body>
 
@@ -80,10 +54,10 @@
       </div>
     </header>
 
-    <div class="container">
+    <main class="container">
 
-      <!-- HERO LADO A LADO COM A FOTO DO CASAL NO MARCO ZERO -->
-      <section class="hero-card">
+      <!-- HERO SECTION COM A FOTO DO CASAL NO MARCO ZERO -->
+      <section class="hero-section">
         <img src="foto-marco-zero.jpg" alt="Josalva e Valtair no Marco Zero" class="foto-casal" onError="this.onerror=null; this.src='assets/foto-marco-zero.jpg';">
         
         <div class="hero-content">
@@ -98,22 +72,22 @@
         </div>
       </section>
 
-      <!-- BLOCO LADO A LADO 1: LOCALIZAÇÃO & RSVP -->
-      <div class="grid-2-col">
+      <!-- GRID DOS CARDS PRINCIPAIS -->
+      <div class="sections-grid">
         
-        <!-- CARD 1: LOCALIZAÇÃO & RECEPÇÃO -->
-        <div class="card-box">
+        <!-- CARD 1: RECEPTÇÃO & LOCALIZAÇÃO -->
+        <div class="card-section">
           <h2 class="card-title">
             <i class="fa-solid fa-location-dot"></i>
             <span>Recepção de Comemoração</span>
           </h2>
           
           <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
-            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1;">
+            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1; text-align: center;">
               <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Data</p>
               <p style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 2px;">18/10/2026</p>
             </div>
-            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1;">
+            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1; text-align: center;">
               <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Horário</p>
               <p style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 2px;">13:00h</p>
             </div>
@@ -127,15 +101,13 @@
           </a>
         </div>
 
-        <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP -> SUPABASE PRESENCAS + FORMSUBMIT EMAIL) -->
-        <div class="card-box">
+        <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP) -->
+        <div class="card-section">
           <h2 class="card-title">
             <i class="fa-regular fa-envelope-open"></i>
-            <span>Confirmação de Presença</span>
+            <span>Confirmar Presença</span>
           </h2>
-          <p style="font-size: 0.825rem; color: var(--text-muted); margin-bottom: 1.2rem;">Notificação enviada para: patriciajosalva@gmail.com</p>
-
-          <div id="rsvpStatusAlert" style="display: none; padding: 1rem; background: #F9EFEA; border: 1px solid var(--primary); color: var(--primary); border-radius: 0.85rem; margin-bottom: 1.2rem; font-size: 0.9rem; text-align: left;"></div>
+          <p style="font-size: 0.825rem; color: var(--text-muted); margin-bottom: 1.2rem; text-align: center;">Notificação enviada para: patriciajosalva@gmail.com</p>
 
           <form id="form-rsvp" style="text-align: left;">
             <label class="form-label" for="rsvp-nome">Nome Completo *</label>
@@ -162,18 +134,13 @@
           </form>
         </div>
 
-      </div>
-
-      <!-- BLOCO LADO A LADO 2: PRESENTES PIX & MURAL DE RECADOS -->
-      <div class="grid-2-col">
-
-        <!-- CARD 3: PRESENTES VIA PIX -->
-        <div class="card-box">
+        <!-- CARD 3: PRESENTES EM DINHEIRO (PIX) -->
+        <div class="card-section">
           <h2 class="card-title">
             <i class="fa-solid fa-gift"></i>
             <span>Presentes em Dinheiro (Pix)</span>
           </h2>
-          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; text-align: center;">
             Caso deseje nos presentear, preferimos contribuições em dinheiro via Pix para nos ajudar nessa nova fase!
           </p>
 
@@ -204,7 +171,7 @@
         </div>
 
         <!-- CARD 4: MURAL DE RECADOS -->
-        <div class="card-box">
+        <div class="card-section">
           <h2 class="card-title">
             <i class="fa-regular fa-comments"></i>
             <span>Mural de Recados</span>
@@ -221,7 +188,7 @@
           </form>
 
           <div id="mural-lista">
-            <div style="border: 2px dashed var(--border-color); padding: 1.5rem 1rem; border-radius: 1rem;">
+            <div style="border: 2px dashed var(--border-color); padding: 1.5rem 1rem; border-radius: 1rem; text-align: center;">
               <p style="color: var(--text-muted); font-style: italic; font-size: 0.9rem;">Seja o primeiro a deixar um recado carinhoso para os noivos!</p>
             </div>
           </div>
@@ -229,7 +196,7 @@
 
       </div>
 
-    </div>
+    </main>
 
     <footer class="main-footer">
       <p class="footer-script">Josalva &amp; Valtair</p>
