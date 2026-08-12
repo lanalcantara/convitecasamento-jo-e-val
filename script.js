@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   ✉️ 2. CAPA DE ENTRADA (CONVITE FECHADO - POSITION: FIXED; INSET: 0; Z-INDEX: 9999)
+   ✉️ 3. TELA DE CAPA (ENVELOPE DE ENTRADA - POSITION: FIXED; INSET: 0; Z-INDEX: 9999)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
-  const envelopeOverlay = document.getElementById('envelopeOverlay');
+  const envelopeOverlay = document.getElementById('cover') || document.getElementById('envelopeOverlay');
   const btnOpenInvite = document.getElementById('btnOpenInvite');
   const mainContent = document.getElementById('mainContent');
   const bgAudio = document.getElementById('bgAudio');
@@ -135,7 +135,7 @@ function initCountdown() {
 }
 
 /* --------------------------------------------------------------------------
-   🎵 4. CONTROLE DE ÁUDIO DE FUNDO (Live Forever — Oasis / VOLUME 0.2)
+   🎵 CONTROLE DE ÁUDIO DE FUNDO (Live Forever — Oasis / VOLUME 0.2)
    -------------------------------------------------------------------------- */
 function initAudioPlayer() {
   const bgAudio = document.getElementById('bgAudio');
@@ -179,7 +179,7 @@ function initAudioPlayer() {
 }
 
 /* --------------------------------------------------------------------------
-   💳 5. CHAVE PIX (CPF 091.602.964-61 / Beneficiário: Josalva / Valtair) & QR CODE
+   CHAVE PIX (CPF 091.602.964-61 / Beneficiário: Josalva / Valtair) & QR CODE
    -------------------------------------------------------------------------- */
 function initQRCodeAndPixKey() {
   const cfg = window.CONFIG || {};
@@ -232,7 +232,7 @@ function initQRCodeAndPixKey() {
 }
 
 /* --------------------------------------------------------------------------
-   💳 5. CONFIRMAÇÃO DE PRESENÇA EM TEMPO REAL NO SUPABASE
+   CONFIRMAÇÃO DE PRESENÇA EM TEMPO REAL NO SUPABASE
    -------------------------------------------------------------------------- */
 function initRSVP() {
   const rsvpForm = document.getElementById('rsvpForm');
@@ -309,7 +309,7 @@ function initRSVP() {
 }
 
 /* --------------------------------------------------------------------------
-   🧹 3. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
+   🧹 2. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -353,7 +353,10 @@ function initGuestbook() {
 
 async function loadAndRenderMessages() {
   const messagesWall = document.getElementById('messagesWall');
-  if (!messagesWall) return;
+  const muralLista = document.getElementById('mural-lista');
+  const targetWall = messagesWall || muralLista;
+
+  if (!targetWall) return;
 
   let messages = [];
 
@@ -376,17 +379,18 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
-  // 🧹 REMOÇÃO COMPLETA DOS DADOS MOCADOS: Se não houver recados, exibe apenas a mensagem amigável
+  // 🧹 EXCLUSÃO COMPLETA DOS RECADOS MOCADOS NO HTML
   if (!messages || messages.length === 0) {
-    messagesWall.innerHTML = `
+    targetWall.innerHTML = `
       <div class="empty-state-box">
         <p>Seja o primeiro a deixar um recado para Josalva & Valtair! ❤️</p>
       </div>
     `;
+    if (muralLista && muralLista !== targetWall) muralLista.innerHTML = '';
     return;
   }
 
-  messagesWall.innerHTML = messages.map(msg => `
+  const renderedHTML = messages.map(msg => `
     <div class="message-card">
       <div class="message-header">
         <span class="message-author">${msg.autor || msg.author}</span>
@@ -395,6 +399,9 @@ async function loadAndRenderMessages() {
       <p class="message-text">"${msg.mensagem || msg.text}"</p>
     </div>
   `).join('');
+
+  targetWall.innerHTML = renderedHTML;
+  if (muralLista && muralLista !== targetWall) muralLista.innerHTML = '';
 }
 
 /* --------------------------------------------------------------------------

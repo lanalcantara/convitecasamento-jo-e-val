@@ -30,8 +30,8 @@
   <!-- 🎵 4. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
   <audio id="bgAudio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
 
-  <!-- ✉️ 2. CAPA DE ENTRADA (CONVITE FECHADO - COBRE 100% DA TELA) -->
-  <div class="envelope-overlay" id="envelopeOverlay">
+  <!-- ✉️ 3. TELA DE CAPA (ENVELOPE DE ENTRADA - POSITION: FIXED; INSET: 0; Z-INDEX: 9999; BACKGROUND: #F7F4EF) -->
+  <div id="cover" class="envelope-overlay">
     <div class="envelope-card">
       
       <!-- Ilustração Floral Rústica Boho -->
@@ -93,17 +93,17 @@
       </div>
     </header>
 
-    <!-- 🖼️ 1. FOTO REAL DO CASAL NO MARCO ZERO & HERO SECTION -->
+    <!-- 📸 1. ENQUADRAMENTO DA FOTO DO CASAL NO CARD HERO -->
     <section class="hero">
       <img 
         src="foto-marco-zero.jpg" 
         alt="Josalva e Valtair" 
-        class="foto-casal-marco-zero"
+        class="foto-casal"
         onError="this.onerror=null; this.src='foto-marco-zero.jpg.png';"
       />
 
       <div class="hero-text-content">
-        <span class="hero-tag">Você é nosso convidado especial</span>
+        <span class="hero-tag">VOCÊ É NOSSO CONVIDADO ESPECIAL</span>
         <h1 class="hero-names-script">Josalva & Valtair</h1>
         <p class="hero-welcome-text">
           "Venha comemorar conosco esse momento de muita alegria e união entre amigos e familiares!"
@@ -143,7 +143,7 @@
       </div>
     </section>
 
-    <!-- 💳 5. Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
+    <!-- Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
     <section id="confirmacao" class="rsvp-section">
       <div class="rsvp-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px; text-align: center;">Confirmação de Presença</h2>
@@ -172,7 +172,7 @@
       </div>
     </section>
 
-    <!-- 🧹 3. MURAL DE RECADOS (ZERO DADOS MOCADOS - TOTALMENTE LIMPO) -->
+    <!-- 🧹 2. MURAL DE RECADOS (ZERO RECADOS MOCADOS NO HTML - CONTÊINER 100% VAZIO) -->
     <section id="recados" class="messages-section">
       <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 16px;">Mural de Recados</h2>
       
@@ -190,11 +190,12 @@
         </form>
       </div>
 
-      <!-- Área de recados alimentada dinamicamente pelo Supabase sem nenhum dado falso -->
+      <!-- Contêiner do mural de recados TOTALMENTE VAZIO no HTML. Preenchido via Supabase pelo script.js -->
+      <div id="mural-lista"></div>
       <div id="messagesWall"></div>
     </section>
 
-    <!-- 💳 5. Pix & Notificação (CPF: 091.602.964-61 / Beneficiário: Josalva / Valtair) -->
+    <!-- Presentes Pix (CPF: 091.602.964-61 / Beneficiário: Josalva / Valtair) -->
     <section id="presentes" class="pix-section">
       <div class="pix-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px;">Presentes em Dinheiro (Pix)</h2>

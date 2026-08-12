@@ -62,15 +62,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ✉️ 2. CAPA DE ENTRADA (CONVITE FECHADO - POSITION: FIXED; INSET: 0; Z-INDEX: 9999) */
+/* ✉️ 3. TELA DE CAPA (ENVELOPE DE ENTRADA - POSITION: FIXED; INSET: 0; Z-INDEX: 9999; BACKGROUND: #F7F4EF) */
 body.envelope-active {
   overflow: hidden !important;
   height: 100vh !important;
   touch-action: none;
 }
 
-.envelope-overlay {
+#cover, .envelope-overlay {
   position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
   inset: 0;
   z-index: 99999;
   width: 100vw;
@@ -86,7 +87,7 @@ body.envelope-active {
   transition: opacity 0.7s ease, visibility 0.7s ease;
 }
 
-.envelope-overlay.opened {
+#cover.opened, .envelope-overlay.opened {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -184,7 +185,7 @@ body.envelope-active {
   transform: scale(0.95);
 }
 
-/* 🎵 4. PLAYER FLUTUANTE DE ÁUDIO NO CANTO INFERIOR DIREITO */
+/* 🎵 PLAYER FLUTUANTE DE ÁUDIO NO CANTO INFERIOR DIREITO */
 .floating-music-widget {
   position: fixed;
   bottom: 24px;
@@ -278,15 +279,14 @@ body.envelope-active {
   color: #8C3F2B;
 }
 
-/* 🖼️ 1. FOTO REAL DO CASAL NO MARCO ZERO */
+/* 📸 1. ENQUADRAMENTO DA FOTO DO CASAL NO CARD HERO */
 .hero {
   padding: 48px 16px;
-  max-width: 896px;
+  max-width: 900px;
   margin: 0 auto;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 36px;
+  gap: 2rem;
 }
 
 @media (max-width: 768px) {
@@ -296,22 +296,18 @@ body.envelope-active {
   }
 }
 
-.foto-casal-marco-zero {
+.foto-casal, .foto-casal-marco-zero {
   width: 100%;
-  max-width: 340px;
-  aspect-ratio: 3/4;
-  border-radius: 28px;
+  max-width: 380px;
+  height: 480px;
   object-fit: cover;
-  border: 4px solid #FFFFFF;
-  box-shadow: 0 20px 40px rgba(140, 63, 43, 0.16);
+  object-position: center top;
+  border-radius: 2rem;
+  border: 4px solid #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   display: block;
   flex-shrink: 0;
-  transition: transform 0.4s ease;
-}
-
-.foto-casal-marco-zero:hover {
-  transform: scale(1.02);
 }
 
 .hero-text-content {
@@ -478,7 +474,7 @@ body.envelope-active {
   background-color: #723222;
 }
 
-/* 🧹 3. MURAL DE RECADOS (SEM DADOS MOCADOS) */
+/* 🧹 2. MURAL DE RECADOS (SEM RECADOS MOCADOS) */
 .messages-section {
   padding: 40px 16px;
   max-width: 576px;
@@ -520,7 +516,7 @@ body.envelope-active {
   font-style: italic;
 }
 
-/* 💳 5. PRESENTES PIX */
+/* PRESENTES PIX */
 .pix-section {
   padding: 40px 16px 80px 16px;
   max-width: 512px;
