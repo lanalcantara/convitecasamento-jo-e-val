@@ -1,47 +1,30 @@
 /* ==========================================================================
    JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO CHIC
-   PLAYER YOUTUBE (Live Forever - Oasis - TDe1DqxwJoc) & LÓGICA DO SITE
+   ÁUDIO NATIVO HTML5 (Live Forever - Oasis) & LÓGICA DO SITE
    ========================================================================== */
 
 const PAYLOAD_PIX_EMV_OFICIAL = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
-let player;
 
-/* 🎵 1. FUNÇÃO DA API DO YOUTUBE PARA "Live Forever - Oasis" (TDe1DqxwJoc) */
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('youtube-player', {
-    height: '0',
-    width: '0',
-    videoId: 'TDe1DqxwJoc', // ID oficial do vídeo "Live Forever - Oasis"
-    playerVars: {
-      'autoplay': 0,
-      'controls': 0,
-      'loop': 1,
-      'playlist': 'TDe1DqxwJoc'
-    },
-    events: {
-      'onReady': onPlayerReady
-    }
-  });
-}
-
-function onPlayerReady(event) {
-  event.target.setVolume(30); // Volume suave em 30%
-}
-
-/* 💌 FUNÇÃO DE ABERTURA DO CONVITE QUE DISPARA A MÚSICA DO YOUTUBE */
+// Função de abertura do convite com reprodução de áudio nativo HTML5
 function abrirConviteComAnimacao() {
   const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
+  const audio = document.getElementById('bg-music');
+
+  // 1. Aplica animação de abertura do convite
   if (cover) {
     cover.classList.add('aberto');
     cover.classList.add('envelope-opening');
     setTimeout(() => { cover.style.display = 'none'; }, 1000);
   }
 
-  // Toca o vídeo do Live Forever no YouTube ao clicar no botão
-  if (player && typeof player.playVideo === 'function') {
-    try {
-      player.playVideo();
-    } catch(e) {}
+  // 2. Toca a música diretamente na interação do clique
+  if (audio) {
+    audio.volume = 0.3; // Volume agradável de fundo (30%)
+    audio.play().then(() => {
+      console.log("Música iniciada com sucesso!");
+    }).catch(err => {
+      console.error("Erro ao reproduzir áudio:", err);
+    });
   }
 }
 
@@ -49,7 +32,7 @@ function abrirConvite() {
   abrirConviteComAnimacao();
 }
 
-/* 👥 MOSTRAR / ESCONDER CAMPO DE QUANTIDADE DE ACOMPANHANTES */
+// Mostrar / esconder campo de quantidade de acompanhantes
 function toggleAcompanhantes(valor) {
   const box = document.getElementById('box-qtd-acompanhantes');
   if (box) {
@@ -57,8 +40,8 @@ function toggleAcompanhantes(valor) {
   }
 }
 
+// Vincula a função ao botão de abertura e inicializa Supabase e formulários
 document.addEventListener('DOMContentLoaded', () => {
-  /* Conectar o botão "Abrir Convite" à função abrirConviteComAnimacao */
   const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('.btn-abrir-envelope');
   if (btnAbrir) {
     btnAbrir.onclick = abrirConviteComAnimacao;
