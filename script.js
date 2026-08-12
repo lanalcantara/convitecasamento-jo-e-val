@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. CAPA SOBREPOSTA (DESAPARECE SUAVEMENTE AO CLICAR)
+   1. CAPA DE ENTRADA (CONVITE FECHADO - POSITION: FIXED; INSET: 0; Z-INDEX: 9999)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
@@ -39,7 +39,7 @@ function initEnvelopeOpening() {
     if (isOpened) return;
     isOpened = true;
 
-    // 1. Suavizar e esconder a Capa
+    // 1. Ocultar a Capa com transição suave
     if (envelopeOverlay) {
       envelopeOverlay.classList.add('opened');
       setTimeout(() => {
@@ -135,7 +135,7 @@ function initCountdown() {
 }
 
 /* --------------------------------------------------------------------------
-   4. CONTROLE DE ÁUDIO DE FUNDO (VOLUME INICIAL 0.2 / OASIS)
+   4. CONTROLE DE ÁUDIO DE FUNDO (Live Forever — Oasis / VOLUME 0.2)
    -------------------------------------------------------------------------- */
 function initAudioPlayer() {
   const bgAudio = document.getElementById('bgAudio');
@@ -179,7 +179,7 @@ function initAudioPlayer() {
 }
 
 /* --------------------------------------------------------------------------
-   5. CHAVE PIX & QR CODE
+   5. CHAVE PIX (CPF 091.602.964-61 / Beneficiário: Josalva / Valtair) & QR CODE
    -------------------------------------------------------------------------- */
 function initQRCodeAndPixKey() {
   const cfg = window.CONFIG || {};
