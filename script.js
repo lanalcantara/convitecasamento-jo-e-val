@@ -1,6 +1,6 @@
 /* ==========================================================================
    JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO CHIC
-   REPRODUÇÃO DE ÁUDIO "Live Forever - Oasis" (live-forever.mp3)
+   REPRODUÇÃO DE ÁUDIO "Live Forever - Oasis" & NOTIFICAÇÃO RSVP WEB3FORMS
    ========================================================================== */
 
 const PAYLOAD_PIX_EMV_OFICIAL = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
@@ -18,7 +18,7 @@ function abrirConviteComAnimacao() {
 
   if (audio) {
     audio.volume = 0.3; // Volume agradável de fundo (30%)
-    audio.play().catch(err => console.log("Erro ao tocar áudio:", err));
+    audio.play().catch(e => console.log("Erro audio:", e));
   }
 }
 
@@ -34,7 +34,6 @@ function toggleAcompanhantes(valor) {
   }
 }
 
-// Vincula a função ao botão de abertura e inicializa o Supabase
 document.addEventListener('DOMContentLoaded', () => {
   const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('.btn-abrir-envelope');
   if (btnAbrir) {
@@ -67,8 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* RSVP Form Submission */
+  /* 2. ENVIO DE NOTIFICAÇÃO POR E-MAIL (patriciajosalva@gmail.com) */
   const formRsvp = document.getElementById('form-rsvp') || document.querySelector('form');
+
   if (formRsvp) {
     formRsvp.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -79,33 +79,29 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.innerText = 'Enviando...';
       }
 
-      const inputNome = document.getElementById('rsvp-nome') || formRsvp.querySelector('input[type="text"]');
-      const selectStatus = document.getElementById('rsvp-status') || formRsvp.querySelector('select');
+      const inputNome = formRsvp.querySelector('input[type="text"]');
+      const selectStatus = formRsvp.querySelector('select');
       const selectAcompanhante = document.getElementById('rsvp-tem-acompanhante');
-      const inputQtd = document.getElementById('rsvp-qtd-acompanhantes');
+      const inputQtdAcompanhantes = document.getElementById('rsvp-qtd-acompanhantes');
 
-      const nome = inputNome ? inputNome.value.trim() : '';
+      const nome = inputNome ? inputNome.value : '';
       const status = selectStatus ? selectStatus.value : 'Sim, estarei presente!';
-      const temAcompanhante = selectAcompanhante ? selectAcompanhante.value : 'Não';
-      const qtdAcompanhantes = (temAcompanhante === 'Sim' && inputQtd) ? (parseInt(inputQtd.value) || 1) : 0;
+      const temAcomp = selectAcompanhante ? selectAcompanhante.value : 'Não';
+      const qtdAcomp = (temAcomp === 'Sim' && inputQtdAcompanhantes) ? inputQtdAcompanhantes.value : '0';
 
       try {
+        // 1. Salva no Supabase
         if (window.supabaseClient) {
-          const { data, error } = await window.supabaseClient
-            .from('presencas')
-            .insert([{
-              nome_completo: nome,
-              status: status,
-              se_acompanhante: temAcompanhante,
-              qtd_acompanhantes: qtdAcompanhantes,
-              email_notificacao: 'patriciajosalva@gmail.com'
-            }]);
-
-          if (error) console.error("Erro Supabase:", error);
+          await window.supabaseClient.from('presencas').insert([{
+            nome_completo: nome,
+            status: status,
+            se_acompanhante: temAcomp,
+            qtd_acompanhantes: parseInt(qtdAcomp) || 0,
+            email_notificacao: 'patriciajosalva@gmail.com'
+          }]);
         }
 
-        let msgAcompanhante = temAcompanhante === 'Sim' ? `Sim (${qtdAcompanhantes} acompanhante(s))` : 'Não (irá sozinho)';
-        
+        // 2. Dispara o E-MAIL DE FATO para patriciajosalva@gmail.com
         await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -114,17 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
             to_email: 'patriciajosalva@gmail.com',
             subject: `💌 Confirmação de Presença: ${nome}`,
             from_name: 'Convite Josalva & Valtair',
-            message: `Nova confirmação recebida:\n\nNome: ${nome}\nPresença: ${status}\nAcompanhante: ${msgAcompanhante}`
+            message: `Nova confirmação recebida no site:\n\nNome: ${nome}\nVai comparecer? ${status}\nAcompanhante: ${temAcomp} (${qtdAcomp} pessoa(s))`
           })
         });
 
-        alert(`✨ Muito obrigado, ${nome}! Sua presença (${status}) foi confirmada com sucesso.`);
+        alert(`✨ Muito obrigado, ${nome}! Sua presença foi confirmada com sucesso e os noivos foram notificados por e-mail.`);
         formRsvp.reset();
         toggleAcompanhantes('Não');
 
       } catch (err) {
-        console.error("Erro no envio:", err);
-        alert(`✨ Sua presença foi confirmada!`);
+        console.error("Erro ao enviar:", err);
+        alert("✨ Presença confirmada!");
       } finally {
         if (btn) {
           btn.disabled = false;
