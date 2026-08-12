@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. TELA DE CAPA (CONVITE FECHADO - ESTADO INICIAL ISOLADO)
+   1. TELA DE CAPA (ENVELOPE COVER - ESTRUTURA ESTRITA DE ABERTURA)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
@@ -31,7 +31,6 @@ function initEnvelopeOpening() {
 
   let isOpened = false;
 
-  // Garante estado inicial: Capa visível, Site Principal OCULTO e Desmontado (display: none)
   if (mainContent) {
     mainContent.style.display = 'none';
     mainContent.style.opacity = '0';
@@ -42,7 +41,7 @@ function initEnvelopeOpening() {
     if (isOpened) return;
     isOpened = true;
 
-    // 1. Animação de transição suave (fade-out + scale-up) da Capa
+    // Transição suave da Capa
     if (envelopeOverlay) {
       envelopeOverlay.classList.add('opened');
       setTimeout(() => {
@@ -50,7 +49,7 @@ function initEnvelopeOpening() {
       }, 750);
     }
 
-    // 2. Montar e exibir o Conteúdo do Site Principal
+    // Exibir Conteúdo do Site
     if (mainContent) {
       mainContent.style.display = 'block';
       setTimeout(() => {
@@ -60,7 +59,7 @@ function initEnvelopeOpening() {
 
     document.body.classList.remove('envelope-active');
 
-    // 3. Iniciar reprodução do áudio "Stop Crying Your Heart Out" em volume 0.2 (20%)
+    // Reproduzir áudio "Stop Crying Your Heart Out" (Acústico) - Oasis com volume 0.2
     if (bgAudio) {
       bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
@@ -482,7 +481,7 @@ function initCotasModal() {
 }
 
 /* --------------------------------------------------------------------------
-   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
+   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -549,7 +548,6 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
-  // ZERO DADOS MOCADOS: Mensagem quando não há registros
   if (!messages || messages.length === 0) {
     messagesWall.innerHTML = `
       <div class="empty-state-box">
