@@ -3,56 +3,7 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. CORREÇÃO DIRETA E IMEDIATA DO EVENTO DE CLIQUE DA CAPA
-  const btnAbrir = document.getElementById('btn-abrir') || document.querySelector('.btn-abrir') || document.getElementById('btnOpenInvite') || document.querySelector('button');
-  const cover = document.getElementById('cover') || document.querySelector('.cover') || document.querySelector('#envelope') || document.getElementById('envelopeOverlay');
-  const audio = document.getElementById('bg-music') || document.getElementById('bgAudio');
-  const mainContent = document.getElementById('mainContent');
-  const musicBtn = document.getElementById('musicBtn');
-  const musicIcon = document.getElementById('musicIcon');
-  const musicText = document.getElementById('musicText');
-
-  if (mainContent) {
-    mainContent.style.display = 'none';
-    mainContent.style.opacity = '0';
-  }
-  document.body.classList.add('envelope-active');
-
-  if (btnAbrir) {
-    btnAbrir.onclick = (e) => {
-      e.preventDefault();
-      
-      // Esconde a capa na hora
-      if (cover) {
-        cover.style.display = 'none';
-      }
-
-      // Revela o site principal na hora
-      if (mainContent) {
-        mainContent.style.display = 'block';
-        setTimeout(() => {
-          mainContent.style.opacity = '1';
-        }, 50);
-      }
-
-      // Desbloqueia a rolagem
-      document.body.classList.remove('envelope-active');
-
-      // Tenta tocar o áudio sem interromper a tela caso falhe
-      if (audio) {
-        audio.volume = 0.2;
-        audio.play().then(() => {
-          if (musicBtn) musicBtn.classList.add('playing');
-          if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
-          if (musicText) musicText.innerText = 'Pausar';
-          showToast('Tocando "Live Forever" — Oasis 🎶');
-        }).catch(err => {
-          console.log("Áudio aguardando interação:", err);
-        });
-      }
-    };
-  }
-
+  initEnvelopeOpening();
   initSupabaseAndEmailJS();
   initCountdown();
   initAudioPlayer();
@@ -63,6 +14,57 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let supabaseClient = null;
+
+/* --------------------------------------------------------------------------
+   EVENTO DE ABERTURA DA CAPA INFALÍVEL
+   -------------------------------------------------------------------------- */
+function initEnvelopeOpening() {
+  const btnAbrir = document.getElementById('btn-abrir') || document.querySelector('.btn-abrir') || document.getElementById('btnOpenInvite') || document.querySelector('button');
+  const covers = document.querySelectorAll('#cover, .cover, #envelopeOverlay, .envelope-overlay');
+  const mainContent = document.getElementById('mainContent');
+  const audio = document.getElementById('bg-music') || document.getElementById('bgAudio');
+  const musicBtn = document.getElementById('musicBtn');
+  const musicIcon = document.getElementById('musicIcon');
+  const musicText = document.getElementById('musicText');
+
+  document.body.classList.add('envelope-active');
+
+  function triggerOpen() {
+    // Esconde a capa na hora
+    covers.forEach(el => {
+      if (el) el.style.display = 'none';
+    });
+
+    // Exibir site principal
+    if (mainContent) {
+      mainContent.style.display = 'block';
+      mainContent.style.opacity = '1';
+    }
+
+    // Desbloquear rolagem
+    document.body.classList.remove('envelope-active');
+
+    // Reproduzir áudio
+    if (audio) {
+      audio.volume = 0.2;
+      audio.play().then(() => {
+        if (musicBtn) musicBtn.classList.add('playing');
+        if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
+        if (musicText) musicText.innerText = 'Pausar';
+        showToast('Tocando "Live Forever" — Oasis 🎶');
+      }).catch(err => {
+        console.log("Áudio aguardando interação:", err);
+      });
+    }
+  }
+
+  if (btnAbrir) {
+    btnAbrir.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerOpen();
+    });
+  }
+}
 
 /* --------------------------------------------------------------------------
    CONEXÃO COM O SUPABASE ( ssfgxswkdbrjvqcpxcfp )
@@ -422,24 +424,6 @@ function fallbackCopyTextToClipboard(text) {
   }
 
   document.body.removeChild(textArea);
-}
-
-function showToast(message) {
-  const container = document.getElementById('toastContainer');
-  if (!container) return;
-
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerHTML = `<span>${message}</span>`;
-
-  container.appendChild(toast);
-
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateX(-100%)';
-    toast.style.transition = 'all 0.3s ease';
-    setTimeout(() => toast.remove(), 300);
-  }, 4000);
 }
 
 function initNavigation() {

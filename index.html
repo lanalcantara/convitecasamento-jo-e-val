@@ -27,7 +27,7 @@
 </head>
 <body class="envelope-active">
 
-  <!-- 🎵 3. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
+  <!-- 🎵 4. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
   <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
   <audio id="bgAudio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
 
@@ -56,8 +56,12 @@
 
       <p class="envelope-instruction">Clique abaixo para abrir o nosso convite</p>
 
-      <!-- Botão em Destaque "Abrir Convite" -->
-      <button class="btn-open-envelope" id="btn-abrir">
+      <!-- Botão em Destaque "Abrir Convite" com evento inline infalível de fallback -->
+      <button 
+        id="btn-abrir" 
+        onclick="document.querySelectorAll('#cover, .cover, #envelopeOverlay, .envelope-overlay').forEach(el => el.style.display='none'); document.body.classList.remove('envelope-active'); const m = document.getElementById('mainContent'); if(m){ m.style.display='block'; m.style.opacity='1'; } const a = document.getElementById('bg-music') || document.getElementById('bgAudio'); if(a){ a.volume=0.2; a.play().catch(()=>{}); }" 
+        class="btn-open-envelope"
+      >
         <span>❤️</span> <span>Abrir Convite</span>
       </button>
 
@@ -78,7 +82,7 @@
   </div>
 
   <!-- 🌐 CONTEÚDO PRINCIPAL DO SITE (REVELADO APÓS ABERTURA) -->
-  <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.7s ease;">
+  <div id="mainContent" style="display: block; opacity: 1;">
 
     <!-- Header / Navbar -->
     <header class="navbar" id="navbar">
@@ -94,7 +98,7 @@
       </div>
     </header>
 
-    <!-- 📸 1. FOTO DO CASAL NO MARCO ZERO & HERO SECTION -->
+    <!-- 📸 FOTO DO CASAL NO MARCO ZERO & HERO SECTION -->
     <section class="hero">
       <img 
         src="foto-marco-zero.jpg" 
@@ -144,7 +148,7 @@
       </div>
     </section>
 
-    <!-- Confirmação de Presença -->
+    <!-- Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
     <section id="confirmacao" class="rsvp-section">
       <div class="rsvp-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px; text-align: center;">Confirmação de Presença</h2>
@@ -173,7 +177,7 @@
       </div>
     </section>
 
-    <!-- 🧹 2. LIMPEZA DOS DADOS MOCADOS NO HTML (SEM DADOS FALSOS) -->
+    <!-- 🧹 MURAL DE RECADOS (CONTÊINER 100% VAZIO NO HTML) -->
     <section id="mural" class="messages-section">
       <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 16px;">Mural de Recados</h2>
       
