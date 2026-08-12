@@ -3,32 +3,23 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Procura qualquer elemento que seja a capa
-  const covers = document.querySelectorAll('#cover, .cover, #envelope, #envelopeOverlay, .envelope-overlay');
-  const btns = document.querySelectorAll('#btn-abrir, .btn-abrir, #btnOpenInvite, button');
+  const btnAbrir = document.getElementById('btn-abrir-convite') || document.getElementById('btn-abrir') || document.querySelector('.btn-abrir') || document.querySelector('button');
+  const cover = document.getElementById('cover') || document.querySelector('.cover') || document.querySelector('#envelopeOverlay');
   const audio = document.getElementById('bg-music') || document.getElementById('bgAudio') || document.querySelector('audio');
 
-  btns.forEach(btn => {
-    btn.onclick = (e) => {
+  if (btnAbrir) {
+    btnAbrir.addEventListener('click', (e) => {
       e.preventDefault();
-      
-      // Esconde TODAS as camadas de capa encontradas
-      covers.forEach(c => {
-        c.style.display = 'none';
-        c.style.opacity = '0';
-      });
-      
-      // Remove a trava de scroll do body
+      if (cover) cover.remove();
       document.body.style.overflow = 'auto';
       document.body.classList.remove('envelope-active', 'overflow-hidden');
 
-      // Inicia a música
       if (audio) {
         audio.volume = 0.2;
         audio.play().catch(err => console.log("Aguardando áudio:", err));
       }
-    };
-  });
+    });
+  }
 
   initSupabaseAndEmailJS();
   initCountdown();

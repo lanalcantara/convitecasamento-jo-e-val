@@ -30,40 +30,29 @@
   <!-- 🎵 4. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
   <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
 
-  <!-- ✉️ CAPA DE ENTRADA (COVER / ENVELOPE) -->
-  <div id="cover" class="envelope-overlay">
-    <div class="envelope-card">
+  <!-- CAPA SOBREPOSTA COM AÇÃO DIRETA E Z-INDEX ELEVADO NO BOTÃO -->
+  <div id="cover" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #F7F4EF; z-index: 99999; display: flex; align-items: center; justify-content: center;">
+    <div style="background: rgba(255, 255, 255, 0.9); padding: 2rem; border-radius: 1.5rem; border: 1px solid #D9C3B0; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
       
-      <!-- Ilustração Floral Rústica Boho -->
-      <div class="envelope-floral-box">
-        <svg viewBox="0 0 240 128" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="120" cy="64" r="54" fill="none" stroke="#E6DDD1" stroke-width="1.5" stroke-dasharray="4,3"/>
-          <path d="M70 64 Q 85 30 120 24" fill="none" stroke="#8C3F2B" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M170 64 Q 155 30 120 24" fill="none" stroke="#8C3F2B" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="95" cy="35" r="4.5" fill="#C59B4E"/>
-          <circle cx="145" cy="35" r="4.5" fill="#C59B4E"/>
-          <circle cx="80" cy="50" r="4" fill="#B06D55"/>
-          <circle cx="160" cy="50" r="4" fill="#B06D55"/>
-          <text x="120" y="74" font-family="'Great Vibes', cursive" font-size="38" fill="#8C3F2B" text-anchor="middle">J &amp; V</text>
-        </svg>
+      <!-- Monograma -->
+      <div style="width: 80px; height: 80px; margin: 0 auto 1rem auto; border-radius: 50%; border: 1px dashed #D9C3B0; display: flex; align-items: center; justify-content: center;">
+        <span style="font-family: serif; font-size: 1.5rem; color: #8C3F2B; font-weight: bold;">J &amp; V</span>
       </div>
 
-      <div>
-        <h1 class="envelope-names">Josalva & Valtair</h1>
-        <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
-      </div>
+      <h1 style="font-family: serif; font-size: 2rem; color: #8C3F2B; margin-bottom: 0.5rem; font-weight: bold;">Josalva &amp; Valtair</h1>
+      <p style="font-size: 0.875rem; color: #57534e; font-style: italic; margin-bottom: 1.5rem;">Recepção de Comemoração com Amigos e Familiares</p>
+      
+      <p style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #78716c; margin-bottom: 1rem;">Clique abaixo para abrir o nosso convite</p>
 
-      <p class="envelope-instruction">Clique abaixo para abrir o nosso convite</p>
-
-      <!-- Botão em Destaque "Abrir Convite" com evento inline exatamente como solicitado -->
+      <!-- BOTÃO COM AÇÃO DIRETA SEM DEPENDÊNCIAS -->
       <button 
-        id="btn-abrir" 
-        onclick="document.querySelectorAll('#cover, .cover, #envelopeOverlay, .envelope-overlay').forEach(el => el.style.display='none'); document.body.classList.remove('envelope-active');" 
-        class="btn-open-envelope"
+        id="btn-abrir-convite" 
+        type="button" 
+        onclick="document.getElementById('cover').remove(); document.body.style.overflow='auto'; const audio = document.querySelector('audio'); if(audio){ audio.volume = 0.2; audio.play().catch(()=>{}); }" 
+        style="width: 100%; padding: 0.875rem 1.5rem; background-color: #8C3F2B; color: #ffffff; border: none; border-radius: 9999px; font-weight: 600; cursor: pointer; position: relative; z-index: 100000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);"
       >
-        <span>❤️</span> <span>Abrir Convite</span>
+        ❤️ Abrir Convite
       </button>
-
     </div>
   </div>
 
