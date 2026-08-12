@@ -3,26 +3,11 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initEnvelopeOpening();
-  initSupabaseAndEmailJS();
-  initCountdown();
-  initAudioPlayer();
-  initQRCodeAndPixKey();
-  initRSVP();
-  initGuestbook();
-  initNavigation();
-});
-
-let supabaseClient = null;
-
-/* --------------------------------------------------------------------------
-   3. EVENTO DE ABERTURA DA CAPA (`script.js`)
-   -------------------------------------------------------------------------- */
-function initEnvelopeOpening() {
-  const btnAbrir = document.getElementById('btn-abrir') || document.getElementById('btnOpenInvite');
-  const cover = document.getElementById('cover') || document.getElementById('envelopeOverlay');
-  const mainContent = document.getElementById('mainContent');
+  // 1. CORREÇÃO DIRETA E IMEDIATA DO EVENTO DE CLIQUE DA CAPA
+  const btnAbrir = document.getElementById('btn-abrir') || document.querySelector('.btn-abrir') || document.getElementById('btnOpenInvite') || document.querySelector('button');
+  const cover = document.getElementById('cover') || document.querySelector('.cover') || document.querySelector('#envelope') || document.getElementById('envelopeOverlay');
   const audio = document.getElementById('bg-music') || document.getElementById('bgAudio');
+  const mainContent = document.getElementById('mainContent');
   const musicBtn = document.getElementById('musicBtn');
   const musicIcon = document.getElementById('musicIcon');
   const musicText = document.getElementById('musicText');
@@ -34,13 +19,15 @@ function initEnvelopeOpening() {
   document.body.classList.add('envelope-active');
 
   if (btnAbrir) {
-    btnAbrir.addEventListener('click', () => {
-      // 1. Ocultar a Capa
+    btnAbrir.onclick = (e) => {
+      e.preventDefault();
+      
+      // Esconde a capa na hora
       if (cover) {
         cover.style.display = 'none';
       }
 
-      // 2. Exibir o site principal
+      // Revela o site principal na hora
       if (mainContent) {
         mainContent.style.display = 'block';
         setTimeout(() => {
@@ -48,10 +35,10 @@ function initEnvelopeOpening() {
         }, 50);
       }
 
-      // 3. Desbloquear a rolagem
+      // Desbloqueia a rolagem
       document.body.classList.remove('envelope-active');
 
-      // 4. Executar áudio com volume suave 0.2 (20%)
+      // Tenta tocar o áudio sem interromper a tela caso falhe
       if (audio) {
         audio.volume = 0.2;
         audio.play().then(() => {
@@ -60,12 +47,22 @@ function initEnvelopeOpening() {
           if (musicText) musicText.innerText = 'Pausar';
           showToast('Tocando "Live Forever" — Oasis 🎶');
         }).catch(err => {
-          console.log("Autoplay bloqueado pelo navegador", err);
+          console.log("Áudio aguardando interação:", err);
         });
       }
-    });
+    };
   }
-}
+
+  initSupabaseAndEmailJS();
+  initCountdown();
+  initAudioPlayer();
+  initQRCodeAndPixKey();
+  initRSVP();
+  initGuestbook();
+  initNavigation();
+});
+
+let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
    CONEXÃO COM O SUPABASE ( ssfgxswkdbrjvqcpxcfp )
@@ -301,7 +298,7 @@ function initRSVP() {
 }
 
 /* --------------------------------------------------------------------------
-   🧹 MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
+   MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -371,7 +368,7 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
-  // 🧹 LIMPEZA DOS DADOS MOCADOS NO HTML: Se não houver recados, exibe apenas a mensagem amigável
+  // Se não houver recados no banco, exibe apenas a mensagem amigável
   if (!messages || messages.length === 0) {
     targetWall.innerHTML = `
       <div class="empty-state-box">
