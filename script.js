@@ -18,29 +18,50 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. TELA DE ENTRADA EXCLUSIVA (HERO COVER 100VH) & ÁUDIO NO CLIQUE
+   1. TELA DE ABERTURA EXCLUSIVA (ESTADO isOpened === false / RENDERIZAÇÃO DA CAPA)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
   const btnOpenInvite = document.getElementById('btnOpenInvite');
   const waxSeal = document.getElementById('waxSeal');
+  const mainContent = document.getElementById('mainContent');
   const bgAudio = document.getElementById('bgAudio');
   const musicBtn = document.getElementById('musicBtn');
   const musicIcon = document.getElementById('musicIcon');
   const musicText = document.getElementById('musicText');
 
-  // Configurar volume inicial suave de 20%
-  if (bgAudio) {
-    bgAudio.volume = 0.2;
+  let isOpened = false;
+
+  // Garante estado inicial: Capa 100% visível e opaca, Conteúdo Principal OCULTO (display: none)
+  if (mainContent) {
+    mainContent.style.display = 'none';
+    mainContent.style.opacity = '0';
   }
+  document.body.classList.add('envelope-active');
 
   function openEnvelope() {
-    if (!envelopeOverlay) return;
+    if (isOpened) return;
+    isOpened = true;
 
-    envelopeOverlay.classList.add('opened');
+    // 1. Desvanecer e ocultar a Capa
+    if (envelopeOverlay) {
+      envelopeOverlay.style.opacity = '0';
+      setTimeout(() => {
+        envelopeOverlay.style.display = 'none';
+      }, 400);
+    }
+
+    // 2. Revelar o Conteúdo do Site
+    if (mainContent) {
+      mainContent.style.display = 'block';
+      setTimeout(() => {
+        mainContent.style.opacity = '1';
+      }, 50);
+    }
+
     document.body.classList.remove('envelope-active');
 
-    // Iniciar áudio com volume suave de 20% no exato instante do clique
+    // 3. Iniciar áudio com volume padrão 0.2 no clique
     if (bgAudio) {
       bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
@@ -365,7 +386,6 @@ async function renderRSVPList() {
 
   let rsvps = [];
 
-  // Buscar confirmações reais no Supabase
   if (supabaseClient) {
     try {
       const { data, error } = await supabaseClient
@@ -464,7 +484,7 @@ function initCotasModal() {
 }
 
 /* --------------------------------------------------------------------------
-   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (SEM DADOS FAKE)
+   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -487,7 +507,6 @@ function initGuestbook() {
         criado_em: new Date().toISOString()
       };
 
-      // Salvar no Supabase
       if (supabaseClient) {
         try {
           await supabaseClient.from('recados').insert([newMessage]);
@@ -496,7 +515,6 @@ function initGuestbook() {
         }
       }
 
-      // Salvar cópia local
       const savedMessages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
       savedMessages.unshift({ id: Date.now(), ...newMessage });
       localStorage.setItem('wedding_messages', JSON.stringify(savedMessages));
@@ -514,7 +532,6 @@ async function loadAndRenderMessages() {
 
   let messages = [];
 
-  // Buscar recados reais no Supabase
   if (supabaseClient) {
     try {
       const { data, error } = await supabaseClient
@@ -534,7 +551,6 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
-  // SEM DADOS MOCADOS: Exibe estado vazio amigável caso não existam mensagens
   if (!messages || messages.length === 0) {
     messagesWall.innerHTML = `
       <div class="empty-state-box">

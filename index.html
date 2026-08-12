@@ -28,430 +28,431 @@
 </head>
 <body class="envelope-active">
 
-  <!-- ✉️ 2. TELA DE ABERTURA INTERATIVA (O "ENVELOPE") -->
+  <!-- ✉️ TELA DE ABERTURA EXCLUSIVA (RENDERIZADA EM SEPARADO QUANDO isOpened === false) -->
   <div class="envelope-overlay" id="envelopeOverlay">
-    <div class="envelope-container">
-      <div class="envelope-card">
-        <!-- Selo de Cera Artesanal com Monograma J & V -->
-        <div class="wax-seal" id="waxSeal" title="Clique para abrir o convite">
-          <span class="wax-seal-monogram">J & V</span>
-        </div>
-
-        <h2 class="envelope-names">Josalva & Valtair</h2>
-        <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
-        <p class="envelope-instruction">Clique para abrir o nosso convite</p>
-        
-        <!-- Botão Customizado Luxuoso Terracota & Dourado -->
-        <button class="btn-open-envelope" id="btnOpenInvite">
-          <i class="fa-solid fa-heart"></i> Abrir Convite
-        </button>
+    <div class="envelope-card">
+      <!-- Monograma / Imagem Floral -->
+      <div class="envelope-floral-img">
+        <img src="./assets/monogram_jv.png" alt="Floral J&V Monograma">
       </div>
+      
+      <h1 class="envelope-names">Josalva & Valtair</h1>
+      <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
+      
+      <p class="envelope-instruction">Clique para abrir o nosso convite</p>
+      
+      <button class="btn-open-envelope" id="btnOpenInvite">
+        <span style="font-size: 1.1rem;">❤️</span> Abrir Convite
+      </button>
     </div>
   </div>
 
-  <!-- BARRA DE NAVEGAÇÃO FIXA COM WIDGET DE ÁUDIO -->
-  <nav class="navbar" id="navbar">
-    <a href="#hero" class="nav-brand">J & V</a>
+  <!-- 🏛️ CONTEÚDO PRINCIPAL DO SITE (OCULTO ATÉ isOpened === true) -->
+  <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.6s ease;">
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#hero" class="nav-link active">Início</a></li>
-      <li><a href="#comemoracao" class="nav-link">Comemoração</a></li>
-      <li><a href="#evento" class="nav-link">O Evento</a></li>
-      <li><a href="#confirmacao" class="nav-link">Confirmação</a></li>
-      <li><a href="#presentes" class="nav-link">Presentes</a></li>
-      <li><a href="#recados" class="nav-link">Recados</a></li>
-    </ul>
+    <!-- BARRA DE NAVEGAÇÃO FIXA COM WIDGET DE ÁUDIO -->
+    <nav class="navbar" id="navbar">
+      <a href="#hero" class="nav-brand">J & V</a>
 
-    <div class="nav-actions">
-      <!-- Player Flutuante ("Songbird" - Oasis) -->
-      <button class="music-btn" id="musicBtn" title="Tocar / Pausar 'Songbird' - Oasis" aria-label="Tocar ou pausar música de fundo">
-        <i class="fa-solid fa-music" id="musicIcon"></i>
-        <span id="musicText">Songbird 🎵</span>
-        <div class="equalizer-bars" id="eqBars">
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-        </div>
-      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="nav-link active">Início</a></li>
+        <li><a href="#comemoracao" class="nav-link">Comemoração</a></li>
+        <li><a href="#evento" class="nav-link">O Evento</a></li>
+        <li><a href="#confirmacao" class="nav-link">Confirmação</a></li>
+        <li><a href="#presentes" class="nav-link">Presentes</a></li>
+        <li><a href="#recados" class="nav-link">Recados</a></li>
+      </ul>
 
-      <!-- Menu Mobile Toggle -->
-      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu de navegação">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-    </div>
-  </nav>
+      <div class="nav-actions">
+        <!-- Player Flutuante ("Songbird" - Oasis) -->
+        <button class="music-btn" id="musicBtn" title="Tocar / Pausar 'Songbird' - Oasis" aria-label="Tocar ou pausar música de fundo">
+          <i class="fa-solid fa-music" id="musicIcon"></i>
+          <span id="musicText">Songbird 🎵</span>
+          <div class="equalizer-bars" id="eqBars">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+          </div>
+        </button>
 
-  <!-- Áudio Oculto -->
-  <audio id="bgAudio" loop preload="auto"></audio>
-
-  <!-- 3. HERO SECTION / REVELADA APÓS ABERTURA -->
-  <header class="hero" id="hero">
-    <div class="hero-overlay"></div>
-
-    <div class="hero-content container">
-      <p class="hero-tag">Convidam para sua</p>
-      
-      <!-- Banner de Caligrafia Rústica Limpa (sem sobreposições) -->
-      <h1 class="hero-names-script">Josalva & Valtair</h1>
-
-      <h2 class="hero-reception-title">Recepção de Comemoração com Amigos e Familiares</h2>
-
-      <p class="hero-welcome-text">
-        "Venha comemorar conosco a alegria do nosso amor e a bênção de compartilhar esse dia inesquecível ao lado de quem mais amamos!"
-      </p>
-
-      <div class="hero-date-badge">
-        <i class="fa-regular fa-calendar-heart text-terracotta"></i>
-        <span>18 de Outubro de 2026 • 13:00h</span>
+        <!-- Menu Mobile Toggle -->
+        <button class="nav-toggle" id="navToggle" aria-label="Abrir menu de navegação">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
+    </nav>
 
-      <!-- TIMER REGRESSIVO -->
-      <div class="countdown-container" id="countdown" data-wedding-date="2026-10-18T13:00:00">
-        <div class="timer-card">
-          <div class="timer-value" id="days">00</div>
-          <div class="timer-label">Dias</div>
-        </div>
-        <div class="timer-card">
-          <div class="timer-value" id="hours">00</div>
-          <div class="timer-label">Horas</div>
-        </div>
-        <div class="timer-card">
-          <div class="timer-value" id="minutes">00</div>
-          <div class="timer-label">Minutos</div>
-        </div>
-        <div class="timer-card">
-          <div class="timer-value" id="seconds">00</div>
-          <div class="timer-label">Segundos</div>
-        </div>
-      </div>
+    <!-- Áudio Oculto -->
+    <audio id="bgAudio" loop preload="auto"></audio>
 
-      <div class="hero-cta">
-        <a href="#confirmacao" class="btn btn-primary">
-          <i class="fa-solid fa-check-to-slot"></i> Confirmar Presença
-        </a>
-        <a href="#presentes" class="btn btn-outline">
-          <i class="fa-solid fa-gift"></i> Lista de Presentes Pix
-        </a>
-      </div>
-    </div>
-  </header>
+    <!-- HERO SECTION / REVELADA APÓS ABERTURA -->
+    <header class="hero" id="hero">
+      <div class="hero-overlay"></div>
 
-  <!-- SEÇÃO NOSSA COMEMORAÇÃO & CARD VECTORIAL MONOGRAMA -->
-  <section class="story-section" id="comemoracao">
-    <div class="container">
-      <div class="story-grid">
-        <div class="story-image-wrapper">
-          <div class="story-svg-card">
-            <svg viewBox="0 0 300 320" width="100%" height="280" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="150" cy="140" r="115" fill="none" stroke="#E6DDD1" stroke-width="2" stroke-dasharray="6,4"/>
-              <path d="M50 140 Q 60 90 100 60" fill="none" stroke="#8C3F2B" stroke-width="3" stroke-linecap="round"/>
-              <path d="M250 140 Q 240 90 200 60" fill="none" stroke="#8C3F2B" stroke-width="3" stroke-linecap="round"/>
-              <circle cx="90" cy="70" r="6" fill="#C59B4E"/>
-              <circle cx="210" cy="70" r="6" fill="#C59B4E"/>
-              <circle cx="70" cy="100" r="5" fill="#B06D55"/>
-              <circle cx="230" cy="100" r="5" fill="#B06D55"/>
-              
-              <text x="150" y="130" font-family="'Great Vibes', cursive" font-size="64" fill="#8C3F2B" text-anchor="middle">J &amp; V</text>
-              <text x="150" y="175" font-family="'Playfair Display', serif" font-size="22" font-weight="600" fill="#2C221F" text-anchor="middle">Josalva &amp; Valtair</text>
-              <text x="150" y="200" font-family="'Inter', sans-serif" font-size="12" font-weight="600" letter-spacing="3" fill="#B06D55" text-anchor="middle">18 • OUTUBRO • 2026</text>
-              <text x="150" y="235" font-family="'Playfair Display', serif" font-size="15" font-style="italic" fill="#6E5D57" text-anchor="middle">Recepção de Comemoração</text>
-            </svg>
-          </div>
-        </div>
+      <div class="hero-content container">
+        <p class="hero-tag">Convidam para sua</p>
+        
+        <h1 class="hero-names-script">Josalva & Valtair</h1>
+        <h2 class="hero-reception-title">Recepção de Comemoração com Amigos e Familiares</h2>
 
-        <div class="story-text">
-          <span class="section-tag">Nossa Comemoração</span>
-          <h2 class="section-title">Comemorando o Amor</h2>
-          
-          <p class="story-paragraph">
-            A vida fica mais bonita quando compartilhamos nossos momentos felizes ao lado das pessoas que são especiais para nós.
-          </p>
-
-          <p class="story-paragraph">
-            Esta reunião não é uma cerimônia tradicional ou formal, mas sim um momento alegre e descontraído para encontrar a família, rever os amigos amados, brindar ao amor e criar lembranças inesquecíveis juntos!
-          </p>
-
-          <p class="story-paragraph font-serif text-terracotta" style="font-size: 1.25rem; font-style: italic; font-weight: 600;">
-            "Preparamos uma recepção de comemoração especial e aguardamos você de coração aberto!"
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DETALHES DO EVENTO -->
-  <section class="details-section" id="evento">
-    <div class="container text-center">
-      <span class="section-tag">Programação & Local</span>
-      <h2 class="section-title">Onde & Quando</h2>
-      <p class="section-subtitle">Confira o horário e o local da nossa recepção de comemoração:</p>
-
-      <div class="details-grid">
-        <div class="detail-card">
-          <div class="detail-icon">
-            <i class="fa-solid fa-champagne-glasses"></i>
-          </div>
-          <h3>Recepção de Comemoração</h3>
-          <p class="detail-info"><i class="fa-regular fa-calendar text-terracotta"></i> Domingo, 18 de Outubro de 2026</p>
-          <p class="detail-highlight"><i class="fa-regular fa-clock"></i> 13:00h (Recepção a partir das 12:30h)</p>
-          <p class="detail-address">
-            <strong>Local do Evento</strong><br>
-            Acesse a localização no Google Maps<br>
-            <small style="color: var(--text-muted);">(Estacionamento no local)</small>
-          </p>
-
-          <div class="detail-card-actions">
-            <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-              <i class="fa-solid fa-location-dot"></i> Abrir no Google Maps
-            </a>
-            <button class="btn btn-outline" id="btnCalendar">
-              <i class="fa-regular fa-calendar-plus"></i> Salvar na Agenda
-            </button>
-          </div>
-        </div>
-
-        <div class="detail-card">
-          <div class="detail-icon">
-            <i class="fa-solid fa-user-tie"></i>
-          </div>
-          <h3>Dress Code & Dicas</h3>
-          <p class="detail-info">Estilo do Evento</p>
-          <p class="detail-highlight">Esporte Fino / Boho Elegante</p>
-          <p class="detail-address">
-            Sugerimos trajes confortáveis e leves em tons terrosos, pastéis, verde oliva, bege ou rosê.<br><br>
-            💡 <em>Dica carinhosa: Venha pronto para sorrir, conversar e curtir uma recepção festiva cheia de carinho!</em>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONFIRMAÇÃO DE PRESENÇA -->
-  <section class="rsvp-section" id="confirmacao">
-    <div class="container">
-      <div class="text-center" style="margin-bottom: 30px;">
-        <span class="section-tag">Sua Presença é Fundamental</span>
-        <h2 class="section-title">Confirmação de Presença</h2>
-        <p class="section-subtitle">Por favor, confirme se você virá comemorar conosco até o dia <strong>01 de Outubro de 2026</strong> para organizarmos tudo com carinho.</p>
-      </div>
-
-      <div class="rsvp-card-wrapper">
-        <div id="formStatusBox" style="display:none; margin-bottom:20px; padding:16px; border-radius:12px; text-align:center; font-weight:600;"></div>
-
-        <form id="rsvpForm">
-          <div class="form-group">
-            <label class="form-label" for="guestName">Seu Nome Completo *</label>
-            <input type="text" id="guestName" class="form-control" placeholder="Ex: Maria da Silva" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="guestPhone">WhatsApp / Telefone *</label>
-            <input type="tel" id="guestPhone" class="form-control" placeholder="(27) 99999-9999" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Você virá comemorar conosco? *</label>
-            <div class="radio-pill-group">
-              <label class="radio-pill">
-                <input type="radio" name="attendance" value="sim" checked id="attYes">
-                <div class="radio-pill-content">
-                  <i class="fa-solid fa-circle-check text-terracotta"></i> Sim, estarei lá!
-                </div>
-              </label>
-
-              <label class="radio-pill">
-                <input type="radio" name="attendance" value="nao" id="attNo">
-                <div class="radio-pill-content">
-                  <i class="fa-solid fa-circle-xmark"></i> Infelizmente não poderei
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <div class="companions-container active" id="companionsContainer">
-            <div class="form-group">
-              <label class="form-label" for="companionsCount">Levará acompanhantes?</label>
-              <select id="companionsCount" class="form-control">
-                <option value="0">Apenas eu</option>
-                <option value="1">+ 1 Acompanhante</option>
-                <option value="2">+ 2 Acompanhantes</option>
-                <option value="3">+ 3 Acompanhantes</option>
-              </select>
-            </div>
-
-            <div id="companionNamesWrapper"></div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="rsvpMessage">Mensagem especial aos noivos (opcional)</label>
-            <textarea id="rsvpMessage" class="form-control" rows="3" placeholder="Deixe um recadinho carinhoso..."></textarea>
-          </div>
-
-          <button type="submit" id="btnSubmitRsvp" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 1.05rem;">
-            <span id="btnSubmitText"><i class="fa-solid fa-paper-plane"></i> Enviar Confirmação</span>
-          </button>
-        </form>
-
-        <div class="text-center" style="margin-top: 20px;">
-          <button type="button" id="btnViewRSVPList" style="background: none; border: none; color: var(--text-muted); font-size: 0.85rem; text-decoration: underline; cursor: pointer;">
-            <i class="fa-solid fa-list-check"></i> Ver Lista de Confirmações (Painel dos Noivos)
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRESENTES EM DINHEIRO (PIX & COTAS) -->
-  <section class="pix-section" id="presentes">
-    <div class="container">
-      <div class="text-center">
-        <span class="section-tag">Carinho em Gestos</span>
-        <h2 class="section-title">Presentes em Dinheiro (Pix)</h2>
-        <p class="section-subtitle">
-          Como já estamos estruturando nosso lar e nossa viagem, optar por presenteá-nos com contribuições em dinheiro via Pix nos dará total liberdade de escolha. Agradecemos muito o carinho!
+        <p class="hero-welcome-text">
+          "Venha comemorar conosco a alegria do nosso amor e a bênção de compartilhar esse dia inesquecível ao lado de quem mais amamos!"
         </p>
-      </div>
 
-      <div class="pix-main-card">
-        <div class="qrcode-box">
-          <div id="qrcodeCanvas"></div>
-          <small style="display:block; margin-top:8px; font-size:0.75rem; color:var(--text-muted);">Aponte a câmera do celular</small>
+        <div class="hero-date-badge">
+          <i class="fa-regular fa-calendar-heart text-terracotta"></i>
+          <span>18 de Outubro de 2026 • 13:00h</span>
         </div>
 
-        <div class="pix-info-content">
-          <h3>Chave Pix Direta dos Noivos</h3>
-          <p id="pixKeyLabel">Chave Pix em breve / Exemplo:</p>
-
-          <div class="pix-key-box">
-            <i class="fa-solid fa-key text-terracotta"></i>
-            <span class="pix-key-text" id="pixKeyText">SUA-CHAVE-PIX-AQUI</span>
+        <!-- TIMER REGRESSIVO -->
+        <div class="countdown-container" id="countdown" data-wedding-date="2026-10-18T13:00:00">
+          <div class="timer-card">
+            <div class="timer-value" id="days">00</div>
+            <div class="timer-label">Dias</div>
           </div>
-
-          <button class="btn btn-primary" id="btnCopyPixMain">
-            <i class="fa-regular fa-copy"></i> Copiar Chave Pix
-          </button>
-        </div>
-      </div>
-
-      <div class="cotas-header">
-        <h3>Sugestões de Cotas Interativas</h3>
-        <p class="section-subtitle">Escolha um momento especial para nos abençoar:</p>
-      </div>
-
-      <div class="cotas-grid">
-        <div class="cota-card">
-          <div>
-            <div class="cota-icon">🍷</div>
-            <h4 class="cota-title">Brinde dos Noivos na Comemoração</h4>
-            <div class="cota-price">R$ 75,00</div>
+          <div class="timer-card">
+            <div class="timer-value" id="hours">00</div>
+            <div class="timer-label">Horas</div>
           </div>
-          <button class="btn btn-outline btn-cota" data-title="Brinde dos Noivos na Comemoração" data-price="75.00">
-            <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
-          </button>
+          <div class="timer-card">
+            <div class="timer-value" id="minutes">00</div>
+            <div class="timer-label">Minutos</div>
+          </div>
+          <div class="timer-card">
+            <div class="timer-value" id="seconds">00</div>
+            <div class="timer-label">Segundos</div>
+          </div>
         </div>
 
-        <div class="cota-card">
-          <div>
-            <div class="cota-icon">🌅</div>
-            <h4 class="cota-title">Passeio Especial ao Pôr do Sol</h4>
-            <div class="cota-price">R$ 120,00</div>
-          </div>
-          <button class="btn btn-outline btn-cota" data-title="Passeio Especial ao Pôr do Sol" data-price="120.00">
-            <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
-          </button>
-        </div>
-
-        <div class="cota-card">
-          <div>
-            <div class="cota-icon">☕</div>
-            <h4 class="cota-title">Café da Manhã Especial na Cama</h4>
-            <div class="cota-price">R$ 100,00</div>
-          </div>
-          <button class="btn btn-outline btn-cota" data-title="Café da Manhã Especial na Cama" data-price="100.00">
-            <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
-          </button>
-        </div>
-
-        <div class="cota-card">
-          <div>
-            <div class="cota-icon">🧳</div>
-            <h4 class="cota-title">Ajuda nas Malas & Viagem</h4>
-            <div class="cota-price">R$ 200,00</div>
-          </div>
-          <button class="btn btn-outline btn-cota" data-title="Ajuda nas Malas & Viagem" data-price="200.00">
-            <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
-          </button>
-        </div>
-
-        <div class="cota-card">
-          <div>
-            <div class="cota-icon">🏡</div>
-            <h4 class="cota-title">Enxoval da Casa Nova</h4>
-            <div class="cota-price">R$ 300,00</div>
-          </div>
-          <button class="btn btn-outline btn-cota" data-title="Enxoval da Casa Nova" data-price="300.00">
-            <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
-          </button>
-        </div>
-
-        <div class="cota-card">
-          <div>
-            <div class="cota-icon">✨</div>
-            <h4 class="cota-title">Contribuição com Valor Livre</h4>
-            <div class="cota-price">Valor Escolhido</div>
-          </div>
-          <button class="btn btn-primary btn-cota" data-title="Contribuição com Valor Livre" data-price="Livre">
-            <i class="fa-solid fa-gift"></i> Presentear Qualquer Valor
-          </button>
+        <div class="hero-cta">
+          <a href="#confirmacao" class="btn btn-primary">
+            <i class="fa-solid fa-check-to-slot"></i> Confirmar Presença
+          </a>
+          <a href="#presentes" class="btn btn-outline">
+            <i class="fa-solid fa-gift"></i> Lista de Presentes Pix
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- MURAL DE RECADOS -->
-  <section class="messages-section" id="recados">
-    <div class="container">
-      <div class="text-center">
-        <span class="section-tag">Carinho dos Convidados</span>
-        <h2 class="section-title">Mural de Recados</h2>
-        <p class="section-subtitle">Deixe uma mensagem amorosa registrada para os noivos guardarem para sempre!</p>
+    <!-- SEÇÃO NOSSA COMEMORAÇÃO & CARD VECTOR MONOGRAMA -->
+    <section class="story-section" id="comemoracao">
+      <div class="container">
+        <div class="story-grid">
+          <div class="story-image-wrapper">
+            <div class="story-svg-card">
+              <svg viewBox="0 0 300 320" width="100%" height="280" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="140" r="115" fill="none" stroke="#E6DDD1" stroke-width="2" stroke-dasharray="6,4"/>
+                <path d="M50 140 Q 60 90 100 60" fill="none" stroke="#8C3F2B" stroke-width="3" stroke-linecap="round"/>
+                <path d="M250 140 Q 240 90 200 60" fill="none" stroke="#8C3F2B" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="90" cy="70" r="6" fill="#C59B4E"/>
+                <circle cx="210" cy="70" r="6" fill="#C59B4E"/>
+                <circle cx="70" cy="100" r="5" fill="#B06D55"/>
+                <circle cx="230" cy="100" r="5" fill="#B06D55"/>
+                
+                <text x="150" y="130" font-family="'Great Vibes', cursive" font-size="64" fill="#8C3F2B" text-anchor="middle">J &amp; V</text>
+                <text x="150" y="175" font-family="'Playfair Display', serif" font-size="22" font-weight="600" fill="#2C221F" text-anchor="middle">Josalva &amp; Valtair</text>
+                <text x="150" y="200" font-family="'Inter', sans-serif" font-size="12" font-weight="600" letter-spacing="3" fill="#B06D55" text-anchor="middle">18 • OUTUBRO • 2026</text>
+                <text x="150" y="235" font-family="'Playfair Display', serif" font-size="15" font-style="italic" fill="#6E5D57" text-anchor="middle">Recepção de Comemoração</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="story-text">
+            <span class="section-tag">Nossa Comemoração</span>
+            <h2 class="section-title">Comemorando o Amor</h2>
+            
+            <p class="story-paragraph">
+              A vida fica mais bonita quando compartilhamos nossos momentos felizes ao lado das pessoas que são especiais para nós.
+            </p>
+
+            <p class="story-paragraph">
+              Esta reunião não é uma cerimônia tradicional ou formal, mas sim um momento alegre e descontraído para encontrar a família, rever os amigos amados, brindar ao amor e criar lembranças inesquecíveis juntos!
+            </p>
+
+            <p class="story-paragraph font-serif text-terracotta" style="font-size: 1.25rem; font-style: italic; font-weight: 600;">
+              "Preparamos uma recepção de comemoração especial e aguardamos você de coração aberto!"
+            </p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="messages-layout">
-        <div class="message-form-card">
-          <h3 class="font-serif" style="font-size: 1.5rem; margin-bottom: 20px; color: var(--text-dark);">Deixar uma Mensagem</h3>
-          
-          <form id="messageForm">
+    <!-- DETALHES DO EVENTO -->
+    <section class="details-section" id="evento">
+      <div class="container text-center">
+        <span class="section-tag">Programação & Local</span>
+        <h2 class="section-title">Onde & Quando</h2>
+        <p class="section-subtitle">Confira o horário e o local da nossa recepção de comemoração:</p>
+
+        <div class="details-grid">
+          <div class="detail-card">
+            <div class="detail-icon">
+              <i class="fa-solid fa-champagne-glasses"></i>
+            </div>
+            <h3>Recepção de Comemoração</h3>
+            <p class="detail-info"><i class="fa-regular fa-calendar text-terracotta"></i> Domingo, 18 de Outubro de 2026</p>
+            <p class="detail-highlight"><i class="fa-regular fa-clock"></i> 13:00h (Recepção a partir das 12:30h)</p>
+            <p class="detail-address">
+              <strong>Local do Evento</strong><br>
+              Acesse a localização no Google Maps<br>
+              <small style="color: var(--text-muted);">(Estacionamento no local)</small>
+            </p>
+
+            <div class="detail-card-actions">
+              <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                <i class="fa-solid fa-location-dot"></i> Abrir no Google Maps
+              </a>
+              <button class="btn btn-outline" id="btnCalendar">
+                <i class="fa-regular fa-calendar-plus"></i> Salvar na Agenda
+              </button>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-icon">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <h3>Dress Code & Dicas</h3>
+            <p class="detail-info">Estilo do Evento</p>
+            <p class="detail-highlight">Esporte Fino / Boho Elegante</p>
+            <p class="detail-address">
+              Sugerimos trajes confortáveis e leves em tons terrosos, pastéis, verde oliva, bege ou rosê.<br><br>
+              💡 <em>Dica carinhosa: Venha pronto para sorrir, conversar e curtir uma recepção festiva cheia de carinho!</em>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONFIRMAÇÃO DE PRESENÇA -->
+    <section class="rsvp-section" id="confirmacao">
+      <div class="container">
+        <div class="text-center" style="margin-bottom: 30px;">
+          <span class="section-tag">Sua Presença é Fundamental</span>
+          <h2 class="section-title">Confirmação de Presença</h2>
+          <p class="section-subtitle">Por favor, confirme se você virá comemorar conosco até o dia <strong>01 de Outubro de 2026</strong> para organizarmos tudo com carinho.</p>
+        </div>
+
+        <div class="rsvp-card-wrapper">
+          <div id="formStatusBox" style="display:none; margin-bottom:20px; padding:16px; border-radius:12px; text-align:center; font-weight:600;"></div>
+
+          <form id="rsvpForm">
             <div class="form-group">
-              <label class="form-label" for="msgAuthor">Seu Nome *</label>
-              <input type="text" id="msgAuthor" class="form-control" placeholder="Ex: Tia Clara" required>
+              <label class="form-label" for="guestName">Seu Nome Completo *</label>
+              <input type="text" id="guestName" class="form-control" placeholder="Ex: Maria da Silva" required>
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="msgContent">Sua Mensagem *</label>
-              <textarea id="msgContent" class="form-control" rows="4" placeholder="Escreva palavras de carinho para Josalva & Valtair..." required></textarea>
+              <label class="form-label" for="guestPhone">WhatsApp / Telefone *</label>
+              <input type="tel" id="guestPhone" class="form-control" placeholder="(27) 99999-9999" required>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%;">
-              <i class="fa-solid fa-heart"></i> Publicar Recado
+            <div class="form-group">
+              <label class="form-label">Você virá comemorar conosco? *</label>
+              <div class="radio-pill-group">
+                <label class="radio-pill">
+                  <input type="radio" name="attendance" value="sim" checked id="attYes">
+                  <div class="radio-pill-content">
+                    <i class="fa-solid fa-circle-check text-terracotta"></i> Sim, estarei lá!
+                  </div>
+                </label>
+
+                <label class="radio-pill">
+                  <input type="radio" name="attendance" value="nao" id="attNo">
+                  <div class="radio-pill-content">
+                    <i class="fa-solid fa-circle-xmark"></i> Infelizmente não poderei
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="companions-container active" id="companionsContainer">
+              <div class="form-group">
+                <label class="form-label" for="companionsCount">Levará acompanhantes?</label>
+                <select id="companionsCount" class="form-control">
+                  <option value="0">Apenas eu</option>
+                  <option value="1">+ 1 Acompanhante</option>
+                  <option value="2">+ 2 Acompanhantes</option>
+                  <option value="3">+ 3 Acompanhantes</option>
+                </select>
+              </div>
+
+              <div id="companionNamesWrapper"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="rsvpMessage">Mensagem especial aos noivos (opcional)</label>
+              <textarea id="rsvpMessage" class="form-control" rows="3" placeholder="Deixe um recadinho carinhoso..."></textarea>
+            </div>
+
+            <button type="submit" id="btnSubmitRsvp" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 1.05rem;">
+              <span id="btnSubmitText"><i class="fa-solid fa-paper-plane"></i> Enviar Confirmação</span>
             </button>
           </form>
+
+          <div class="text-center" style="margin-top: 20px;">
+            <button type="button" id="btnViewRSVPList" style="background: none; border: none; color: var(--text-muted); font-size: 0.85rem; text-decoration: underline; cursor: pointer;">
+              <i class="fa-solid fa-list-check"></i> Ver Lista de Confirmações (Painel dos Noivos)
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRESENTES EM DINHEIRO (PIX & COTAS) -->
+    <section class="pix-section" id="presentes">
+      <div class="container">
+        <div class="text-center">
+          <span class="section-tag">Carinho em Gestos</span>
+          <h2 class="section-title">Presentes em Dinheiro (Pix)</h2>
+          <p class="section-subtitle">
+            Como já estamos estruturando nosso lar e nossa viagem, optar por presenteá-nos com contribuições em dinheiro via Pix nos dará total liberdade de escolha. Agradecemos muito o carinho!
+          </p>
         </div>
 
-        <div class="messages-wall" id="messagesWall"></div>
-      </div>
-    </div>
-  </section>
+        <div class="pix-main-card">
+          <div class="qrcode-box">
+            <div id="qrcodeCanvas"></div>
+            <small style="display:block; margin-top:8px; font-size:0.75rem; color:var(--text-muted);">Aponte a câmera do celular</small>
+          </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-names">Josalva & Valtair</div>
-      <p class="footer-quote">"Grandes coisas fez o Senhor por nós, e por isso estamos alegres." — Salmos 126:3</p>
-      <div class="footer-divider"></div>
-      <p class="footer-copy">© 2026 Comemoração Josalva & Valtair. Feito com amor ❤️</p>
-    </div>
-  </footer>
+          <div class="pix-info-content">
+            <h3>Chave Pix Direta dos Noivos</h3>
+            <p id="pixKeyLabel">Chave Pix em breve / Exemplo:</p>
+
+            <div class="pix-key-box">
+              <i class="fa-solid fa-key text-terracotta"></i>
+              <span class="pix-key-text" id="pixKeyText">SUA-CHAVE-PIX-AQUI</span>
+            </div>
+
+            <button class="btn btn-primary" id="btnCopyPixMain">
+              <i class="fa-regular fa-copy"></i> Copiar Chave Pix
+            </button>
+          </div>
+        </div>
+
+        <div class="cotas-header">
+          <h3>Sugestões de Cotas Interativas</h3>
+          <p class="section-subtitle">Escolha um momento especial para nos abençoar:</p>
+        </div>
+
+        <div class="cotas-grid">
+          <div class="cota-card">
+            <div>
+              <div class="cota-icon">🍷</div>
+              <h4 class="cota-title">Brinde dos Noivos na Comemoração</h4>
+              <div class="cota-price">R$ 75,00</div>
+            </div>
+            <button class="btn btn-outline btn-cota" data-title="Brinde dos Noivos na Comemoração" data-price="75.00">
+              <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
+            </button>
+          </div>
+
+          <div class="cota-card">
+            <div>
+              <div class="cota-icon">🌅</div>
+              <h4 class="cota-title">Passeio Especial ao Pôr do Sol</h4>
+              <div class="cota-price">R$ 120,00</div>
+            </div>
+            <button class="btn btn-outline btn-cota" data-title="Passeio Especial ao Pôr do Sol" data-price="120.00">
+              <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
+            </button>
+          </div>
+
+          <div class="cota-card">
+            <div>
+              <div class="cota-icon">☕</div>
+              <h4 class="cota-title">Café da Manhã Especial na Cama</h4>
+              <div class="cota-price">R$ 100,00</div>
+            </div>
+            <button class="btn btn-outline btn-cota" data-title="Café da Manhã Especial na Cama" data-price="100.00">
+              <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
+            </button>
+          </div>
+
+          <div class="cota-card">
+            <div>
+              <div class="cota-icon">🧳</div>
+              <h4 class="cota-title">Ajuda nas Malas & Viagem</h4>
+              <div class="cota-price">R$ 200,00</div>
+            </div>
+            <button class="btn btn-outline btn-cota" data-title="Ajuda nas Malas & Viagem" data-price="200.00">
+              <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
+            </button>
+          </div>
+
+          <div class="cota-card">
+            <div>
+              <div class="cota-icon">🏡</div>
+              <h4 class="cota-title">Enxoval da Casa Nova</h4>
+              <div class="cota-price">R$ 300,00</div>
+            </div>
+            <button class="btn btn-outline btn-cota" data-title="Enxoval da Casa Nova" data-price="300.00">
+              <i class="fa-solid fa-heart-circle-plus"></i> Presentear Cota
+            </button>
+          </div>
+
+          <div class="cota-card">
+            <div>
+              <div class="cota-icon">✨</div>
+              <h4 class="cota-title">Contribuição com Valor Livre</h4>
+              <div class="cota-price">Valor Escolhido</div>
+            </div>
+            <button class="btn btn-primary btn-cota" data-title="Contribuição com Valor Livre" data-price="Livre">
+              <i class="fa-solid fa-gift"></i> Presentear Qualquer Valor
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MURAL DE RECADOS -->
+    <section class="messages-section" id="recados">
+      <div class="container">
+        <div class="text-center">
+          <span class="section-tag">Carinho dos Convidados</span>
+          <h2 class="section-title">Mural de Recados</h2>
+          <p class="section-subtitle">Deixe uma mensagem amorosa registrada para os noivos guardarem para sempre!</p>
+        </div>
+
+        <div class="messages-layout">
+          <div class="message-form-card">
+            <h3 class="font-serif" style="font-size: 1.5rem; margin-bottom: 20px; color: var(--text-dark);">Deixar uma Mensagem</h3>
+            
+            <form id="messageForm">
+              <div class="form-group">
+                <label class="form-label" for="msgAuthor">Seu Nome *</label>
+                <input type="text" id="msgAuthor" class="form-control" placeholder="Ex: Tia Clara" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="msgContent">Sua Mensagem *</label>
+                <textarea id="msgContent" class="form-control" rows="4" placeholder="Escreva palavras de carinho para Josalva & Valtair..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <i class="fa-solid fa-heart"></i> Publicar Recado
+              </button>
+            </form>
+          </div>
+
+          <div class="messages-wall" id="messagesWall"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-names">Josalva & Valtair</div>
+        <p class="footer-quote">"Grandes coisas fez o Senhor por nós, e por isso estamos alegres." — Salmos 126:3</p>
+        <div class="footer-divider"></div>
+        <p class="footer-copy">© 2026 Comemoração Josalva & Valtair. Feito com amor ❤️</p>
+      </div>
+    </footer>
+
+  </div> <!-- FIM DE #mainContent -->
 
   <!-- MODAL DE COTAS E PIX -->
   <div class="modal-overlay" id="cotaModal">
