@@ -74,36 +74,43 @@
       <!-- GRID DOS CARDS PRINCIPAIS -->
       <div class="sections-grid">
         
-        <!-- CARD 1: RECEPÇÃO & LOCALIZAÇÃO -->
-        <div class="card-section">
+        <!-- CARD 1: RECEPÇÃO & LOCALIZAÇÃO COM FOTO DO CASAL -->
+        <div class="card-section card-recepcao">
           <h2 class="card-title">
-            <i class="fa-solid fa-location-dot"></i>
-            <span>Recepção de Comemoração</span>
+            <i class="fa-solid fa-location-dot" style="color: #8C3F2B; margin-right: 0.4rem;"></i>
+            Recepção de Comemoração
           </h2>
-          
-          <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.2rem;">
-            <div style="background: #F7F4EF; padding: 0.8rem; border-radius: 0.8rem; flex: 1; text-align: center;">
-              <p style="font-size: 0.75rem; color: #78716C; text-transform: uppercase;">Data</p>
-              <p style="font-size: 1.1rem; font-weight: 700; color: #8C3F2B; margin-top: 2px;">18/10/2026</p>
+
+          <div class="info-grid" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <div class="info-box" style="flex: 1; background: #F7F4EF; padding: 0.8rem; border-radius: 0.75rem; text-align: center;">
+              <span style="font-size: 0.75rem; color: #78716C; font-weight: 600; display: block;">DATA</span>
+              <strong style="color: #8C3F2B; font-size: 1.1rem;">18/10/2026</strong>
             </div>
-            <div style="background: #F7F4EF; padding: 0.8rem; border-radius: 0.8rem; flex: 1; text-align: center;">
-              <p style="font-size: 0.75rem; color: #78716C; text-transform: uppercase;">Horário</p>
-              <p style="font-size: 1.1rem; font-weight: 700; color: #8C3F2B; margin-top: 2px;">13:00h</p>
+            <div class="info-box" style="flex: 1; background: #F7F4EF; padding: 0.8rem; border-radius: 0.75rem; text-align: center;">
+              <span style="font-size: 0.75rem; color: #78716C; font-weight: 600; display: block;">HORÁRIO</span>
+              <strong style="color: #8C3F2B; font-size: 1.1rem;">13:00h</strong>
             </div>
           </div>
 
-          <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
-            <button class="btn-primary">
-              <i class="fa-solid fa-map-location-dot"></i>
-              <span>Abrir no Google Maps</span>
-            </button>
+          <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: flex; align-items: center; justify-content: center; text-decoration: none; margin-bottom: 1.2rem;">
+            <i class="fa-solid fa-map-location-dot" style="margin-right: 0.4rem;"></i> Abrir no Google Maps
           </a>
+
+          <!-- FOTO DO CASAL ENQUADRADA COM BORDAS ARREDONDADAS -->
+          <div class="container-foto-card" style="width: 100%; height: 220px; overflow: hidden; border-radius: 1rem; border: 1px solid #E5D8CC;">
+            <img 
+              src="foto-casal-recepcao.jpg" 
+              alt="Josalva e Valtair" 
+              style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
+              onError="this.onerror=null; this.src='assets/foto-casal-recepcao.jpg';"
+            >
+          </div>
         </div>
 
         <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP) -->
         <div class="card-section">
           <h2 class="card-title">
-            <i class="fa-regular fa-envelope"></i>
+            <i class="fa-regular fa-envelope" style="color: #8C3F2B; margin-right: 0.4rem;"></i>
             <span>Confirmação de Presença</span>
           </h2>
           <p style="font-size: 0.8rem; color: #78716C; margin-bottom: 1rem; text-align: center;">Notificação enviada para: patriciajosalva@gmail.com</p>
@@ -136,7 +143,7 @@
         <!-- CARD 3: PRESENTES EM PIX -->
         <div class="card-section">
           <h2 class="card-title">
-            <i class="fa-solid fa-gift"></i>
+            <i class="fa-solid fa-gift" style="color: #8C3F2B; margin-right: 0.4rem;"></i>
             <span>Presentes em Pix</span>
           </h2>
           <p style="font-size: 0.85rem; color: #78716C; margin-bottom: 0.8rem; text-align: center;">
@@ -160,7 +167,7 @@
           </div>
 
           <button id="btn-copiar-pix" class="btn-primary">
-            <i class="fa-regular fa-copy"></i>
+            <i class="fa-regular fa-copy" style="margin-right: 0.4rem;"></i>
             <span>Copiar Pix Copia e Cola</span>
           </button>
         </div>
@@ -168,7 +175,7 @@
         <!-- CARD 4: MURAL DE RECADOS -->
         <div class="card-section">
           <h2 class="card-title">
-            <i class="fa-regular fa-comment"></i>
+            <i class="fa-regular fa-comment" style="color: #8C3F2B; margin-right: 0.4rem;"></i>
             <span>Mural de Recados</span>
           </h2>
           
