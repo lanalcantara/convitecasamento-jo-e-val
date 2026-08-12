@@ -27,10 +27,11 @@
 </head>
 <body class="envelope-active">
 
-  <!-- 🎵 4. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
+  <!-- 🎵 3. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
+  <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
   <audio id="bgAudio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
 
-  <!-- ✉️ 3. TELA DE CAPA (ENVELOPE DE ENTRADA - POSITION: FIXED; INSET: 0; Z-INDEX: 9999; BACKGROUND: #F7F4EF) -->
+  <!-- ✉️ CAPA DE ENTRADA (COVER / ENVELOPE) -->
   <div id="cover" class="envelope-overlay">
     <div class="envelope-card">
       
@@ -56,7 +57,7 @@
       <p class="envelope-instruction">Clique abaixo para abrir o nosso convite</p>
 
       <!-- Botão em Destaque "Abrir Convite" -->
-      <button class="btn-open-envelope" id="btnOpenInvite">
+      <button class="btn-open-envelope" id="btn-abrir">
         <span>❤️</span> <span>Abrir Convite</span>
       </button>
 
@@ -87,19 +88,19 @@
         <nav class="nav-links" id="navLinks">
           <a href="#comemoracao" class="nav-link">O Evento</a>
           <a href="#confirmacao" class="nav-link">Confirmar</a>
-          <a href="#recados" class="nav-link">Mural</a>
+          <a href="#mural" class="nav-link">Mural</a>
           <a href="#presentes" class="nav-link">Presentes</a>
         </nav>
       </div>
     </header>
 
-    <!-- 📸 1. ENQUADRAMENTO DA FOTO DO CASAL NO CARD HERO -->
+    <!-- 📸 1. FOTO DO CASAL NO MARCO ZERO & HERO SECTION -->
     <section class="hero">
       <img 
         src="foto-marco-zero.jpg" 
         alt="Josalva e Valtair" 
         class="foto-casal"
-        onError="this.onerror=null; this.src='foto-marco-zero.jpg.png';"
+        onError="this.onerror=null; this.src='assets/foto-marco-zero.jpg';"
       />
 
       <div class="hero-text-content">
@@ -143,7 +144,7 @@
       </div>
     </section>
 
-    <!-- Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
+    <!-- Confirmação de Presença -->
     <section id="confirmacao" class="rsvp-section">
       <div class="rsvp-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px; text-align: center;">Confirmação de Presença</h2>
@@ -172,8 +173,8 @@
       </div>
     </section>
 
-    <!-- 🧹 2. MURAL DE RECADOS (ZERO RECADOS MOCADOS NO HTML - CONTÊINER 100% VAZIO) -->
-    <section id="recados" class="messages-section">
+    <!-- 🧹 2. LIMPEZA DOS DADOS MOCADOS NO HTML (SEM DADOS FALSOS) -->
+    <section id="mural" class="messages-section">
       <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 16px;">Mural de Recados</h2>
       
       <div style="background: #FFF; padding: 20px; border-radius: 20px; border: 1px solid #D9C3B0; margin-bottom: 20px; text-align: left;">
@@ -190,7 +191,7 @@
         </form>
       </div>
 
-      <!-- Contêiner do mural de recados TOTALMENTE VAZIO no HTML. Preenchido via Supabase pelo script.js -->
+      <!-- Contêiner do mural contendo APENAS a div limpa para preenchimento dinâmico via Supabase -->
       <div id="mural-lista"></div>
       <div id="messagesWall"></div>
     </section>

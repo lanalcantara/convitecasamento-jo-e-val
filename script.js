@@ -16,63 +16,55 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   ✉️ 3. TELA DE CAPA (ENVELOPE DE ENTRADA - POSITION: FIXED; INSET: 0; Z-INDEX: 9999)
+   3. EVENTO DE ABERTURA DA CAPA (`script.js`)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
-  const envelopeOverlay = document.getElementById('cover') || document.getElementById('envelopeOverlay');
-  const btnOpenInvite = document.getElementById('btnOpenInvite');
+  const btnAbrir = document.getElementById('btn-abrir') || document.getElementById('btnOpenInvite');
+  const cover = document.getElementById('cover') || document.getElementById('envelopeOverlay');
   const mainContent = document.getElementById('mainContent');
-  const bgAudio = document.getElementById('bgAudio');
+  const audio = document.getElementById('bg-music') || document.getElementById('bgAudio');
   const musicBtn = document.getElementById('musicBtn');
   const musicIcon = document.getElementById('musicIcon');
   const musicText = document.getElementById('musicText');
 
-  let isOpened = false;
-
-  document.body.classList.add('envelope-active');
   if (mainContent) {
     mainContent.style.display = 'none';
     mainContent.style.opacity = '0';
   }
+  document.body.classList.add('envelope-active');
 
-  function openEnvelope() {
-    if (isOpened) return;
-    isOpened = true;
+  if (btnAbrir) {
+    btnAbrir.addEventListener('click', () => {
+      // 1. Ocultar a Capa
+      if (cover) {
+        cover.style.display = 'none';
+      }
 
-    // 1. Ocultar a Capa com transição suave
-    if (envelopeOverlay) {
-      envelopeOverlay.classList.add('opened');
-      setTimeout(() => {
-        envelopeOverlay.style.display = 'none';
-      }, 700);
-    }
+      // 2. Exibir o site principal
+      if (mainContent) {
+        mainContent.style.display = 'block';
+        setTimeout(() => {
+          mainContent.style.opacity = '1';
+        }, 50);
+      }
 
-    // 2. Exibir imediatamente o Conteúdo Principal do Site
-    if (mainContent) {
-      mainContent.style.display = 'block';
-      setTimeout(() => {
-        mainContent.style.opacity = '1';
-      }, 50);
-    }
+      // 3. Desbloquear a rolagem
+      document.body.classList.remove('envelope-active');
 
-    // 3. Desbloquear a rolagem da página
-    document.body.classList.remove('envelope-active');
-
-    // 4. Reproduzir áudio "Live Forever — Oasis" em volume suave 0.2 (20%)
-    if (bgAudio) {
-      bgAudio.volume = 0.2;
-      bgAudio.play().then(() => {
-        if (musicBtn) musicBtn.classList.add('playing');
-        if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
-        if (musicText) musicText.innerText = 'Pausar';
-        showToast('Tocando "Live Forever" — Oasis 🎶');
-      }).catch(err => {
-        console.log('Autoplay bloqueado pelo navegador:', err);
-      });
-    }
+      // 4. Executar áudio com volume suave 0.2 (20%)
+      if (audio) {
+        audio.volume = 0.2;
+        audio.play().then(() => {
+          if (musicBtn) musicBtn.classList.add('playing');
+          if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
+          if (musicText) musicText.innerText = 'Pausar';
+          showToast('Tocando "Live Forever" — Oasis 🎶');
+        }).catch(err => {
+          console.log("Autoplay bloqueado pelo navegador", err);
+        });
+      }
+    });
   }
-
-  if (btnOpenInvite) btnOpenInvite.addEventListener('click', openEnvelope);
 }
 
 /* --------------------------------------------------------------------------
@@ -138,7 +130,7 @@ function initCountdown() {
    🎵 CONTROLE DE ÁUDIO DE FUNDO (Live Forever — Oasis / VOLUME 0.2)
    -------------------------------------------------------------------------- */
 function initAudioPlayer() {
-  const bgAudio = document.getElementById('bgAudio');
+  const bgAudio = document.getElementById('bg-music') || document.getElementById('bgAudio');
   const musicBtn = document.getElementById('musicBtn');
   const musicIcon = document.getElementById('musicIcon');
   const musicText = document.getElementById('musicText');
@@ -309,7 +301,7 @@ function initRSVP() {
 }
 
 /* --------------------------------------------------------------------------
-   🧹 2. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
+   🧹 MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -352,9 +344,9 @@ function initGuestbook() {
 }
 
 async function loadAndRenderMessages() {
-  const messagesWall = document.getElementById('messagesWall');
   const muralLista = document.getElementById('mural-lista');
-  const targetWall = messagesWall || muralLista;
+  const messagesWall = document.getElementById('messagesWall');
+  const targetWall = muralLista || messagesWall;
 
   if (!targetWall) return;
 
@@ -379,14 +371,14 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
-  // 🧹 EXCLUSÃO COMPLETA DOS RECADOS MOCADOS NO HTML
+  // 🧹 LIMPEZA DOS DADOS MOCADOS NO HTML: Se não houver recados, exibe apenas a mensagem amigável
   if (!messages || messages.length === 0) {
     targetWall.innerHTML = `
       <div class="empty-state-box">
         <p>Seja o primeiro a deixar um recado para Josalva & Valtair! ❤️</p>
       </div>
     `;
-    if (muralLista && muralLista !== targetWall) muralLista.innerHTML = '';
+    if (messagesWall && messagesWall !== targetWall) messagesWall.innerHTML = '';
     return;
   }
 
@@ -401,7 +393,7 @@ async function loadAndRenderMessages() {
   `).join('');
 
   targetWall.innerHTML = renderedHTML;
-  if (muralLista && muralLista !== targetWall) muralLista.innerHTML = '';
+  if (messagesWall && messagesWall !== targetWall) messagesWall.innerHTML = '';
 }
 
 /* --------------------------------------------------------------------------
