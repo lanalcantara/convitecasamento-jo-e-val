@@ -27,10 +27,10 @@
 </head>
 <body class="envelope-active">
 
-  <!-- Áudio Flutuante Oculto (Live Forever — Oasis) -->
-  <audio id="bgAudio" loop preload="auto"></audio>
+  <!-- 🎵 4. ÁUDIO DE FUNDO ("Live Forever" - Oasis) -->
+  <audio id="bgAudio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3" preload="auto"></audio>
 
-  <!-- ✉️ 1. CAPA DE ENTRADA (CONVITE FECHADO - POSITION: FIXED; INSET: 0; Z-INDEX: 9999) -->
+  <!-- ✉️ 2. CAPA DE ENTRADA (CONVITE FECHADO - COBRE 100% DA TELA) -->
   <div class="envelope-overlay" id="envelopeOverlay">
     <div class="envelope-card">
       
@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <!-- 🎵 2. MÚSICA DE FUNDO & PLAYER FLUTUANTE NO CANTO INFERIOR DIREITO -->
+  <!-- 🎵 PLAYER DE ÁUDIO FLUTUANTE NO CANTO INFERIOR DIREITO -->
   <div class="floating-music-widget">
     <button class="music-btn" id="musicBtn" title="Tocar / Pausar Live Forever — Oasis 🎵" aria-label="Tocar ou pausar música de fundo">
       <i class="fa-solid fa-music" id="musicIcon"></i>
@@ -76,7 +76,7 @@
     </button>
   </div>
 
-  <!-- 📸 3. CONTEÚDO PRINCIPAL DO SITE (REVELADO APÓS ABERTURA) -->
+  <!-- 🌐 CONTEÚDO PRINCIPAL DO SITE (REVELADO APÓS ABERTURA) -->
   <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.7s ease;">
 
     <!-- Header / Navbar -->
@@ -93,15 +93,14 @@
       </div>
     </header>
 
-    <!-- 📸 Foto Oficial do Casal no Marco Zero ao Pôr do Sol & Hero Section -->
+    <!-- 🖼️ 1. FOTO REAL DO CASAL NO MARCO ZERO & HERO SECTION -->
     <section class="hero">
-      <div class="hero-photo-wrapper">
-        <img 
-          src="./assets/foto-marco-zero.jpg" 
-          alt="Josalva e Valtair no Marco Zero ao Pôr do Sol"
-          onError="this.onerror=null; this.src='data:image/svg+xml,<svg viewBox=%220 0 320 420%22 width=%22100%25%22 height=%22100%25%22 xmlns=%22http://www.w3.org/2000/svg%22><rect width=%22320%22 height=%22420%22 fill=%22%23FAF4E8%22/><circle cx=%22160%22 cy=%22180%22 r=%22110%22 fill=%22none%22 stroke=%22%23D8B468%22 stroke-width=%222%22 stroke-dasharray=%226,4%22/><text x=%22160%22 y=%22180%22 font-family=%22serif%22 font-size=%2264%22 fill=%22%238C3F2B%22 text-anchor=%22middle%22>J %26amp; V</text><text x=%22160%22 y=%22220%22 font-family=%22sans-serif%22 font-size=%2214%22 font-weight=%22bold%22 fill=%22%232C221F%22 text-anchor=%22middle%22>MARCO ZERO</text></svg>'"
-        />
-      </div>
+      <img 
+        src="foto-marco-zero.jpg" 
+        alt="Josalva e Valtair" 
+        class="foto-casal-marco-zero"
+        onError="this.onerror=null; this.src='foto-marco-zero.jpg.png';"
+      />
 
       <div class="hero-text-content">
         <span class="hero-tag">Você é nosso convidado especial</span>
@@ -144,7 +143,7 @@
       </div>
     </section>
 
-    <!-- 💳 4. Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
+    <!-- 💳 5. Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
     <section id="confirmacao" class="rsvp-section">
       <div class="rsvp-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px; text-align: center;">Confirmação de Presença</h2>
@@ -173,7 +172,7 @@
       </div>
     </section>
 
-    <!-- Mural de Recados (Zero dados mocados) -->
+    <!-- 🧹 3. MURAL DE RECADOS (ZERO DADOS MOCADOS - TOTALMENTE LIMPO) -->
     <section id="recados" class="messages-section">
       <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 16px;">Mural de Recados</h2>
       
@@ -191,10 +190,11 @@
         </form>
       </div>
 
+      <!-- Área de recados alimentada dinamicamente pelo Supabase sem nenhum dado falso -->
       <div id="messagesWall"></div>
     </section>
 
-    <!-- 💳 Pix & Notificação (CPF: 091.602.964-61 / Beneficiário: Josalva / Valtair) -->
+    <!-- 💳 5. Pix & Notificação (CPF: 091.602.964-61 / Beneficiário: Josalva / Valtair) -->
     <section id="presentes" class="pix-section">
       <div class="pix-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px;">Presentes em Dinheiro (Pix)</h2>

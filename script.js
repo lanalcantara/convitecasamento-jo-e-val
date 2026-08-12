@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. CAPA DE ENTRADA (CONVITE FECHADO - POSITION: FIXED; INSET: 0; Z-INDEX: 9999)
+   ✉️ 2. CAPA DE ENTRADA (CONVITE FECHADO - POSITION: FIXED; INSET: 0; Z-INDEX: 9999)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
@@ -47,7 +47,7 @@ function initEnvelopeOpening() {
       }, 700);
     }
 
-    // 2. Exibir imediatamente o Conteúdo Principal do Site (Garantindo exibição completa)
+    // 2. Exibir imediatamente o Conteúdo Principal do Site
     if (mainContent) {
       mainContent.style.display = 'block';
       setTimeout(() => {
@@ -58,7 +58,7 @@ function initEnvelopeOpening() {
     // 3. Desbloquear a rolagem da página
     document.body.classList.remove('envelope-active');
 
-    // 4. Reproduzir áudio "Live Forever — Oasis" em volume 0.2 (20%)
+    // 4. Reproduzir áudio "Live Forever — Oasis" em volume suave 0.2 (20%)
     if (bgAudio) {
       bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
@@ -76,7 +76,7 @@ function initEnvelopeOpening() {
 }
 
 /* --------------------------------------------------------------------------
-   2. CONEXÃO COM O SUPABASE ( ssfgxswkdbrjvqcpxcfp )
+   CONEXÃO COM O SUPABASE ( ssfgxswkdbrjvqcpxcfp )
    -------------------------------------------------------------------------- */
 function initSupabaseAndEmailJS() {
   const cfg = window.CONFIG || {};
@@ -92,7 +92,7 @@ function initSupabaseAndEmailJS() {
 }
 
 /* --------------------------------------------------------------------------
-   3. CONTADOR REGRESSIVO EM TEMPO REAL (18/10/2026 13:00)
+   CONTADOR REGRESSIVO EM TEMPO REAL (18/10/2026 13:00)
    -------------------------------------------------------------------------- */
 function initCountdown() {
   const countdownElement = document.getElementById('countdown');
@@ -135,7 +135,7 @@ function initCountdown() {
 }
 
 /* --------------------------------------------------------------------------
-   4. CONTROLE DE ÁUDIO DE FUNDO (Live Forever — Oasis / VOLUME 0.2)
+   🎵 4. CONTROLE DE ÁUDIO DE FUNDO (Live Forever — Oasis / VOLUME 0.2)
    -------------------------------------------------------------------------- */
 function initAudioPlayer() {
   const bgAudio = document.getElementById('bgAudio');
@@ -179,7 +179,7 @@ function initAudioPlayer() {
 }
 
 /* --------------------------------------------------------------------------
-   5. CHAVE PIX (CPF 091.602.964-61 / Beneficiário: Josalva / Valtair) & QR CODE
+   💳 5. CHAVE PIX (CPF 091.602.964-61 / Beneficiário: Josalva / Valtair) & QR CODE
    -------------------------------------------------------------------------- */
 function initQRCodeAndPixKey() {
   const cfg = window.CONFIG || {};
@@ -232,7 +232,7 @@ function initQRCodeAndPixKey() {
 }
 
 /* --------------------------------------------------------------------------
-   6. CONFIRMAÇÃO DE PRESENÇA EM TEMPO REAL NO SUPABASE
+   💳 5. CONFIRMAÇÃO DE PRESENÇA EM TEMPO REAL NO SUPABASE
    -------------------------------------------------------------------------- */
 function initRSVP() {
   const rsvpForm = document.getElementById('rsvpForm');
@@ -309,7 +309,7 @@ function initRSVP() {
 }
 
 /* --------------------------------------------------------------------------
-   7. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
+   🧹 3. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -376,11 +376,11 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
-  // ZERO DADOS MOCADOS
+  // 🧹 REMOÇÃO COMPLETA DOS DADOS MOCADOS: Se não houver recados, exibe apenas a mensagem amigável
   if (!messages || messages.length === 0) {
     messagesWall.innerHTML = `
       <div class="empty-state-box">
-        <p>Seja o primeiro a deixar uma mensagem carinhosa para Josalva & Valtair! ❤️</p>
+        <p>Seja o primeiro a deixar um recado para Josalva & Valtair! ❤️</p>
       </div>
     `;
     return;
@@ -398,7 +398,7 @@ async function loadAndRenderMessages() {
 }
 
 /* --------------------------------------------------------------------------
-   8. UTILS & TOAST NOTIFICATIONS & NAVEGAÇÃO
+   UTILITIES & TOAST NOTIFICATIONS & NAVEGAÇÃO
    -------------------------------------------------------------------------- */
 function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
