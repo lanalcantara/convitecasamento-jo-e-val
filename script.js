@@ -1,25 +1,30 @@
 // ==========================================
 // 1. ÁUDIO DO OASIS & ABERTURA DO CONVITE
 // ==========================================
-function abrirConviteComAnimacao() {
-  const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
+window.abrirConviteComAnimacao = function() {
+  const cover = document.getElementById('cover');
   const audio = document.getElementById('bg-music');
 
+  // Esconde o envelope de capa
   if (cover) {
     cover.classList.add('aberto');
-    cover.classList.add('envelope-opening');
-    setTimeout(() => { cover.style.display = 'none'; }, 800);
   }
 
+  // Toca o áudio imediatamente no clique do usuário
   if (audio) {
     audio.volume = 0.35;
-    audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.log("Autoplay bloqueado ou erro no áudio:", error);
+      });
+    }
   }
-}
+};
 
-// Garante disponibilidade global da função no window
-window.abrirConviteComAnimacao = abrirConviteComAnimacao;
-window.abrirConvite = abrirConviteComAnimacao;
+function abrirConviteComAnimacao() {
+  window.abrirConviteComAnimacao();
+}
 
 function toggleAcompanhantes(valor) {
   const box = document.getElementById('box-qtd-acompanhantes');
@@ -32,168 +37,169 @@ function toggleAcompanhantes(valor) {
 // 2. MURAL DE RECADOS (SUPABASE)
 // ==========================================
 async function carregarRecados() {
-  const wallContainer = document.getElementById('mural-recados') || document.getElementById('wall-container') || document.getElementById('mural-lista');
-  if (!wallContainer || !window.supabaseClient) return;
+  const wallContainer = document.getElementById('mural-recados') || document.getElementById('mural-lista');
+  if (!wallContainer) return;
+
+  if (typeof supabaseClient === 'undefined' || !supabaseClient) {
+    console.warn("Supabase client não configurado em config.js.");
+    return;
+  }
 
   try {
-    const { data, error } = await window.supabaseClient
+    const { data: recados, error } = await supabaseClient
       .from('recados')
       .select('*')
-      .order('id', { ascending: false });
+      .order('created_at', { ascending: false });
 
-    if (!error && data && data.length > 0) {
-      wallContainer.innerHTML = data.map(msg => `
-        <div style="background: var(--bg-main, #FFFDF9); border: 1px solid var(--border-color, #D9C3B0); border-radius: 1rem; padding: 1.1rem; margin-bottom: 0.85rem; text-align: left;">
-          <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--primary, #8C3F2B); margin-bottom: 0.3rem; font-size: 0.95rem;">
-            <span>${msg.autor || msg.nome || 'Convidado'}</span>
-            <span style="font-size: 0.75rem; color: var(--text-muted, #78716C); font-weight: 400;">${msg.criado_em ? new Date(msg.criado_em).toLocaleDateString('pt-BR') : 'Hoje'}</span>
-          </div>
-          <p style="margin: 0; color: var(--text-dark, #444); font-style: italic; font-size: 0.9rem;">"${msg.mensagem}"</p>
+    if (error) throw error;
+
+    if (!recados || recados.length === 0) {
+      wallContainer.innerHTML = `
+        <div style="border: 2px dashed #D9C3B0; padding: 1.2rem 1rem; border-radius: 0.8rem; text-align: center;">
+          <p style="color: #78716C; font-style: italic; font-size: 0.85rem;">Seja o primeiro a deixar um recado carinhoso para os noivos!</p>
         </div>
-      `).join('');
+      `;
+      return;
     }
-  } catch(e) {
-    console.error("Erro ao carregar recados:", e);
+
+    wallContainer.innerHTML = recados.map(r => `
+      <div style="background: #F7F4EF; border: 1px solid #D9C3B0; padding: 1rem; border-radius: 0.8rem; margin-bottom: 0.8rem; text-align: left;">
+        <p style="font-weight: 700; color: #8C3F2B; font-size: 0.95rem; margin-bottom: 0.2rem;">
+          <i class="fa-solid fa-heart" style="font-size: 0.75rem; margin-right: 4px;"></i> ${r.nome || 'Convidado'}
+        </p>
+        <p style="font-size: 0.9rem; color: #444; line-height: 1.4;">${r.mensagem || ''}</p>
+        <span style="font-size: 0.7rem; color: #78716C; display: block; margin-top: 0.4rem;">
+          ${r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : ''}
+        </span>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error("Erro ao carregar recados:", err);
   }
 }
 
 // ==========================================
-// 3. AUXILIARES (PIX & TOAST)
-// ==========================================
-function fallbackCopyPixText(text) {
-  const area = document.createElement("textarea");
-  area.value = text;
-  document.body.appendChild(area);
-  area.select();
-  document.execCommand('copy');
-  document.body.removeChild(area);
-  alert("✨ Código Pix Copia e Cola copiado com sucesso! Abra o app do seu banco e escolha 'Pix Copia e Cola'.");
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.innerText = msg;
-  t.style.display = 'block';
-  setTimeout(() => { t.style.display = 'none'; }, 4000);
-}
-
-// ==========================================
-// 4. INICIALIZAÇÃO E FORMULÁRIOS
+// 3. EVENT LISTENERS E INICIALIZAÇÃO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Inicializa Supabase se configurado
-  if (window.supabase && window.CONFIG && window.CONFIG.SUPABASE_URL) {
-    try {
-      window.supabaseClient = window.supabase.createClient(window.CONFIG.SUPABASE_URL, window.CONFIG.SUPABASE_ANON_KEY);
-    } catch(e) {
-      console.error('Erro no Supabase:', e);
-    }
-  }
-
   // Carrega recados do mural
   carregarRecados();
 
-  // Botão "Abrir Convite"
-  const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('#cover button');
-  if (btnAbrir) {
-    btnAbrir.onclick = abrirConviteComAnimacao;
-  }
-
-  // Botão Copiar Pix
+  // Copiar chave Pix
   const btnPix = document.getElementById('btn-copiar-pix');
   if (btnPix) {
     btnPix.addEventListener('click', () => {
-      const payloadPix = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(payloadPix).then(() => {
-          alert("✨ Código Pix Copia e Cola copiado com sucesso!");
-        }).catch(() => fallbackCopyPixText(payloadPix));
-      } else {
-        fallbackCopyPixText(payloadPix);
-      }
+      const pixCode = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
+      navigator.clipboard.writeText(pixCode).then(() => {
+        exibirToast("Chave Pix copiada com sucesso!");
+      }).catch(err => {
+        console.error("Erro ao copiar Pix:", err);
+        exibirToast("Chave Pix: 091.602.964-61");
+      });
     });
   }
 
-  // Formulário RSVP (Supabase + E-mail FormSubmit)
-  const formRsvp = document.getElementById('form-rsvp') || document.querySelector('form');
+  // RSVP Form Submit
+  const formRsvp = document.getElementById('form-rsvp');
   if (formRsvp) {
     formRsvp.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = formRsvp.querySelector('button[type="submit"]');
-      if (btn) { btn.disabled = true; btn.innerText = 'Enviando...'; }
+      
+      const btn = document.getElementById('btn-rsvp');
+      if (btn) btn.disabled = true;
 
-      const inputNome = formRsvp.querySelector('input[type="text"]');
-      const selectStatus = formRsvp.querySelector('select');
-      const selectAcomp = document.getElementById('rsvp-tem-acompanhante');
-      const inputQtd = document.getElementById('rsvp-qtd-acompanhantes');
+      const nome = document.getElementById('rsvp-nome').value.trim();
+      const status = document.getElementById('rsvp-status').value;
+      const temAcompanhante = document.getElementById('rsvp-tem-acompanhante').value;
+      const qtdAcompanhantes = (temAcompanhante === 'Sim') ? document.getElementById('rsvp-qtd-acompanhantes').value : '0';
 
-      const nome = inputNome ? inputNome.value : '';
-      const status = selectStatus ? selectStatus.value : 'Sim, estarei presente!';
-      const temAcomp = selectAcomp ? selectAcomp.value : 'Não';
-      const qtdAcomp = (temAcomp === 'Sim' && inputQtd) ? inputQtd.value : '0';
-
+      // 1. Envia notificação por e-mail via FormSubmit AJAX API
       try {
-        // 1. Grava no Supabase
-        if (window.supabaseClient) {
-          await window.supabaseClient.from('presencas').insert([{
-            nome_completo: nome,
-            status: status,
-            se_acompanhante: temAcomp,
-            qtd_acompanhantes: parseInt(qtdAcomp) || 0,
-            email_notificacao: 'patriciajosalva@gmail.com'
-          }]);
-        }
-
-        // 2. Envia e-mail direto para patriciajosalva@gmail.com
         await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify({
-            _subject: `💌 Confirmação de Presença: ${nome}`,
+            _subject: `Confirmação de RSVP - ${nome}`,
             _template: 'table',
             _captcha: 'false',
             Nome: nome,
             Presenca: status,
-            Acompanhante: temAcomp,
-            Quantidade_Acompanhantes: qtdAcomp
+            Acompanhante: temAcompanhante,
+            Quantidade_Acompanhantes: qtdAcompanhantes
           })
         });
-
-        alert(`✨ Muito obrigado, ${nome}! Sua presença foi confirmada e os noivos foram notificados por e-mail.`);
-        formRsvp.reset();
-      } catch (err) {
-        console.error("Erro RSVP:", err);
-        alert("✨ Sua presença foi confirmada!");
-      } finally {
-        if (btn) { btn.disabled = false; btn.innerText = 'Confirmar Presença'; }
+      } catch (errEmail) {
+        console.warn("Erro ao enviar e-mail via FormSubmit:", errEmail);
       }
+
+      // 2. Registra presença no Supabase
+      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+        try {
+          await supabaseClient.from('presencas').insert([{
+            nome: nome,
+            confirmado: (status.includes('Sim')),
+            acompanhantes: parseInt(qtdAcompanhantes, 10) || 0
+          }]);
+        } catch (errSupa) {
+          console.warn("Erro ao salvar presença no Supabase:", errSupa);
+        }
+      }
+
+      exibirToast("Presença confirmada com sucesso!");
+      formRsvp.reset();
+      toggleAcompanhantes('Não');
+      if (btn) btn.disabled = false;
     });
   }
 
-  // Formulário do Mural de Recados
-  const messageForm = document.getElementById('messageForm');
-  if (messageForm) {
-    messageForm.addEventListener('submit', async (e) => {
+  // Submit Mural de Recados Form
+  const formMsg = document.getElementById('messageForm');
+  if (formMsg) {
+    formMsg.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const author = document.getElementById('msgAuthor').value.trim();
-      const content = document.getElementById('msgContent').value.trim();
 
-      if (!author || !content) return;
+      const autorInput = document.getElementById('msgAuthor');
+      const msgInput = document.getElementById('msgContent');
+      const nome = autorInput ? autorInput.value.trim() : '';
+      const mensagem = msgInput ? msgInput.value.trim() : '';
 
-      if (window.supabaseClient) {
+      if (!nome || !mensagem) return;
+
+      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
         try {
-          await window.supabaseClient.from('recados').insert([{
-            autor: author,
-            mensagem: content,
-            criado_em: new Date().toISOString()
+          const { error } = await supabaseClient.from('recados').insert([{
+            nome: nome,
+            mensagem: mensagem
           }]);
-        } catch(e) {}
-      }
+          if (error) throw error;
 
-      showToast("Seu recado foi publicado no mural!");
-      messageForm.reset();
-      carregarRecados();
+          exibirToast("Mensagem publicada no mural!");
+          formMsg.reset();
+          carregarRecados();
+        } catch (err) {
+          console.error("Erro ao publicar recado:", err);
+          exibirToast("Erro ao publicar recado. Tente novamente.");
+        }
+      } else {
+        exibirToast("Mensagem recebida com carinho!");
+        formMsg.reset();
+      }
     });
   }
 });
+
+function exibirToast(mensagem) {
+  const toast = document.getElementById('toast');
+  if (toast) {
+    toast.textContent = mensagem;
+    toast.style.display = 'block';
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 4000);
+  } else {
+    alert(mensagem);
+  }
+}
