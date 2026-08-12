@@ -14,8 +14,8 @@ const CONFIG = {
   CHAVE_PIX_LABEL: 'Chave Pix em breve / Exemplo',
   NOME_TITULAR_PIX: 'Josalva & Valtair',
 
-  // 3. MÚSICA DE FUNDO ("Songbird" - Oasis)
-  AUDIO_TITLE: 'Songbird - Oasis',
+  // 3. MÚSICA DE FUNDO (Oasis - Acústico)
+  AUDIO_TITLE: 'Stop Crying Your Heart Out (Acoustic) - Oasis',
   AUDIO_URL: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3',
 
   // 4. CREDENCIAIS REAIS DO SUPABASE (Projeto: ssfgxswkdbrjvqcpxcfp)

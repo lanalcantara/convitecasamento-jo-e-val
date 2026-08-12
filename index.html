@@ -28,45 +28,50 @@
 </head>
 <body class="envelope-active">
 
-  <!-- ✉️ CAPA DE ABERTURA (ENVELOPE COVER - ESTRUTURA ESTRITA RESPONSIVA E SEM SCROLL) -->
+  <!-- ✉️ 1. TELA DE CAPA (CONVITE FECHADO - ESTADO INICIAL) -->
   <div class="envelope-overlay" id="envelopeOverlay">
     <div class="envelope-card">
-      <!-- 1. Arranjo floral decorativo pequeno e centralizado (w-28 h-28) -->
-      <div class="envelope-floral-icon">
-        <svg viewBox="0 0 120 120" width="112" height="112" xmlns="http://www.w3.org/2000/svg">
-          <!-- Ramos e Flores Boho Terrosas sem qualquer texto -->
-          <circle cx="60" cy="60" r="48" fill="none" stroke="#E6DDD1" stroke-width="1.5" stroke-dasharray="4,3"/>
-          <path d="M25 60 Q 35 30 60 20" fill="none" stroke="#8C3F2B" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M95 60 Q 85 30 60 20" fill="none" stroke="#8C3F2B" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="40" cy="30" r="4" fill="#C59B4E"/>
-          <circle cx="80" cy="30" r="4" fill="#C59B4E"/>
-          <circle cx="30" cy="45" r="3.5" fill="#B06D55"/>
-          <circle cx="90" cy="45" r="3.5" fill="#B06D55"/>
-          <path d="M60 48 L65 58 L76 60 L68 68 L70 79 L60 73 L50 79 L52 68 L44 60 L55 58 Z" fill="#8C3F2B" opacity="0.15"/>
-          <text x="60" y="68" font-family="'Great Vibes', cursive" font-size="34" fill="#8C3F2B" text-anchor="middle">J &amp; V</text>
-        </svg>
+      <!-- Imagem decorativa centralizada (arranjo floral rústico) -->
+      <div class="envelope-header-img">
+        <img src="./assets/hero_bg.png" alt="Arranjo Floral Rústico Boho">
       </div>
 
-      <!-- 2. Nomes dos noivos em destaque em cor #8C3F2B -->
+      <!-- Título Principal -->
       <h1 class="envelope-names">Josalva & Valtair</h1>
 
-      <!-- 3. Texto explicativo sutil -->
+      <!-- Subtítulo -->
       <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
 
-      <!-- 4. Texto de instrução -->
-      <p class="envelope-instruction">Clique para abrir o nosso convite</p>
+      <!-- Texto de Instrução -->
+      <p class="envelope-instruction">Clique abaixo para abrir o nosso convite</p>
 
-      <!-- 5. Botão "Abrir Convite" -->
+      <!-- Botão Principal -->
       <button class="btn-open-envelope" id="btnOpenInvite">
         <i class="fa-solid fa-heart" style="color: #FFF; font-size: 0.95rem;"></i> Abrir Convite
       </button>
     </div>
   </div>
 
-  <!-- 🏛️ CONTEÚDO PRINCIPAL DO SITE (OCULTO ATÉ O CLIQUE) -->
-  <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.6s ease;">
+  <!-- 🎵 2. PLAYER DE ÁUDIO FLUTUANTE (CANTO INFERIOR DIREITO) -->
+  <div class="floating-music-widget">
+    <button class="music-btn" id="musicBtn" title="Tocar / Pausar 'Stop Crying Your Heart Out' (Acústico) - Oasis" aria-label="Tocar ou pausar música de fundo">
+      <i class="fa-solid fa-music" id="musicIcon"></i>
+      <span id="musicText">Stop Crying Your Heart Out 🎵</span>
+      <div class="equalizer-bars" id="eqBars">
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+      </div>
+    </button>
+  </div>
 
-    <!-- BARRA DE NAVEGAÇÃO FIXA COM WIDGET DE ÁUDIO -->
+  <!-- Áudio Oculto -->
+  <audio id="bgAudio" loop preload="auto"></audio>
+
+  <!-- 🌐 3. CONTEÚDO DO SITE PRINCIPAL (DESMONTADO DO DOM / OCULTO ATÉ isOpened === true) -->
+  <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.8s ease;">
+
+    <!-- BARRA DE NAVEGAÇÃO FIXA -->
     <nav class="navbar" id="navbar">
       <a href="#hero" class="nav-brand">J & V</a>
 
@@ -79,29 +84,13 @@
         <li><a href="#recados" class="nav-link">Recados</a></li>
       </ul>
 
-      <div class="nav-actions">
-        <!-- Player Flutuante ("Songbird" - Oasis) -->
-        <button class="music-btn" id="musicBtn" title="Tocar / Pausar 'Songbird' - Oasis" aria-label="Tocar ou pausar música de fundo">
-          <i class="fa-solid fa-music" id="musicIcon"></i>
-          <span id="musicText">Songbird 🎵</span>
-          <div class="equalizer-bars" id="eqBars">
-            <div class="eq-bar"></div>
-            <div class="eq-bar"></div>
-            <div class="eq-bar"></div>
-          </div>
-        </button>
-
-        <!-- Menu Mobile Toggle -->
-        <button class="nav-toggle" id="navToggle" aria-label="Abrir menu de navegação">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
+      <!-- Menu Mobile Toggle -->
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu de navegação">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </nav>
 
-    <!-- Áudio Oculto -->
-    <audio id="bgAudio" loop preload="auto"></audio>
-
-    <!-- HERO SECTION / REVELADA APÓS ABERTURA -->
+    <!-- HERO SECTION -->
     <header class="hero" id="hero">
       <div class="hero-overlay"></div>
 
@@ -151,7 +140,7 @@
       </div>
     </header>
 
-    <!-- SEÇÃO NOSSA COMEMORAÇÃO & CARD VECTOR MONOGRAMA -->
+    <!-- SEÇÃO NOSSA COMEMORAÇÃO -->
     <section class="story-section" id="comemoracao">
       <div class="container">
         <div class="story-grid">
@@ -194,7 +183,7 @@
       </div>
     </section>
 
-    <!-- DETALHES DO EVENTO -->
+    <!-- DETALHES DO EVENTO & MAPA -->
     <section class="details-section" id="evento">
       <div class="container text-center">
         <span class="section-tag">Programação & Local</span>
@@ -316,7 +305,7 @@
       </div>
     </section>
 
-    <!-- PRESENTES EM DINHEIRO (PIX & COTAS) -->
+    <!-- PRESENTES VIA PIX -->
     <section class="pix-section" id="presentes">
       <div class="container">
         <div class="text-center">
@@ -423,7 +412,7 @@
       </div>
     </section>
 
-    <!-- MURAL DE RECADOS -->
+    <!-- MURAL DE RECADOS (SEM DADOS MOCADOS) -->
     <section class="messages-section" id="recados">
       <div class="container">
         <div class="text-center">

@@ -18,12 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. TELA DE ABERTURA EXCLUSIVA (ESTADO isOpened === false / RENDERIZAÇÃO DA CAPA)
+   1. TELA DE CAPA (CONVITE FECHADO - ESTADO INICIAL ISOLADO)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
   const btnOpenInvite = document.getElementById('btnOpenInvite');
-  const waxSeal = document.getElementById('waxSeal');
   const mainContent = document.getElementById('mainContent');
   const bgAudio = document.getElementById('bgAudio');
   const musicBtn = document.getElementById('musicBtn');
@@ -32,7 +31,7 @@ function initEnvelopeOpening() {
 
   let isOpened = false;
 
-  // Garante estado inicial: Capa 100% visível e opaca, Conteúdo Principal OCULTO (display: none)
+  // Garante estado inicial: Capa visível, Site Principal OCULTO e Desmontado (display: none)
   if (mainContent) {
     mainContent.style.display = 'none';
     mainContent.style.opacity = '0';
@@ -43,32 +42,32 @@ function initEnvelopeOpening() {
     if (isOpened) return;
     isOpened = true;
 
-    // 1. Desvanecer e ocultar a Capa
+    // 1. Animação de transição suave (fade-out + scale-up) da Capa
     if (envelopeOverlay) {
-      envelopeOverlay.style.opacity = '0';
+      envelopeOverlay.classList.add('opened');
       setTimeout(() => {
         envelopeOverlay.style.display = 'none';
-      }, 400);
+      }, 750);
     }
 
-    // 2. Revelar o Conteúdo do Site
+    // 2. Montar e exibir o Conteúdo do Site Principal
     if (mainContent) {
       mainContent.style.display = 'block';
       setTimeout(() => {
         mainContent.style.opacity = '1';
-      }, 50);
+      }, 100);
     }
 
     document.body.classList.remove('envelope-active');
 
-    // 3. Iniciar áudio com volume padrão 0.2 no clique
+    // 3. Iniciar reprodução do áudio "Stop Crying Your Heart Out" em volume 0.2 (20%)
     if (bgAudio) {
       bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
         if (musicBtn) musicBtn.classList.add('playing');
         if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
         if (musicText) musicText.innerText = 'Pausar';
-        showToast('Tocando "Songbird" - Oasis 🎶');
+        showToast('Tocando "Stop Crying Your Heart Out" (Acústico) - Oasis 🎶');
       }).catch(err => {
         console.log('Autoplay bloqueado pelo navegador:', err);
       });
@@ -76,7 +75,6 @@ function initEnvelopeOpening() {
   }
 
   if (btnOpenInvite) btnOpenInvite.addEventListener('click', openEnvelope);
-  if (waxSeal) waxSeal.addEventListener('click', openEnvelope);
 }
 
 /* --------------------------------------------------------------------------
@@ -147,7 +145,7 @@ function initCountdown() {
 }
 
 /* --------------------------------------------------------------------------
-   4. CONTROLE DE ÁUDIO DE FUNDO (VOLUME INICIAL 0.2)
+   4. CONTROLE DE ÁUDIO DE FUNDO (VOLUME INICIAL 0.2 / OASIS)
    -------------------------------------------------------------------------- */
 function initAudioPlayer() {
   const bgAudio = document.getElementById('bgAudio');
@@ -170,7 +168,7 @@ function initAudioPlayer() {
       bgAudio.pause();
       musicBtn.classList.remove('playing');
       if (musicIcon) musicIcon.className = 'fa-solid fa-music';
-      if (musicText) musicText.innerText = 'Songbird 🎵';
+      if (musicText) musicText.innerText = 'Stop Crying Your Heart Out 🎵';
       isPlaying = false;
       showToast('Música de fundo pausada 🎵');
     } else {
@@ -180,7 +178,7 @@ function initAudioPlayer() {
         if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
         if (musicText) musicText.innerText = 'Pausar';
         isPlaying = true;
-        showToast('Tocando "Songbird" - Oasis 🎶');
+        showToast('Tocando "Stop Crying Your Heart Out" (Acústico) - Oasis 🎶');
       }).catch(() => {
         musicBtn.classList.add('playing');
         if (musicText) musicText.innerText = 'Pausar';
@@ -484,7 +482,7 @@ function initCotasModal() {
 }
 
 /* --------------------------------------------------------------------------
-   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE
+   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -551,11 +549,12 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
+  // ZERO DADOS MOCADOS: Mensagem quando não há registros
   if (!messages || messages.length === 0) {
     messagesWall.innerHTML = `
       <div class="empty-state-box">
         <i class="fa-regular fa-comment-dots"></i>
-        <p>Seja o primeiro a enviar uma mensagem aos noivos! ❤️</p>
+        <p>Seja o primeiro a deixar uma mensagem carinhosa para os noivos! ❤️</p>
       </div>
     `;
     return;
