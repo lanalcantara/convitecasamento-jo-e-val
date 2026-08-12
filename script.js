@@ -8,17 +8,13 @@ window.abrirConviteComAnimacao = function() {
   // Esconde o envelope de capa
   if (cover) {
     cover.classList.add('aberto');
+    setTimeout(() => { cover.style.display = 'none'; }, 600);
   }
 
-  // Toca o áudio imediatamente no clique do usuário
+  // Toca o áudio oficial do index.html (#bg-music)
   if (audio) {
     audio.volume = 0.35;
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(error => {
-        console.log("Autoplay bloqueado ou erro no áudio:", error);
-      });
-    }
+    audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));
   }
 };
 
@@ -82,6 +78,12 @@ async function carregarRecados() {
 // 3. EVENT LISTENERS E INICIALIZAÇÃO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+  // Vincula evento de abertura do convite
+  const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('#cover button');
+  if (btnAbrir) {
+    btnAbrir.onclick = window.abrirConviteComAnimacao;
+  }
+
   // Carrega recados do mural
   carregarRecados();
 
