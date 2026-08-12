@@ -30,16 +30,22 @@
   <!-- Áudio Flutuante Oculto -->
   <audio id="bgAudio" loop preload="auto"></audio>
 
-  <!-- ✉️ CAPA / ENVELOPE DE ENTRADA -->
+  <!-- 1. CAPA SOBREPOSTA (DESAPARECE SUAVEMENTE AO CLICAR) -->
   <div class="envelope-overlay" id="envelopeOverlay">
     <div class="envelope-card">
       
-      <!-- Elemento Decorativo / Arranjo Floral Pequeno -->
+      <!-- Arranjo Floral Rústico da Capa -->
       <div class="envelope-floral-box">
-        <img 
-          src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=400&q=80" 
-          alt="Flores Rústicas" 
-        />
+        <svg viewBox="0 0 240 128" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="120" cy="64" r="54" fill="none" stroke="#E6DDD1" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <path d="M70 64 Q 85 30 120 24" fill="none" stroke="#8C3F2B" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M170 64 Q 155 30 120 24" fill="none" stroke="#8C3F2B" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="95" cy="35" r="4.5" fill="#C59B4E"/>
+          <circle cx="145" cy="35" r="4.5" fill="#C59B4E"/>
+          <circle cx="80" cy="50" r="4" fill="#B06D55"/>
+          <circle cx="160" cy="50" r="4" fill="#B06D55"/>
+          <text x="120" y="74" font-family="'Great Vibes', cursive" font-size="38" fill="#8C3F2B" text-anchor="middle">J &amp; V</text>
+        </svg>
       </div>
 
       <div>
@@ -69,21 +75,18 @@
     </button>
   </div>
 
-  <!-- 🌐 CONTEÚDO PRINCIPAL DO SITE (SÓ APARECE APÓS ABERTURA) -->
-  <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.6s ease;">
+  <!-- 2. CONTEÚDO PRINCIPAL DO SITE (SEMPRE PRESENTE NO DOM) -->
+  <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.7s ease;">
 
-    <!-- Header / Navbar -->
+    <!-- Cabeçalho -->
     <header class="navbar" id="navbar">
       <a href="#" class="nav-brand">J & V</a>
       <nav class="nav-links" id="navLinks">
         <a href="#comemoracao" class="nav-link">O Evento</a>
-        <a href="#confirmacao" class="nav-link">Confirmar Presença</a>
+        <a href="#confirmacao" class="nav-link">Confirmar</a>
         <a href="#recados" class="nav-link">Mural</a>
         <a href="#presentes" class="nav-link">Presentes</a>
       </nav>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu Mobile">
-        <i class="fa-solid fa-bars"></i>
-      </button>
     </header>
 
     <!-- Hero Section -->
@@ -150,45 +153,23 @@
     <!-- Confirmação de Presença -->
     <section id="confirmacao" class="rsvp-section">
       <div class="rsvp-card">
-        <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #8C3F2B; margin-bottom: 8px; text-align: center;">Confirmação de Presença</h2>
-        <p style="font-size: 0.85rem; text-align: center; color: #78716C; margin-bottom: 24px;">Por favor, confirme sua presença para organizarmos tudo com carinho.</p>
+        <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px; text-align: center;">Confirmação de Presença</h2>
+        <p style="font-size: 0.75rem; text-align: center; color: #78716C; margin-bottom: 20px;">Por favor, confirme sua presença para organizarmos tudo perfeitamente.</p>
         
-        <div id="formStatusBox" style="display:none; margin-bottom:20px; padding:16px; border-radius:12px; text-align:center; font-weight:600;"></div>
+        <div id="formStatusBox" style="display:none; margin-bottom:16px; padding:12px; border-radius:12px; text-align:center; font-size:0.85rem;"></div>
 
         <form id="rsvpForm">
           <div class="form-group">
             <label class="form-label" for="guestName">Nome Completo *</label>
-            <input type="text" id="guestName" class="form-control" placeholder="Digite seu nome completo" required />
+            <input type="text" id="guestName" class="form-control" placeholder="Digite seu nome" required />
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="guestPhone">WhatsApp / Telefone *</label>
-            <input type="tel" id="guestPhone" class="form-control" placeholder="(27) 99999-9999" required />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Irá comparecer? *</label>
+            <label class="form-label">Irá comparecer?</label>
             <select id="guestAttendance" class="form-control">
               <option value="sim">Sim, com certeza!</option>
               <option value="nao">Infelizmente não poderei</option>
             </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="companionsCount">Acompanhantes</label>
-            <select id="companionsCount" class="form-control">
-              <option value="0">Apenas eu</option>
-              <option value="1">+ 1 Acompanhante</option>
-              <option value="2">+ 2 Acompanhantes</option>
-              <option value="3">+ 3 Acompanhantes</option>
-            </select>
-          </div>
-
-          <div id="companionNamesWrapper"></div>
-
-          <div class="form-group">
-            <label class="form-label" for="rsvpMessage">Mensagem aos noivos (opcional)</label>
-            <textarea id="rsvpMessage" class="form-control" rows="3" placeholder="Escreva uma mensagem especial..."></textarea>
           </div>
 
           <button type="submit" id="btnSubmitRsvp" class="btn-submit-rsvp">
@@ -198,20 +179,19 @@
       </div>
     </section>
 
-    <!-- Mural de Recados (Sem dados mocados) -->
+    <!-- Mural de Recados (Zero dados mocados) -->
     <section id="recados" class="messages-section">
-      <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #8C3F2B; margin-bottom: 20px;">Mural de Recados</h2>
+      <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 16px;">Mural de Recados</h2>
       
-      <div style="background: #FFF; padding: 24px; border-radius: 24px; border: 1px solid #D9C3B0; margin-bottom: 24px; text-align: left;">
-        <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #292524; margin-bottom: 16px;">Deixar uma Mensagem</h3>
+      <div style="background: #FFF; padding: 20px; border-radius: 20px; border: 1px solid #D9C3B0; margin-bottom: 20px; text-align: left;">
         <form id="messageForm">
           <div class="form-group">
             <label class="form-label" for="msgAuthor">Seu Nome *</label>
-            <input type="text" id="msgAuthor" class="form-control" placeholder="Ex: Maria" required />
+            <input type="text" id="msgAuthor" class="form-control" placeholder="Digite seu nome" required />
           </div>
           <div class="form-group">
             <label class="form-label" for="msgContent">Sua Mensagem *</label>
-            <textarea id="msgContent" class="form-control" rows="3" placeholder="Escreva carinho para Josalva & Valtair..." required></textarea>
+            <textarea id="msgContent" class="form-control" rows="3" placeholder="Escreva uma mensagem carinhosa..." required></textarea>
           </div>
           <button type="submit" class="btn-submit-rsvp" style="width: auto; padding: 10px 24px;">Publicar Mensagem</button>
         </form>
@@ -223,13 +203,14 @@
     <!-- Presentes Pix -->
     <section id="presentes" class="pix-section">
       <div class="pix-card">
-        <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #8C3F2B; margin-bottom: 8px;">Presentes via Pix</h2>
-        <p style="font-size: 0.85rem; color: #78716C; margin-bottom: 20px;">Caso deseje nos abençoar com uma contribuição em dinheiro:</p>
+        <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px;">Presentes em Dinheiro (Pix)</h2>
+        <p style="font-size: 0.75rem; color: #57534E; margin-bottom: 16px;">
+          Preferimos presentes em dinheiro via Pix para que possamos comprar o que quisermos para o nosso lar.
+        </p>
         
-        <div id="qrcodeCanvas" style="display: flex; justify-content: center; margin-bottom: 16px;"></div>
+        <div id="qrcodeCanvas" style="display: flex; justify-content: center; margin-bottom: 12px;"></div>
         
-        <p style="font-size: 0.85rem; font-weight: 700; color: #292524;">Chave Pix Direta:</p>
-        <div class="pix-key-box" id="pixKeyText">SUA-CHAVE-PIX-AQUI</div>
+        <div class="pix-key-box" id="pixKeyText">Chave Pix em breve</div>
 
         <button class="btn-map" id="btnCopyPixMain" style="cursor: pointer; border: none;">
           📋 Copiar Chave Pix
@@ -239,8 +220,8 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p style="font-family: var(--font-script); font-size: 3rem; color: #C59B4E;">Josalva & Valtair</p>
-      <p style="font-size: 0.85rem; color: rgba(250,247,242,0.7); margin-top: 8px;">© 2026 Recepção de Comemoração. Feito com amor ❤️</p>
+      <p style="font-family: var(--font-script); font-size: 2.8rem; color: #C59B4E;">Josalva & Valtair</p>
+      <p style="font-size: 0.8rem; color: rgba(250,247,242,0.7); margin-top: 8px;">© 2026 Recepção de Comemoração. Feito com amor ❤️</p>
     </footer>
 
   </div>

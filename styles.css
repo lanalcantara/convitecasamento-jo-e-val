@@ -62,7 +62,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 1. TELA DE CAPA (ENVELOPE COVER) */
+/* 1. CAPA SOBREPOSTA (DESAPARECE SUAVEMENTE AO CLICAR) */
 body.envelope-active {
   overflow: hidden !important;
   height: 100vh !important;
@@ -83,16 +83,22 @@ body.envelope-active {
   overflow: hidden;
   user-select: none;
   opacity: 1;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+
+.envelope-overlay.opened {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .envelope-card {
   width: 100%;
-  max-width: 440px;
-  background: rgba(255, 255, 255, 0.85);
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: 32px 24px;
+  padding: 24px;
   border-radius: 24px;
   border: 1px solid #D9C3B0;
   box-shadow: 0 25px 50px -12px rgba(140, 63, 43, 0.18);
@@ -106,27 +112,26 @@ body.envelope-active {
 
 .envelope-floral-box {
   width: 100%;
-  max-width: 220px;
-  height: 112px;
+  max-width: 240px;
+  height: 128px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 12px;
   margin: 0 auto;
   flex-shrink: 0;
 }
 
-.envelope-floral-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
+.envelope-floral-box svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 128px !important;
+  object-fit: contain !important;
 }
 
 .envelope-names {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 5.5vw, 2.75rem);
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
   font-weight: 700;
   color: #8C3F2B;
   line-height: 1.15;
@@ -135,7 +140,7 @@ body.envelope-active {
 
 .envelope-concept {
   font-family: var(--font-serif);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #57534E;
   font-style: italic;
   margin-top: 4px;
@@ -143,21 +148,21 @@ body.envelope-active {
 
 .envelope-instruction {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: #78716C;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .btn-open-envelope {
   width: 100%;
-  padding: 14px 24px;
+  padding: 12px 24px;
   background-color: #8C3F2B;
   color: #FFFFFF;
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 500;
+  font-size: 0.9rem;
   border-radius: 9999px;
   border: none;
   box-shadow: 0 10px 25px rgba(140, 63, 43, 0.25);
@@ -257,29 +262,20 @@ body.envelope-active {
 
 .nav-links {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   list-style: none;
 }
 
 .nav-link {
   text-decoration: none;
   color: #44403C;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
   transition: var(--transition-smooth);
 }
 
 .nav-link:hover {
   color: #8C3F2B;
-}
-
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.4rem;
-  color: var(--text-dark);
-  cursor: pointer;
 }
 
 /* 4. HERO SECTION */
@@ -366,16 +362,17 @@ body.envelope-active {
 
 /* 5. DETALHES E MAPA */
 .details-section {
-  padding: 48px 16px;
-  max-width: 896px;
+  padding: 40px 16px;
+  max-width: 768px;
   margin: 0 auto;
 }
 
 .details-card {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 24px;
   padding: 32px;
   border: 1px solid #D9C3B0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   text-align: center;
 }
 
@@ -415,7 +412,7 @@ body.envelope-active {
 
 .details-box-val {
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: #8C3F2B;
 }
 
@@ -423,10 +420,11 @@ body.envelope-active {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 28px;
+  padding: 12px 24px;
   background-color: #8C3F2B;
   color: #FFF;
   border-radius: 9999px;
+  font-size: 0.9rem;
   font-weight: 500;
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(140, 63, 43, 0.2);
@@ -439,8 +437,8 @@ body.envelope-active {
 
 /* 6. CONFIRMAÇÃO DE PRESENÇA */
 .rsvp-section {
-  padding: 48px 16px;
-  max-width: 576px;
+  padding: 40px 16px;
+  max-width: 512px;
   margin: 0 auto;
 }
 
@@ -453,24 +451,24 @@ body.envelope-active {
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   text-align: left;
 }
 
 .form-label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #44403C;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .form-control {
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px;
   border-radius: 12px;
   border: 1px solid #D6D3D1;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   transition: border-color 0.2s ease;
 }
 
@@ -481,10 +479,11 @@ body.envelope-active {
 
 .btn-submit-rsvp {
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   background-color: #8C3F2B;
   color: #FFF;
   font-weight: 700;
+  font-size: 0.875rem;
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -497,8 +496,8 @@ body.envelope-active {
 
 /* 7. MURAL DE RECADOS */
 .messages-section {
-  padding: 48px 16px;
-  max-width: 672px;
+  padding: 40px 16px;
+  max-width: 576px;
   margin: 0 auto;
   text-align: center;
 }
@@ -509,6 +508,7 @@ body.envelope-active {
   border-radius: 24px;
   color: #78716C;
   font-style: italic;
+  font-size: 0.875rem;
 }
 
 .message-card {
@@ -538,8 +538,8 @@ body.envelope-active {
 
 /* 8. PRESENTES PIX */
 .pix-section {
-  padding: 48px 16px 96px 16px;
-  max-width: 576px;
+  padding: 40px 16px 80px 16px;
+  max-width: 512px;
   margin: 0 auto;
   text-align: center;
 }
@@ -557,8 +557,8 @@ body.envelope-active {
   padding: 12px;
   border-radius: 12px;
   font-family: monospace;
-  font-weight: 700;
-  color: #8C3F2B;
+  font-size: 0.75rem;
+  color: #57534E;
   margin: 16px 0;
   word-break: break-all;
 }

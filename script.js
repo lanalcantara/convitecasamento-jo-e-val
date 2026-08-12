@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. TELA DE CAPA (ENVELOPE COVER - ESTADO isOpened)
+   1. CAPA SOBREPOSTA (DESAPARECE SUAVEMENTE AO CLICAR)
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
@@ -29,25 +29,25 @@ function initEnvelopeOpening() {
 
   let isOpened = false;
 
+  document.body.classList.add('envelope-active');
   if (mainContent) {
     mainContent.style.display = 'none';
     mainContent.style.opacity = '0';
   }
-  document.body.classList.add('envelope-active');
 
   function openEnvelope() {
     if (isOpened) return;
     isOpened = true;
 
-    // Ocultar Capa
+    // 1. Suavizar e esconder a Capa
     if (envelopeOverlay) {
-      envelopeOverlay.style.opacity = '0';
+      envelopeOverlay.classList.add('opened');
       setTimeout(() => {
         envelopeOverlay.style.display = 'none';
-      }, 500);
+      }, 700);
     }
 
-    // Exibir Site Principal
+    // 2. Exibir imediatamente o Conteúdo Principal do Site (Garantindo exibição completa)
     if (mainContent) {
       mainContent.style.display = 'block';
       setTimeout(() => {
@@ -55,9 +55,10 @@ function initEnvelopeOpening() {
       }, 50);
     }
 
+    // 3. Desbloquear a rolagem da página
     document.body.classList.remove('envelope-active');
 
-    // Reproduzir áudio em volume 0.2 (20%)
+    // 4. Reproduzir áudio em volume 0.2 (20%)
     if (bgAudio) {
       bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
@@ -244,11 +245,9 @@ function initRSVP() {
       e.preventDefault();
 
       const name = document.getElementById('guestName').value.trim();
-      const phone = document.getElementById('guestPhone').value.trim();
       const attendanceVal = document.getElementById('guestAttendance').value;
       const vaiComparecer = attendanceVal === 'sim' ? 'Sim' : 'Não';
-      const count = parseInt(document.getElementById('companionsCount').value || '0');
-      const rsvpMessage = document.getElementById('rsvpMessage').value.trim();
+      const rsvpMessage = document.getElementById('rsvpMessage') ? document.getElementById('rsvpMessage').value.trim() : '';
 
       if (btnSubmitRsvp) btnSubmitRsvp.disabled = true;
       if (btnSubmitText) btnSubmitText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando...`;
@@ -257,7 +256,7 @@ function initRSVP() {
       const payload = {
         nome_completo: name,
         vai_comparecer: vaiComparecer,
-        quantidade_acompanhantes: count,
+        quantidade_acompanhantes: 0,
         nomes_acompanhantes: '',
         mensagem_noivos: rsvpMessage,
         criado_em: new Date().toISOString()
@@ -277,13 +276,13 @@ function initRSVP() {
         }
 
         const savedRSVPs = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-        savedRSVPs.push({ ...payload, phone, date: new Date().toLocaleString('pt-BR') });
+        savedRSVPs.push({ ...payload, date: new Date().toLocaleString('pt-BR') });
         localStorage.setItem('wedding_rsvps', JSON.stringify(savedRSVPs));
         
         success = true;
       } catch (err) {
         const savedRSVPs = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-        savedRSVPs.push({ ...payload, phone, date: new Date().toLocaleString('pt-BR') });
+        savedRSVPs.push({ ...payload, date: new Date().toLocaleString('pt-BR') });
         localStorage.setItem('wedding_rsvps', JSON.stringify(savedRSVPs));
         success = true;
       }
@@ -310,7 +309,7 @@ function initRSVP() {
 }
 
 /* --------------------------------------------------------------------------
-   7. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (SEM DADOS MOCADOS)
+   7. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (ZERO DADOS MOCADOS)
    -------------------------------------------------------------------------- */
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
@@ -377,11 +376,11 @@ async function loadAndRenderMessages() {
     messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   }
 
-  // SEM DADOS MOCADOS: Exibe mensagem de estado vazio
+  // ZERO DADOS MOCADOS
   if (!messages || messages.length === 0) {
     messagesWall.innerHTML = `
       <div class="empty-state-box">
-        <p>Seja o primeiro a deixar uma mensagem carinhosa para Josalva & Valtair! ❤️</p>
+        <p>Seja o primeiro a deixar uma mensagem carinhosa para os noivos! ❤️</p>
       </div>
     `;
     return;
@@ -399,7 +398,7 @@ async function loadAndRenderMessages() {
 }
 
 /* --------------------------------------------------------------------------
-   8. UTILS & SISTEMA DE TOAST & NAVEGAÇÃO
+   8. UTILS & TOAST NOTIFICATIONS & NAVEGAÇÃO
    -------------------------------------------------------------------------- */
 function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -435,9 +434,7 @@ function showToast(message) {
 
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `
-    <span>${message}</span>
-  `;
+  toast.innerHTML = `<span>${message}</span>`;
 
   container.appendChild(toast);
 
@@ -450,19 +447,17 @@ function showToast(message) {
 }
 
 function initNavigation() {
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.getElementById('navLinks');
-  const links = document.querySelectorAll('.nav-link');
+  const navLinks = document.querySelectorAll('.nav-link');
 
-  if (navToggle && navLinks) {
-    navToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-    });
-  }
-
-  links.forEach(link => {
+  navLinks.forEach(link => {
     link.addEventListener('click', () => {
-      if (navLinks) navLinks.classList.remove('active');
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
     });
   });
 }
