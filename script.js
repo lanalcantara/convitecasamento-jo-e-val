@@ -3,22 +3,13 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const btnAbrir = document.getElementById('btn-abrir-convite') || document.getElementById('btn-abrir') || document.querySelector('.btn-abrir') || document.querySelector('button');
-  const cover = document.getElementById('cover') || document.querySelector('.cover') || document.querySelector('#envelopeOverlay');
-  const audio = document.getElementById('bg-music') || document.getElementById('bgAudio') || document.querySelector('audio');
+  document.body.classList.remove('envelope-active', 'overflow-hidden');
+  document.body.style.overflow = 'auto';
 
-  if (btnAbrir) {
-    btnAbrir.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (cover) cover.remove();
-      document.body.style.overflow = 'auto';
-      document.body.classList.remove('envelope-active', 'overflow-hidden');
-
-      if (audio) {
-        audio.volume = 0.2;
-        audio.play().catch(err => console.log("Aguardando áudio:", err));
-      }
-    });
+  const mainContent = document.getElementById('mainContent');
+  if (mainContent) {
+    mainContent.style.display = 'block';
+    mainContent.style.opacity = '1';
   }
 
   initSupabaseAndEmailJS();
