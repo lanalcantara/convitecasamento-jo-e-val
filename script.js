@@ -1,17 +1,14 @@
 // ==========================================
-// 1. ÁUDIO DO OASIS & ABERTURA DO CONVITE
+// 1. ÁUDIO DO OASIS & ABERTURA DO CONVITE (BOHO CHIC)
 // ==========================================
 window.abrirConviteComAnimacao = function() {
   const cover = document.getElementById('cover');
   const audio = document.getElementById('bg-music');
 
-  // Esconde o envelope de capa
   if (cover) {
     cover.classList.add('aberto');
-    setTimeout(() => { cover.style.display = 'none'; }, 600);
   }
 
-  // Toca o áudio oficial do index.html (#bg-music)
   if (audio) {
     audio.volume = 0.35;
     audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));

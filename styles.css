@@ -1,4 +1,3 @@
-/* RESET DE MARGENS E CAIXAS */
 *, *::before, *::after {
   box-sizing: border-box !important;
   margin: 0;
@@ -6,30 +5,28 @@
 }
 
 body {
-  background-color: #F7F4EF !important;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
-  color: #444 !important;
+  background-color: #F7F4EF !important; /* Tom palha artesanal */
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  color: #4A403A !important;
   overflow-x: hidden !important;
 }
 
-/* HEADER FIXO NO TOPO */
+/* HEADER DELICADO */
 header, .main-header {
   width: 100% !important;
   padding: 1.2rem 2rem !important;
   background: #FFFDF9 !important;
-  border-bottom: 1px solid #D9C3B0 !important;
+  border-bottom: 1px solid #E5D8CC !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  position: relative !important;
-  z-index: 10 !important;
 }
 
 .logo-header, .brand-logo {
-  font-family: 'Playfair Display', 'Cormorant Garamond', serif !important;
-  font-size: 1.5rem !important;
-  font-weight: bold !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.4rem !important;
   color: #8C3F2B !important;
+  letter-spacing: 1px !important;
   text-decoration: none !important;
 }
 
@@ -41,45 +38,45 @@ header, .main-header {
   gap: 8px !important;
 }
 
-/* CONTAINER PRINCIPAL DO CONTEÚDO */
+/* MAIN CONTAINER EM FLUXO NORMAL */
 main.container, .container {
-  max-width: 1100px !important;
+  max-width: 1000px !important;
   margin: 0 auto !important;
-  padding: 2rem 1rem !important;
+  padding: 2.5rem 1.2rem !important;
   display: block !important;
 }
 
-/* HERO SECTION */
+/* HERO SECTION BOHO */
 .hero-section, .hero-card {
   background: #FFFDF9 !important;
-  border: 1px solid #D9C3B0 !important;
+  border: 1px solid #E5D8CC !important;
   border-radius: 1.25rem !important;
   padding: 2rem !important;
-  box-shadow: 0 8px 20px rgba(140, 63, 43, 0.06) !important;
+  box-shadow: 0 10px 30px rgba(140, 63, 43, 0.04) !important;
   display: grid !important;
   grid-template-columns: 1fr !important;
   gap: 2rem !important;
   align-items: center !important;
   position: static !important;
   transform: none !important;
-  margin: 0 0 2rem 0 !important;
+  margin-bottom: 2rem !important;
 }
 
 @media (min-width: 768px) {
   .hero-section, .hero-card {
-    grid-template-columns: 360px 1fr !important;
+    grid-template-columns: 340px 1fr !important;
   }
 }
 
 .foto-casal {
   width: 100% !important;
-  max-width: 360px !important;
-  height: 440px !important;
+  max-width: 340px !important;
+  height: 420px !important;
   object-fit: cover !important;
   object-position: center top !important;
   border-radius: 1.25rem !important;
-  border: 5px solid #FFFFFF !important;
-  box-shadow: 0 10px 25px rgba(140, 63, 43, 0.12) !important;
+  border: 4px solid #FFFFFF !important;
+  box-shadow: 0 10px 25px rgba(140, 63, 43, 0.08) !important;
   margin: 0 auto !important;
   display: block !important;
 }
@@ -100,7 +97,7 @@ main.container, .container {
 
 .hero-names {
   font-family: 'Playfair Display', serif !important;
-  font-size: clamp(2.4rem, 4.5vw, 3.5rem) !important;
+  font-size: clamp(2.4rem, 4.5vw, 3.4rem) !important;
   font-weight: 700 !important;
   color: #8C3F2B !important;
   line-height: 1.1 !important;
@@ -122,38 +119,38 @@ main.container, .container {
   background: #F7F4EF !important;
   padding: 0.7rem 1.4rem !important;
   border-radius: 9999px !important;
-  border: 1px solid #D9C3B0 !important;
+  border: 1px solid #E5D8CC !important;
   font-weight: 600 !important;
   color: #8C3F2B !important;
   font-size: 0.95rem !important;
 }
 
-/* GRID RESPONSIVO PARA OS CARDS (SEM ABSOLUTE) */
+/* GRID DOS CARDS ALINHAMENTO PERFEITO */
 .sections-grid {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
-  gap: 1.5rem !important;
+  gap: 2rem !important;
   margin-top: 2rem !important;
-  align-items: start !important;
+  align-items: stretch !important;
 }
 
 .card-section, .card-box {
   background: #FFFDF9 !important;
-  border: 1px solid #D9C3B0 !important;
+  border: 1px solid #E5D8CC !important;
   border-radius: 1.25rem !important;
-  padding: 1.8rem !important;
-  box-shadow: 0 8px 20px rgba(140, 63, 43, 0.06) !important;
+  padding: 2rem !important;
+  box-shadow: 0 10px 30px rgba(140, 63, 43, 0.04) !important;
   width: 100% !important;
   position: static !important;
   transform: none !important;
-  margin: 0 !important;
 }
 
 .card-title {
   color: #8C3F2B !important;
   font-family: 'Playfair Display', serif !important;
-  font-size: 1.35rem !important;
-  margin-bottom: 1rem !important;
+  font-size: 1.4rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 1.2rem !important;
   text-align: center !important;
   display: flex !important;
   align-items: center !important;
@@ -161,16 +158,17 @@ main.container, .container {
   gap: 8px !important;
 }
 
-/* INPUTS E BOTÕES */
+/* INPUTS BOHO ELEGANTES */
 input, select, textarea, .form-input {
   width: 100% !important;
-  padding: 0.75rem !important;
+  padding: 0.85rem 1rem !important;
   border: 1px solid #D9C3B0 !important;
-  border-radius: 0.6rem !important;
+  border-radius: 0.75rem !important;
   background-color: #F7F4EF !important;
   font-size: 0.95rem !important;
-  margin-top: 0.3rem !important;
-  margin-bottom: 0.8rem !important;
+  color: #4A403A !important;
+  margin-top: 0.4rem !important;
+  margin-bottom: 1rem !important;
   font-family: inherit !important;
 }
 
@@ -179,22 +177,24 @@ label, .form-label {
   text-align: left !important;
   font-size: 0.85rem !important;
   font-weight: 600 !important;
-  color: #444 !important;
+  color: #4A403A !important;
   margin-top: 0.5rem !important;
   margin-bottom: 0.2rem !important;
 }
 
 button.btn-primary, button.btn-abrir, .btn-acao {
   width: 100% !important;
-  padding: 0.85rem !important;
+  padding: 0.9rem !important;
   background-color: #8C3F2B !important;
-  color: white !important;
+  color: #FFFDF9 !important;
   border: none !important;
   border-radius: 0.75rem !important;
-  font-weight: bold !important;
-  font-size: 1rem !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.5px !important;
   cursor: pointer !important;
-  transition: background 0.2s ease !important;
+  transition: background 0.3s ease !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -214,37 +214,34 @@ button.btn-primary:hover, button.btn-abrir:hover, .btn-acao:hover {
   margin-bottom: 1rem !important;
 }
 
-/* CAPA DE ABERTURA (#COVER) */
+/* CAPA DE ENVELOPE / CONVITE (#COVER) */
 #cover, #cover-overlay {
   position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
+  inset: 0 !important;
   z-index: 99999 !important;
   background-color: #F7F4EF !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   padding: 1.5rem !important;
-  transition: opacity 0.5s ease, visibility 0.5s ease !important;
+  transition: opacity 0.6s ease, visibility 0.6s ease !important;
 }
 
 #cover.aberto, #cover-overlay.aberto {
+  display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
-  display: none !important;
 }
 
 .card-capa {
   width: 100% !important;
   max-width: 420px !important;
   background: #FFFDF9 !important;
-  border: 1px solid #D9C3B0 !important;
+  border: 1px solid #E5D8CC !important;
   border-radius: 1.5rem !important;
   padding: 2.2rem 1.8rem !important;
-  box-shadow: 0 20px 40px rgba(140, 63, 43, 0.15) !important;
+  box-shadow: 0 20px 40px rgba(140, 63, 43, 0.12) !important;
   text-align: center !important;
 }
 
@@ -265,7 +262,7 @@ button.btn-primary:hover, button.btn-abrir:hover, .btn-acao:hover {
   background: radial-gradient(circle, #A34A33 0%, #8C3F2B 100%) !important;
   border: 2px solid #C59B4E !important;
   border-radius: 50% !important;
-  box-shadow: 0 4px 12px rgba(140, 63, 43, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(140, 63, 43, 0.2) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
