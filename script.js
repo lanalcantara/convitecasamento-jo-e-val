@@ -1,12 +1,55 @@
 /* ==========================================================================
    JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO CHIC
-   LÓGICA INTERATIVA, ÁUDIO, ACOMPANHANTES, SUPABASE & WEB3FORMS
+   PLAYER YOUTUBE (Live Forever - Oasis - TDe1DqxwJoc) & LÓGICA DO SITE
    ========================================================================== */
 
 const PAYLOAD_PIX_EMV_OFICIAL = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
-let ytPlayerInstance = null;
+let player;
 
-/* 👥 2. MOSTRAR / ESCONDER CAMPO DE QUANTIDADE DE ACOMPANHANTES */
+/* 🎵 1. FUNÇÃO DA API DO YOUTUBE PARA "Live Forever - Oasis" (TDe1DqxwJoc) */
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('youtube-player', {
+    height: '0',
+    width: '0',
+    videoId: 'TDe1DqxwJoc', // ID oficial do vídeo "Live Forever - Oasis"
+    playerVars: {
+      'autoplay': 0,
+      'controls': 0,
+      'loop': 1,
+      'playlist': 'TDe1DqxwJoc'
+    },
+    events: {
+      'onReady': onPlayerReady
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  event.target.setVolume(30); // Volume suave em 30%
+}
+
+/* 💌 FUNÇÃO DE ABERTURA DO CONVITE QUE DISPARA A MÚSICA DO YOUTUBE */
+function abrirConviteComAnimacao() {
+  const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
+  if (cover) {
+    cover.classList.add('aberto');
+    cover.classList.add('envelope-opening');
+    setTimeout(() => { cover.style.display = 'none'; }, 1000);
+  }
+
+  // Toca o vídeo do Live Forever no YouTube ao clicar no botão
+  if (player && typeof player.playVideo === 'function') {
+    try {
+      player.playVideo();
+    } catch(e) {}
+  }
+}
+
+function abrirConvite() {
+  abrirConviteComAnimacao();
+}
+
+/* 👥 MOSTRAR / ESCONDER CAMPO DE QUANTIDADE DE ACOMPANHANTES */
 function toggleAcompanhantes(valor) {
   const box = document.getElementById('box-qtd-acompanhantes');
   if (box) {
@@ -14,51 +57,13 @@ function toggleAcompanhantes(valor) {
   }
 }
 
-/* 🎵 1. MÚSICA DE FUNDO NO BOTÃO ABRIR CONVITE */
-function abrirConvite() {
-  const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
-  const audio = document.getElementById('bg-music');
-
-  if (cover) {
-    cover.classList.add('aberto');
-    cover.classList.add('envelope-opening');
-    setTimeout(() => { cover.style.display = 'none'; }, 1000);
-  }
-
-  /* Toca o áudio HTML5 local */
-  if (audio) {
-    audio.volume = 0.3;
-    audio.play().then(() => {
-      console.log("Música iniciada com sucesso!");
-    }).catch(err => {
-      console.error("Erro ao tocar áudio:", err);
-    });
-  }
-
-  /* Toca o áudio via YouTube IFrame API como reforço */
-  if (ytPlayerInstance && typeof ytPlayerInstance.playVideo === 'function') {
-    try {
-      ytPlayerInstance.setVolume(30);
-      ytPlayerInstance.playVideo();
-    } catch(e) {}
-  }
-}
-
-function abrirConviteComAnimacao() {
-  abrirConvite();
-}
-
-/* Youtube IFrame API Callback */
-function onYouTubeIframeAPIReady() {
-  ytPlayerInstance = new YT.Player('youtube-player', {
-    height: '0',
-    width: '0',
-    videoId: 'TDe1DqxwJoc',
-    playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'TDe1DqxwJoc' }
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
+  /* Conectar o botão "Abrir Convite" à função abrirConviteComAnimacao */
+  const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('.btn-abrir-envelope');
+  if (btnAbrir) {
+    btnAbrir.onclick = abrirConviteComAnimacao;
+  }
+
   /* Inicialização do Supabase */
   if (window.supabase && window.CONFIG && window.CONFIG.SUPABASE_URL) {
     try {
@@ -67,15 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(e) {
       console.error('Erro no Supabase:', e);
     }
-  }
-
-  /* Botão do Convite de Entrada */
-  const btnAbrir = document.getElementById('btn-abrir') || document.querySelector('.btn-abrir-envelope') || document.querySelector('.btn-abrir');
-  if (btnAbrir) {
-    btnAbrir.onclick = (e) => {
-      e.preventDefault();
-      abrirConvite();
-    };
   }
 
   /* Botão de Copiar Chave Pix */
@@ -94,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* RSVP Form Submission (com campos de acompanhante) */
+  /* RSVP Form Submission */
   const formRsvp = document.getElementById('form-rsvp') || document.querySelector('form');
   if (formRsvp) {
     formRsvp.addEventListener('submit', async (e) => {
@@ -117,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const qtdAcompanhantes = (temAcompanhante === 'Sim' && inputQtd) ? (parseInt(inputQtd.value) || 1) : 0;
 
       try {
-        // 1. Salva na tabela presencas do Supabase
         if (window.supabaseClient) {
           const { data, error } = await window.supabaseClient
             .from('presencas')
@@ -132,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
           if (error) console.error("Erro Supabase:", error);
         }
 
-        // 2. Envia notificação por e-mail via Web3Forms API
         let msgAcompanhante = temAcompanhante === 'Sim' ? `Sim (${qtdAcompanhantes} acompanhante(s))` : 'Não (irá sozinho)';
         
         await fetch('https://api.web3forms.com/submit', {

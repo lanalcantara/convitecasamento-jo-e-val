@@ -45,11 +45,6 @@
 </head>
 <body>
 
-  <!-- 🎵 1. MÚSICA DE FUNDO LOCAL E YOUTUBE EMBED -->
-  <audio id="bg-music" loop src="audio/live-forever.mp3"></audio>
-  <div id="youtube-player" style="display:none;"></div>
-  <script src="https://www.youtube.com/iframe_api"></script>
-
   <!-- ✉️ CAPA INICIAL DO CONVITE (#cover / #cover-overlay) -->
   <div id="cover">
     <div class="card-capa">
@@ -64,7 +59,7 @@
       <h1 class="envelope-title">Josalva &amp; Valtair</h1>
       <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
 
-      <button class="btn-abrir" id="btn-abrir" onclick="abrirConvite()">
+      <button class="btn-abrir" id="btn-abrir" onclick="abrirConviteComAnimacao()">
         <span>Abrir Convite</span>
       </button>
 
@@ -149,7 +144,6 @@
               <option value="Infelizmente não poderei comparecer">Infelizmente não poderei comparecer</option>
             </select>
 
-            <!-- 👥 2. CAMPO DE ACOMPANHANTES NO FORMULÁRIO DE RSVP -->
             <label style="font-size: 0.85rem; font-weight: 600; color: #8C3F2B; display: block; margin-top: 0.8rem; margin-bottom: 0.2rem;">Vai levar acompanhante? *</label>
             <select id="rsvp-tem-acompanhante" onchange="toggleAcompanhantes(this.value)" style="width: 100%; padding: 0.8rem; border-radius: 0.75rem; border: 1px solid #D9C3B0; margin-bottom: 0.8rem;">
               <option value="Não">Não, irei sozinho(a)</option>
@@ -243,6 +237,10 @@
 
   <!-- Toast Notification -->
   <div id="toast" class="toast-msg"></div>
+
+  <!-- Player Oculto do YouTube para Tocar Live Forever - Oasis -->
+  <div id="youtube-player" style="display: none;"></div>
+  <script src="https://www.youtube.com/iframe_api"></script>
 
   <script src="script.js"></script>
 </body>
