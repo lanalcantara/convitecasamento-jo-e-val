@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Josalva & Valtair | Comemoração de Casamento</title>
+  <title>Josalva & Valtair | Convite de Casamento</title>
   
   <!-- SEO & Meta Tags -->
-  <meta name="description" content="Convite oficial para a Recepção de Comemoração de Josalva & Valtair com amigos e familiares. Confirme sua presença e celebre conosco!">
+  <meta name="description" content="Convite oficial para a Recepção de Comemoração de Josalva & Valtair. Confirme sua presença e venha celebrar conosco!">
   <meta name="keywords" content="Josalva, Valtair, Convite de Casamento, Recepção de Comemoração, Confirmação de Presença, Boho Chic">
   <meta name="theme-color" content="#8C3F2B">
 
@@ -19,7 +19,7 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Supabase JS Client & EmailJS SDK -->
+  <!-- Supabase Client & EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
@@ -28,40 +28,42 @@
 </head>
 <body class="envelope-active">
 
-  <!-- ✉️ TELA DE ABERTURA INTERATIVA - ENVELOPE VIRTUAL FECHADO -->
+  <!-- ✉️ 2. TELA DE ABERTURA INTERATIVA (O "ENVELOPE") -->
   <div class="envelope-overlay" id="envelopeOverlay">
-    <div class="envelope-wrapper">
+    <div class="envelope-container">
       <div class="envelope-card">
+        <!-- Selo de Cera Artesanal com Monograma J & V -->
         <div class="wax-seal" id="waxSeal" title="Clique para abrir o convite">
-          <span class="wax-seal-text">J & V</span>
+          <span class="wax-seal-monogram">J & V</span>
         </div>
-        <h2 class="envelope-title">Josalva & Valtair</h2>
-        <p class="envelope-subtitle">Recepção de Comemoração com Amigos e Familiares</p>
-        <p class="envelope-instruction">
-          <i class="fa-regular fa-envelope-open text-terracotta"></i> Clique para abrir o convite
-        </p>
-        <button class="btn-open-invite" id="btnOpenInvite">
+
+        <h2 class="envelope-names">Josalva & Valtair</h2>
+        <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
+        <p class="envelope-instruction">Clique para abrir o nosso convite</p>
+        
+        <!-- Botão Customizado Luxuoso Terracota & Dourado -->
+        <button class="btn-open-envelope" id="btnOpenInvite">
           <i class="fa-solid fa-heart"></i> Abrir Convite
         </button>
       </div>
     </div>
   </div>
 
-  <!-- BARRA DE NAVEGAÇÃO FIXA COM ÁUDIO FLUTUANTE -->
+  <!-- BARRA DE NAVEGAÇÃO FIXA COM WIDGET DE ÁUDIO -->
   <nav class="navbar" id="navbar">
-    <a href="#hero" class="nav-brand">Josalva & Valtair</a>
+    <a href="#hero" class="nav-brand">J & V</a>
 
     <ul class="nav-links" id="navLinks">
       <li><a href="#hero" class="nav-link active">Início</a></li>
-      <li><a href="#comemoracao" class="nav-link">Nossa História</a></li>
+      <li><a href="#comemoracao" class="nav-link">Comemoração</a></li>
       <li><a href="#evento" class="nav-link">O Evento</a></li>
       <li><a href="#confirmacao" class="nav-link">Confirmação</a></li>
-      <li><a href="#presentes" class="nav-link">Presentes Pix</a></li>
+      <li><a href="#presentes" class="nav-link">Presentes</a></li>
       <li><a href="#recados" class="nav-link">Recados</a></li>
     </ul>
 
     <div class="nav-actions">
-      <!-- Player de Áudio Flutuante Discreto ("Songbird" - Oasis) -->
+      <!-- Player Flutuante ("Songbird" - Oasis) -->
       <button class="music-btn" id="musicBtn" title="Tocar / Pausar 'Songbird' - Oasis" aria-label="Tocar ou pausar música de fundo">
         <i class="fa-solid fa-music" id="musicIcon"></i>
         <span id="musicText">Songbird 🎵</span>
@@ -72,29 +74,30 @@
         </div>
       </button>
 
-      <!-- Toggle Menu Mobile -->
+      <!-- Menu Mobile Toggle -->
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menu de navegação">
         <i class="fa-solid fa-bars"></i>
       </button>
     </div>
   </nav>
 
-  <!-- Elemento de Áudio Oculto -->
+  <!-- Áudio Oculto -->
   <audio id="bgAudio" loop preload="auto"></audio>
 
-  <!-- 1. HERO SECTION / BANNER -->
+  <!-- 3. HERO SECTION / REVELADA APÓS ABERTURA -->
   <header class="hero" id="hero">
     <div class="hero-overlay"></div>
 
     <div class="hero-content container">
-      <p class="hero-subhead">Recepção de Comemoração com Amigos e Familiares</p>
+      <p class="hero-tag">Convidam para sua</p>
       
-      <h1 class="hero-names">
-        Josalva <span>&</span> Valtair
-      </h1>
+      <!-- Banner de Caligrafia Rústica Limpa (sem sobreposições) -->
+      <h1 class="hero-names-script">Josalva & Valtair</h1>
 
-      <p class="hero-quote">
-        "Venha comemorar conosco a alegria do nosso amor e a bênção de compartilhar esse dia especial ao lado de quem mais amamos!"
+      <h2 class="hero-reception-title">Recepção de Comemoração com Amigos e Familiares</h2>
+
+      <p class="hero-welcome-text">
+        "Venha comemorar conosco a alegria do nosso amor e a bênção de compartilhar esse dia inesquecível ao lado de quem mais amamos!"
       </p>
 
       <div class="hero-date-badge">
@@ -102,7 +105,7 @@
         <span>18 de Outubro de 2026 • 13:00h</span>
       </div>
 
-      <!-- TIMER REGRESSIVO EM TEMPO REAL -->
+      <!-- TIMER REGRESSIVO -->
       <div class="countdown-container" id="countdown" data-wedding-date="2026-10-18T13:00:00">
         <div class="timer-card">
           <div class="timer-value" id="days">00</div>
@@ -133,18 +136,14 @@
     </div>
   </header>
 
-  <!-- 2. NOSSA COMEMORAÇÃO & CARD VECTOR SVG MONOGRAMA J & V -->
+  <!-- SEÇÃO NOSSA COMEMORAÇÃO & CARD VECTORIAL MONOGRAMA -->
   <section class="story-section" id="comemoracao">
     <div class="container">
       <div class="story-grid">
         <div class="story-image-wrapper">
-          <!-- Design Vectorial FLUIDO SVG com Monograma exclusivo J & V -->
           <div class="story-svg-card">
             <svg viewBox="0 0 300 320" width="100%" height="280" xmlns="http://www.w3.org/2000/svg">
-              <!-- Moldura Floral de Ramos Terrosos -->
-              <circle cx="150" cy="140" r="115" fill="none" stroke="#E8DFD5" stroke-width="2" stroke-dasharray="6,4"/>
-              
-              <!-- Elementos Florais Terrosos -->
+              <circle cx="150" cy="140" r="115" fill="none" stroke="#E6DDD1" stroke-width="2" stroke-dasharray="6,4"/>
               <path d="M50 140 Q 60 90 100 60" fill="none" stroke="#8C3F2B" stroke-width="3" stroke-linecap="round"/>
               <path d="M250 140 Q 240 90 200 60" fill="none" stroke="#8C3F2B" stroke-width="3" stroke-linecap="round"/>
               <circle cx="90" cy="70" r="6" fill="#C59B4E"/>
@@ -152,19 +151,11 @@
               <circle cx="70" cy="100" r="5" fill="#B06D55"/>
               <circle cx="230" cy="100" r="5" fill="#B06D55"/>
               
-              <!-- Iniciais Caligráficas Monograma -->
               <text x="150" y="130" font-family="'Great Vibes', cursive" font-size="64" fill="#8C3F2B" text-anchor="middle">J &amp; V</text>
-              
-              <!-- Nomes Completos Exclusivos -->
-              <text x="150" y="175" font-family="'Cormorant Garamond', serif" font-size="22" font-weight="600" fill="#2A211E" text-anchor="middle">Josalva &amp; Valtair</text>
-              <text x="150" y="200" font-family="'Montserrat', sans-serif" font-size="12" font-weight="600" letter-spacing="3" fill="#B06D55" text-anchor="middle">18 • OUTUBRO • 2026</text>
-              <text x="150" y="235" font-family="'Cormorant Garamond', serif" font-size="15" font-style="italic" fill="#6E5D57" text-anchor="middle">Recepção de Comemoração</text>
+              <text x="150" y="175" font-family="'Playfair Display', serif" font-size="22" font-weight="600" fill="#2C221F" text-anchor="middle">Josalva &amp; Valtair</text>
+              <text x="150" y="200" font-family="'Inter', sans-serif" font-size="12" font-weight="600" letter-spacing="3" fill="#B06D55" text-anchor="middle">18 • OUTUBRO • 2026</text>
+              <text x="150" y="235" font-family="'Playfair Display', serif" font-size="15" font-style="italic" fill="#6E5D57" text-anchor="middle">Recepção de Comemoração</text>
             </svg>
-
-            <div class="story-badge-floating">
-              <span>J & V</span>
-              <p>18.10.2026</p>
-            </div>
           </div>
         </div>
 
@@ -188,15 +179,14 @@
     </div>
   </section>
 
-  <!-- 3. DETALHES DO EVENTO -->
+  <!-- DETALHES DO EVENTO -->
   <section class="details-section" id="evento">
     <div class="container text-center">
       <span class="section-tag">Programação & Local</span>
       <h2 class="section-title">Onde & Quando</h2>
-      <p class="section-subtitle">Confira o horário e local da nossa recepção de comemoração:</p>
+      <p class="section-subtitle">Confira o horário e o local da nossa recepção de comemoração:</p>
 
       <div class="details-grid">
-        <!-- Card Recepção de Comemoração -->
         <div class="detail-card">
           <div class="detail-icon">
             <i class="fa-solid fa-champagne-glasses"></i>
@@ -211,17 +201,15 @@
           </p>
 
           <div class="detail-card-actions">
-            <!-- Botão em destaque "Abrir no Google Maps" -->
-            <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 12px 24px; font-size: 0.95rem;">
+            <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
               <i class="fa-solid fa-location-dot"></i> Abrir no Google Maps
             </a>
-            <button class="btn btn-outline" id="btnCalendar" style="padding: 12px 24px; font-size: 0.95rem;">
+            <button class="btn btn-outline" id="btnCalendar">
               <i class="fa-regular fa-calendar-plus"></i> Salvar na Agenda
             </button>
           </div>
         </div>
 
-        <!-- Card Traje e Dicas -->
         <div class="detail-card">
           <div class="detail-icon">
             <i class="fa-solid fa-user-tie"></i>
@@ -238,7 +226,7 @@
     </div>
   </section>
 
-  <!-- 4. CONFIRMAÇÃO DE PRESENÇA -->
+  <!-- CONFIRMAÇÃO DE PRESENÇA -->
   <section class="rsvp-section" id="confirmacao">
     <div class="container">
       <div class="text-center" style="margin-bottom: 30px;">
@@ -248,7 +236,6 @@
       </div>
 
       <div class="rsvp-card-wrapper">
-        <!-- Caixa de Mensagem de Status -->
         <div id="formStatusBox" style="display:none; margin-bottom:20px; padding:16px; border-radius:12px; text-align:center; font-weight:600;"></div>
 
         <form id="rsvpForm">
@@ -314,7 +301,7 @@
     </div>
   </section>
 
-  <!-- 5. PRESENTES EM DINHEIRO (PIX & COTAS) -->
+  <!-- PRESENTES EM DINHEIRO (PIX & COTAS) -->
   <section class="pix-section" id="presentes">
     <div class="container">
       <div class="text-center">
@@ -421,7 +408,7 @@
     </div>
   </section>
 
-  <!-- 6. MURAL DE RECADOS -->
+  <!-- MURAL DE RECADOS -->
   <section class="messages-section" id="recados">
     <div class="container">
       <div class="text-center">
