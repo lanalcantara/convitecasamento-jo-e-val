@@ -1,10 +1,11 @@
 /* ==========================================================================
    JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO CHIC
+   REPRODUÇÃO DO MP3 REAL DE "LIVE FOREVER - OASIS" (live-forever.mp3)
    ========================================================================== */
 
 const PAYLOAD_PIX_EMV_OFICIAL = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
 
-// Função de abertura do convite que dispara o áudio
+// Função de abertura do convite que dispara o MP3 de Live Forever - Oasis
 function abrirConviteComAnimacao() {
   const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
   const audio = document.getElementById('bg-music');
@@ -17,7 +18,7 @@ function abrirConviteComAnimacao() {
 
   if (audio) {
     audio.volume = 0.3; // Volume agradável de fundo (30%)
-    audio.play().catch(err => console.log("Erro audio:", err));
+    audio.play().catch(e => console.log("Erro audio:", e));
   }
 }
 
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* 💌 2. ENVIO DE E-MAIL DIRETO PARA patriciajosalva@gmail.com VIA FORMSUBMIT */
+  /* Envio de Notificação por E-mail via FormSubmit API */
   const formRsvp = document.getElementById('form-rsvp') || document.querySelector('form');
 
   if (formRsvp) {
