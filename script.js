@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CASAMENTO JOSALVA & VALTAIR - LÓGICA INTERATIVA, ENVELOPE & SUPABASE
+   JOSALVA & VALTAIR - LÓGICA INTERATIVA & SUPABASE EM TEMPO REAL
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,11 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initCalendarAdd();
 });
 
-// Instâncias Globais de Supabase
 let supabaseClient = null;
 
 /* --------------------------------------------------------------------------
-   1. TELA DE ABERTURA INTERATIVA (ENVELOPE VIRTUAL DE CONVITE)
+   1. TELA DE ENTRADA EXCLUSIVA (HERO COVER 100VH) & ÁUDIO NO CLIQUE
    -------------------------------------------------------------------------- */
 function initEnvelopeOpening() {
   const envelopeOverlay = document.getElementById('envelopeOverlay');
@@ -30,21 +29,27 @@ function initEnvelopeOpening() {
   const musicIcon = document.getElementById('musicIcon');
   const musicText = document.getElementById('musicText');
 
+  // Configurar volume inicial suave de 20%
+  if (bgAudio) {
+    bgAudio.volume = 0.2;
+  }
+
   function openEnvelope() {
     if (!envelopeOverlay) return;
 
     envelopeOverlay.classList.add('opened');
     document.body.classList.remove('envelope-active');
 
-    // Tocar música "Songbird" - Oasis automaticamente no clique (liberado pelo navegador)
+    // Iniciar áudio com volume suave de 20% no exato instante do clique
     if (bgAudio) {
+      bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
         if (musicBtn) musicBtn.classList.add('playing');
         if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
         if (musicText) musicText.innerText = 'Pausar';
         showToast('Tocando "Songbird" - Oasis 🎶');
       }).catch(err => {
-        console.log('Autoplay audio blocked or pending:', err);
+        console.log('Autoplay bloqueado pelo navegador:', err);
       });
     }
   }
@@ -54,7 +59,7 @@ function initEnvelopeOpening() {
 }
 
 /* --------------------------------------------------------------------------
-   2. CONEXÃO COM O SUPABASE (Projeto: ssfgxswkdbrjvqcpxcfp)
+   2. CONEXÃO COM O SUPABASE ( ssfgxswkdbrjvqcpxcfp )
    -------------------------------------------------------------------------- */
 function initSupabaseAndEmailJS() {
   const cfg = window.CONFIG || {};
@@ -62,7 +67,7 @@ function initSupabaseAndEmailJS() {
   if (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) {
     try {
       supabaseClient = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
-      console.log('Conectado ao Supabase (ssfgxswkdbrjvqcpxcfp) com sucesso!');
+      console.log('Conectado ao Supabase com sucesso!');
     } catch (e) {
       console.error('Erro ao conectar ao Supabase:', e);
     }
@@ -121,7 +126,7 @@ function initCountdown() {
 }
 
 /* --------------------------------------------------------------------------
-   4. CONTROLE DE ÁUDIO DE FUNDO ("Songbird" - Oasis)
+   4. CONTROLE DE ÁUDIO DE FUNDO (VOLUME INICIAL 0.2)
    -------------------------------------------------------------------------- */
 function initAudioPlayer() {
   const bgAudio = document.getElementById('bgAudio');
@@ -135,6 +140,7 @@ function initAudioPlayer() {
   if (cfg.AUDIO_URL) {
     bgAudio.src = cfg.AUDIO_URL;
   }
+  bgAudio.volume = 0.2; // Volume padrão inicial 20%
 
   let isPlaying = false;
 
@@ -147,6 +153,7 @@ function initAudioPlayer() {
       isPlaying = false;
       showToast('Música de fundo pausada 🎵');
     } else {
+      bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
         musicBtn.classList.add('playing');
         if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
@@ -154,43 +161,12 @@ function initAudioPlayer() {
         isPlaying = true;
         showToast('Tocando "Songbird" - Oasis 🎶');
       }).catch(() => {
-        playSynthesizedMelody();
         musicBtn.classList.add('playing');
         if (musicText) musicText.innerText = 'Pausar';
         isPlaying = true;
-        showToast('Tocando melodia de comemoração 🎶');
       });
     }
   });
-}
-
-function playSynthesizedMelody() {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    const ctx = new AudioContext();
-    const notes = [196, 246.94, 293.66, 392, 293.66, 246.94];
-    let step = 0;
-
-    setInterval(() => {
-      if (ctx.state === 'suspended') ctx.resume();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.value = notes[step % notes.length];
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 1.2);
-      step++;
-    }, 600);
-  } catch(e) {
-    console.log('Synth backup active');
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -253,7 +229,7 @@ function initQRCodeAndPixKey() {
 }
 
 /* --------------------------------------------------------------------------
-   6. CONFIRMAÇÃO DE PRESENÇA DIRETO NO SUPABASE
+   6. CONFIRMAÇÃO DE PRESENÇA EM TEMPO REAL NO SUPABASE
    -------------------------------------------------------------------------- */
 function initRSVP() {
   const rsvpForm = document.getElementById('rsvpForm');
@@ -341,7 +317,6 @@ function initRSVP() {
         
         success = true;
       } catch (err) {
-        console.warn('Salvando localmente devido a desconexão:', err);
         const savedRSVPs = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
         savedRSVPs.push({ ...payload, phone, date: new Date().toLocaleString('pt-BR') });
         localStorage.setItem('wedding_rsvps', JSON.stringify(savedRSVPs));
@@ -360,7 +335,7 @@ function initRSVP() {
           formStatusBox.innerHTML = `
             <i class="fa-solid fa-circle-check" style="font-size:1.8rem; margin-bottom:8px; display:block;"></i>
             ✨ <strong>Muito obrigado, ${name}!</strong><br>
-            Sua confirmações de presença na nossa comemoração foi registrada com sucesso! Esperamos por você! ❤️
+            Sua confirmação de presença na nossa comemoração foi registrada com sucesso! Esperamos por você! ❤️
           `;
         }
         showToast(`Confirmação enviada com sucesso, ${name}! ✨`);
@@ -371,8 +346,8 @@ function initRSVP() {
   }
 
   if (btnViewRSVPList && rsvpListModal) {
-    btnViewRSVPList.addEventListener('click', () => {
-      renderRSVPList();
+    btnViewRSVPList.addEventListener('click', async () => {
+      await renderRSVPList();
       rsvpListModal.classList.add('active');
     });
 
@@ -384,18 +359,43 @@ function initRSVP() {
   }
 }
 
-function renderRSVPList() {
+async function renderRSVPList() {
   const content = document.getElementById('rsvpListContent');
   if (!content) return;
 
-  const savedRSVPs = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
+  let rsvps = [];
 
-  if (savedRSVPs.length === 0) {
-    content.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 20px;">Nenhuma confirmação registrada até o momento.</p>`;
+  // Buscar confirmações reais no Supabase
+  if (supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('confirmacoes')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        rsvps = data;
+      } else {
+        rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
+      }
+    } catch (e) {
+      rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
+    }
+  } else {
+    rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
+  }
+
+  if (!rsvps || rsvps.length === 0) {
+    content.innerHTML = `
+      <div class="empty-state-box">
+        <i class="fa-regular fa-folder-open"></i>
+        <p>Nenhuma confirmação registrada até o momento.</p>
+      </div>
+    `;
     return;
   }
 
-  content.innerHTML = savedRSVPs.map(item => `
+  content.innerHTML = rsvps.map(item => `
     <div style="background: var(--bg-main); padding: 14px 18px; border-radius: var(--radius-sm); border-left: 4px solid ${item.vai_comparecer === 'Sim' ? '#8C3F2B' : '#6E5D57'}">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <strong style="color: var(--text-dark); font-size: 1rem;">${item.nome_completo}</strong>
@@ -464,38 +464,15 @@ function initCotasModal() {
 }
 
 /* --------------------------------------------------------------------------
-   8. MURAL DE RECADOS
+   8. MURAL DE RECADOS EM TEMPO REAL NO SUPABASE (SEM DADOS FAKE)
    -------------------------------------------------------------------------- */
-const initialMessages = [
-  {
-    id: 1,
-    author: 'Clara & Roberto (Padrinhos)',
-    text: 'Que alegria imensa celebrar esse amor com vocês em 18 de Outubro! Estamos ansiosos para nossa recepção de comemoração! ❤️',
-    likes: 12,
-    date: '10/08/2026'
-  },
-  {
-    id: 2,
-    author: 'Dona Maria (Mãe da Noiva)',
-    text: 'Minha filha amada Josalva e meu genro querido Valtair, que Deus abençoe grandemente esse encontro e nossa família.',
-    likes: 24,
-    date: '11/08/2026'
-  }
-];
-
 function initGuestbook() {
   const messageForm = document.getElementById('messageForm');
 
-  let savedMessages = JSON.parse(localStorage.getItem('wedding_messages') || 'null');
-  if (!savedMessages) {
-    savedMessages = initialMessages;
-    localStorage.setItem('wedding_messages', JSON.stringify(savedMessages));
-  }
-
-  renderMessages(savedMessages);
+  loadAndRenderMessages();
 
   if (messageForm) {
-    messageForm.addEventListener('submit', (e) => {
+    messageForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const author = document.getElementById('msgAuthor').value.trim();
@@ -504,56 +481,112 @@ function initGuestbook() {
       if (!author || !text) return;
 
       const newMessage = {
-        id: Date.now(),
-        author,
-        text,
-        likes: 1,
-        date: new Date().toLocaleDateString('pt-BR')
+        autor: author,
+        mensagem: text,
+        curtidas: 1,
+        criado_em: new Date().toISOString()
       };
 
-      savedMessages.unshift(newMessage);
+      // Salvar no Supabase
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('recados').insert([newMessage]);
+        } catch (err) {
+          console.warn('Erro ao inserir recado no Supabase:', err);
+        }
+      }
+
+      // Salvar cópia local
+      const savedMessages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
+      savedMessages.unshift({ id: Date.now(), ...newMessage });
       localStorage.setItem('wedding_messages', JSON.stringify(savedMessages));
 
-      renderMessages(savedMessages);
+      await loadAndRenderMessages();
       messageForm.reset();
       showToast('Seu recado foi publicado no mural! 💌');
     });
   }
 }
 
-function renderMessages(messages) {
+async function loadAndRenderMessages() {
   const messagesWall = document.getElementById('messagesWall');
   if (!messagesWall) return;
+
+  let messages = [];
+
+  // Buscar recados reais no Supabase
+  if (supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('recados')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (!error && data) {
+        messages = data;
+      } else {
+        messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
+      }
+    } catch (e) {
+      messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
+    }
+  } else {
+    messages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
+  }
+
+  // SEM DADOS MOCADOS: Exibe estado vazio amigável caso não existam mensagens
+  if (!messages || messages.length === 0) {
+    messagesWall.innerHTML = `
+      <div class="empty-state-box">
+        <i class="fa-regular fa-comment-dots"></i>
+        <p>Seja o primeiro a enviar uma mensagem aos noivos! ❤️</p>
+      </div>
+    `;
+    return;
+  }
 
   messagesWall.innerHTML = messages.map(msg => `
     <div class="message-card" id="msg-${msg.id}">
       <div class="message-header">
-        <span class="message-author">${msg.author}</span>
-        <span class="message-date">${msg.date}</span>
+        <span class="message-author">${msg.autor || msg.author}</span>
+        <span class="message-date">${msg.criado_em ? new Date(msg.criado_em).toLocaleDateString('pt-BR') : (msg.date || 'Hoje')}</span>
       </div>
-      <p class="message-text">"${msg.text}"</p>
+      <p class="message-text">"${msg.mensagem || msg.text}"</p>
       <div class="message-actions">
         <button class="like-btn" onclick="likeMessage(${msg.id})">
-          <i class="fa-solid fa-heart"></i> <span id="like-count-${msg.id}">${msg.likes}</span>
+          <i class="fa-solid fa-heart"></i> <span id="like-count-${msg.id}">${msg.curtidas || msg.likes || 1}</span>
         </button>
       </div>
     </div>
   `).join('');
 }
 
-window.likeMessage = function(id) {
+window.likeMessage = async function(id) {
+  let countEl = document.getElementById(`like-count-${id}`);
+  let currentLikes = countEl ? parseInt(countEl.innerText || '1') : 1;
+  let newLikes = currentLikes + 1;
+
+  if (countEl) countEl.innerText = newLikes;
+
+  if (supabaseClient) {
+    try {
+      await supabaseClient
+        .from('recados')
+        .update({ curtidas: newLikes })
+        .eq('id', id);
+    } catch(e) {
+      console.warn('Erro ao atualizar curtidas no Supabase:', e);
+    }
+  }
+
   let savedMessages = JSON.parse(localStorage.getItem('wedding_messages') || '[]');
   const msgIndex = savedMessages.findIndex(m => m.id === id);
-
   if (msgIndex !== -1) {
-    savedMessages[msgIndex].likes += 1;
+    savedMessages[msgIndex].curtidas = newLikes;
     localStorage.setItem('wedding_messages', JSON.stringify(savedMessages));
-    
-    const countEl = document.getElementById(`like-count-${id}`);
-    if (countEl) countEl.innerText = savedMessages[msgIndex].likes;
-
-    showToast('Você enviou amor para este recado! ❤️');
   }
+
+  showToast('Você enviou amor para este recado! ❤️');
 };
 
 /* --------------------------------------------------------------------------

@@ -69,22 +69,21 @@ body {
   background-size: 24px 24px;
 }
 
+/* 4. TELA DE ENTRADA EXCLUSIVA (HERO COVER 100VH INSET-0) */
 body.envelope-active {
-  overflow: hidden;
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* 4. TELA DE ABERTURA INTERATIVA (O "ENVELOPE DE CONVITE") */
 .envelope-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 10000;
-  background: linear-gradient(135deg, #FAF7F2 0%, #F1ECE3 100%);
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  background: linear-gradient(180deg, rgba(250, 247, 242, 0.8) 0%, rgba(250, 247, 242, 0.95) 100%),
+              url('./assets/hero_bg.png') no-repeat center center / cover;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,15 +91,13 @@ img {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.8s ease, visibility 0.8s ease, transform 0.8s ease;
-  background-image: radial-gradient(rgba(140, 63, 43, 0.04) 1px, transparent 0);
-  background-size: 20px 20px;
 }
 
 .envelope-overlay.opened {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .envelope-container {
@@ -111,10 +108,11 @@ img {
 
 .envelope-card {
   position: relative;
-  background: var(--bg-card);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
   border-radius: 28px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 25px 60px rgba(140, 63, 43, 0.12);
+  box-shadow: 0 25px 60px rgba(140, 63, 43, 0.15);
   padding: 50px 36px;
   position: relative;
   overflow: hidden;
@@ -130,7 +128,6 @@ img {
   opacity: 0.6;
 }
 
-/* Selo de Cera Artesanal J & V */
 .wax-seal {
   width: 100px;
   height: 100px;
@@ -185,7 +182,6 @@ img {
   letter-spacing: 1px;
 }
 
-/* BOTÃO DE ABRIR CONVITE - DESIGN LUXUOSO RÚSTICO-CHIQUE */
 .btn-open-envelope {
   display: inline-flex;
   align-items: center;
@@ -210,16 +206,6 @@ img {
   background: linear-gradient(135deg, #733120 0%, #8C3F2B 100%);
   transform: translateY(-3px) scale(1.03);
   box-shadow: 0 16px 35px rgba(140, 63, 43, 0.4);
-}
-
-.btn-open-envelope i {
-  color: var(--gold);
-  font-size: 1.1rem;
-  transition: transform 0.3s ease;
-}
-
-.btn-open-envelope:hover i {
-  transform: scale(1.2);
 }
 
 /* 5. STICKY NAVBAR & AUDIO WIDGET */
@@ -286,7 +272,6 @@ img {
   width: 100%;
 }
 
-/* Botão de Áudio com Equalizador Animado */
 .music-btn {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -340,7 +325,7 @@ img {
   cursor: pointer;
 }
 
-/* 6. HERO SECTION / BOA-VINDAS LIMPA */
+/* 6. HERO SECTION / REVELADA APÓS ABERTURA */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -377,7 +362,6 @@ img {
   font-weight: 600;
 }
 
-/* Banner em Caligrafia Limpa - SEM SOBREPOSIÇÕES DE TEXTO */
 .hero-names-script {
   font-family: var(--font-script);
   font-size: clamp(4.2rem, 10vw, 7rem);
@@ -422,7 +406,6 @@ img {
   margin-bottom: 44px;
 }
 
-/* TIMER REGRESSIVO */
 .countdown-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -480,7 +463,6 @@ img {
   flex-wrap: wrap;
 }
 
-/* BOTÕES PADRÃO DO SITE */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -557,7 +539,6 @@ img {
   margin: 0 auto 40px auto;
 }
 
-/* 8. NOSSA COMEMORAÇÃO CARD VECTOR SVG */
 .story-section {
   padding: 100px 0;
   position: relative;
@@ -597,7 +578,6 @@ img {
   margin-bottom: 20px;
 }
 
-/* 9. DETALHES DO EVENTO */
 .details-section {
   padding: 100px 0;
   background: var(--bg-alt);
@@ -671,7 +651,6 @@ img {
   flex-wrap: wrap;
 }
 
-/* 10. CONFIRMAÇÃO DE PRESENÇA */
 .rsvp-section {
   padding: 100px 0;
 }
@@ -779,7 +758,6 @@ img {
   display: block;
 }
 
-/* 11. PRESENTES EM DINHEIRO (PIX & COTAS) */
 .pix-section {
   padding: 100px 0;
   background: var(--bg-alt);
@@ -903,7 +881,6 @@ img {
   margin-bottom: 20px;
 }
 
-/* 12. MURAL DE RECADOS */
 .messages-section {
   padding: 100px 0;
 }
@@ -930,6 +907,22 @@ img {
   max-height: 580px;
   overflow-y: auto;
   padding-right: 10px;
+}
+
+.empty-state-box {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 36px 24px;
+  text-align: center;
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+}
+
+.empty-state-box i {
+  font-size: 2.5rem;
+  color: var(--primary-light);
+  margin-bottom: 12px;
+  display: block;
 }
 
 .message-card {
@@ -987,7 +980,6 @@ img {
   color: #FFF;
 }
 
-/* 13. FOOTER */
 .footer {
   background: var(--bg-dark);
   color: var(--text-light);
@@ -1021,7 +1013,6 @@ img {
   color: rgba(250, 247, 242, 0.5);
 }
 
-/* 14. TOAST & MODAL SYSTEM */
 .toast-container {
   position: fixed;
   bottom: 30px; right: 30px;
@@ -1099,7 +1090,6 @@ img {
   color: var(--text-dark);
 }
 
-/* RESPONSIVIDADE MOBILE */
 @media (max-width: 868px) {
   .nav-links {
     position: fixed;
