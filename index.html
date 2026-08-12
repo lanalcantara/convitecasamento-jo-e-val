@@ -45,8 +45,8 @@
 </head>
 <body>
 
-  <!-- 🎵 1. MÚSICA DE FUNDO (LIVE FOREVER - OASIS) -->
-  <audio id="bg-music" src="live-forever.mp3" preload="auto" loop></audio>
+  <!-- 🎵 1. MÚSICA DE FUNDO (LIVE FOREVER - OASIS VIA CDN & LOCAL FALLBACK) -->
+  <audio id="bg-music" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=live-forever.mp3" preload="auto" loop></audio>
 
   <!-- ✉️ CAPA INICIAL DO CONVITE (#cover / #cover-overlay) -->
   <div id="cover">
@@ -127,7 +127,7 @@
           </a>
         </div>
 
-        <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP -> SUPABASE PRESENCAS + WEB3FORMS EMAIL) -->
+        <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP -> SUPABASE PRESENCAS + FORMSUBMIT EMAIL) -->
         <div class="card-box">
           <h2 class="card-title">
             <i class="fa-regular fa-envelope-open"></i>

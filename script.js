@@ -1,11 +1,10 @@
 /* ==========================================================================
    JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO CHIC
-   REPRODUÇÃO DE ÁUDIO "Live Forever - Oasis" & NOTIFICAÇÃO RSVP WEB3FORMS
    ========================================================================== */
 
 const PAYLOAD_PIX_EMV_OFICIAL = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
 
-// Função de abertura do convite que dispara o MP3 de Live Forever - Oasis
+// Função de abertura do convite que dispara o áudio
 function abrirConviteComAnimacao() {
   const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
   const audio = document.getElementById('bg-music');
@@ -18,7 +17,7 @@ function abrirConviteComAnimacao() {
 
   if (audio) {
     audio.volume = 0.3; // Volume agradável de fundo (30%)
-    audio.play().catch(e => console.log("Erro audio:", e));
+    audio.play().catch(err => console.log("Erro audio:", err));
   }
 }
 
@@ -66,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* 2. ENVIO DE NOTIFICAÇÃO POR E-MAIL (patriciajosalva@gmail.com) */
+  /* 💌 2. ENVIO DE E-MAIL DIRETO PARA patriciajosalva@gmail.com VIA FORMSUBMIT */
   const formRsvp = document.getElementById('form-rsvp') || document.querySelector('form');
 
   if (formRsvp) {
@@ -101,16 +100,21 @@ document.addEventListener('DOMContentLoaded', () => {
           }]);
         }
 
-        // 2. Dispara o E-MAIL DE FATO para patriciajosalva@gmail.com
-        await fetch('https://api.web3forms.com/submit', {
+        // 2. Dispara e-mail real e direto para patriciajosalva@gmail.com via FormSubmit API
+        await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify({
-            access_key: '2f111818-bfae-4f7f-a63e-00101b63799d',
-            to_email: 'patriciajosalva@gmail.com',
-            subject: `💌 Confirmação de Presença: ${nome}`,
-            from_name: 'Convite Josalva & Valtair',
-            message: `Nova confirmação recebida no site:\n\nNome: ${nome}\nVai comparecer? ${status}\nAcompanhante: ${temAcomp} (${qtdAcomp} pessoa(s))`
+            _subject: `💌 Confirmação de Presença: ${nome}`,
+            _template: 'table',
+            _captcha: 'false',
+            Nome: nome,
+            Presenca: status,
+            Acompanhante: temAcomp,
+            Quantidade_Acompanhantes: qtdAcomp
           })
         });
 
