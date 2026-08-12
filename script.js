@@ -1,11 +1,84 @@
 /* ==========================================================================
-   JOSALVA & VALTAIR - LÓGICA INTERATIVA & SUPABASE & WEB3FORMS EMAIL
+   JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO CHIC
+   LÓGICA INTERATIVA, ÁUDIO, ACOMPANHANTES, SUPABASE & WEB3FORMS
    ========================================================================== */
 
 const PAYLOAD_PIX_EMV_OFICIAL = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
+let ytPlayerInstance = null;
+
+/* 👥 2. MOSTRAR / ESCONDER CAMPO DE QUANTIDADE DE ACOMPANHANTES */
+function toggleAcompanhantes(valor) {
+  const box = document.getElementById('box-qtd-acompanhantes');
+  if (box) {
+    box.style.display = (valor === 'Sim') ? 'block' : 'none';
+  }
+}
+
+/* 🎵 1. MÚSICA DE FUNDO NO BOTÃO ABRIR CONVITE */
+function abrirConvite() {
+  const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
+  const audio = document.getElementById('bg-music');
+
+  if (cover) {
+    cover.classList.add('aberto');
+    cover.classList.add('envelope-opening');
+    setTimeout(() => { cover.style.display = 'none'; }, 1000);
+  }
+
+  /* Toca o áudio HTML5 local */
+  if (audio) {
+    audio.volume = 0.3;
+    audio.play().then(() => {
+      console.log("Música iniciada com sucesso!");
+    }).catch(err => {
+      console.error("Erro ao tocar áudio:", err);
+    });
+  }
+
+  /* Toca o áudio via YouTube IFrame API como reforço */
+  if (ytPlayerInstance && typeof ytPlayerInstance.playVideo === 'function') {
+    try {
+      ytPlayerInstance.setVolume(30);
+      ytPlayerInstance.playVideo();
+    } catch(e) {}
+  }
+}
+
+function abrirConviteComAnimacao() {
+  abrirConvite();
+}
+
+/* Youtube IFrame API Callback */
+function onYouTubeIframeAPIReady() {
+  ytPlayerInstance = new YT.Player('youtube-player', {
+    height: '0',
+    width: '0',
+    videoId: 'TDe1DqxwJoc',
+    playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'TDe1DqxwJoc' }
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  /* 1. LÓGICA DO BOTÃO COPIAR PIX COPIA E COLA */
+  /* Inicialização do Supabase */
+  if (window.supabase && window.CONFIG && window.CONFIG.SUPABASE_URL) {
+    try {
+      window.supabaseClient = window.supabase.createClient(window.CONFIG.SUPABASE_URL, window.CONFIG.SUPABASE_ANON_KEY);
+      carregarRecadosSupabase();
+    } catch(e) {
+      console.error('Erro no Supabase:', e);
+    }
+  }
+
+  /* Botão do Convite de Entrada */
+  const btnAbrir = document.getElementById('btn-abrir') || document.querySelector('.btn-abrir-envelope') || document.querySelector('.btn-abrir');
+  if (btnAbrir) {
+    btnAbrir.onclick = (e) => {
+      e.preventDefault();
+      abrirConvite();
+    };
+  }
+
+  /* Botão de Copiar Chave Pix */
   const btnPix = document.getElementById('btn-copiar-pix');
   if (btnPix) {
     btnPix.addEventListener('click', () => {
@@ -21,9 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* 2. FORMULÁRIO DE CONFIRMAÇÃO DE PRESENÇA (RSVP + SUPABASE + WEB3FORMS) */
+  /* RSVP Form Submission (com campos de acompanhante) */
   const formRsvp = document.getElementById('form-rsvp') || document.querySelector('form');
-
   if (formRsvp) {
     formRsvp.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -36,35 +108,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const inputNome = document.getElementById('rsvp-nome') || formRsvp.querySelector('input[type="text"]');
       const selectStatus = document.getElementById('rsvp-status') || formRsvp.querySelector('select');
+      const selectAcompanhante = document.getElementById('rsvp-tem-acompanhante');
+      const inputQtd = document.getElementById('rsvp-qtd-acompanhantes');
 
       const nome = inputNome ? inputNome.value.trim() : '';
       const status = selectStatus ? selectStatus.value : 'Sim, estarei presente!';
+      const temAcompanhante = selectAcompanhante ? selectAcompanhante.value : 'Não';
+      const qtdAcompanhantes = (temAcompanhante === 'Sim' && inputQtd) ? (parseInt(inputQtd.value) || 1) : 0;
 
       try {
-        // 1. Salva no banco de dados Supabase
+        // 1. Salva na tabela presencas do Supabase
         if (window.supabaseClient) {
           const { data, error } = await window.supabaseClient
             .from('presencas')
-            .insert([{ nome_completo: nome, status: status, email_notificacao: 'patriciajosalva@gmail.com' }]);
+            .insert([{
+              nome_completo: nome,
+              status: status,
+              se_acompanhante: temAcompanhante,
+              qtd_acompanhantes: qtdAcompanhantes,
+              email_notificacao: 'patriciajosalva@gmail.com'
+            }]);
 
           if (error) console.error("Erro Supabase:", error);
         }
 
-        // 2. Dispara a notificação por e-mail via Web3Forms API para patriciajosalva@gmail.com
+        // 2. Envia notificação por e-mail via Web3Forms API
+        let msgAcompanhante = temAcompanhante === 'Sim' ? `Sim (${qtdAcompanhantes} acompanhante(s))` : 'Não (irá sozinho)';
+        
         await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            access_key: '2f111818-bfae-4f7f-a63e-00101b63799d', // Chave pública de entrega
+            access_key: '2f111818-bfae-4f7f-a63e-00101b63799d',
             to_email: 'patriciajosalva@gmail.com',
             subject: `💌 Confirmação de Presença: ${nome}`,
             from_name: 'Convite Josalva & Valtair',
-            message: `Nova confirmação recebida:\n\nNome: ${nome}\nPresença: ${status}`
+            message: `Nova confirmação recebida:\n\nNome: ${nome}\nPresença: ${status}\nAcompanhante: ${msgAcompanhante}`
           })
         });
 
         alert(`✨ Muito obrigado, ${nome}! Sua presença (${status}) foi confirmada com sucesso.`);
         formRsvp.reset();
+        toggleAcompanhantes('Não');
 
       } catch (err) {
         console.error("Erro no envio:", err);
@@ -77,7 +162,57 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  /* Guestbook Form Submission */
+  const messageForm = document.getElementById('messageForm');
+  if (messageForm) {
+    messageForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const author = document.getElementById('msgAuthor').value.trim();
+      const content = document.getElementById('msgContent').value.trim();
+
+      if (!author || !content) return;
+
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient.from('recados').insert([{
+            autor: author,
+            mensagem: content,
+            criado_em: new Date().toISOString()
+          }]);
+        } catch(e) {}
+      }
+
+      showToast("Seu recado foi publicado no mural!");
+      messageForm.reset();
+      carregarRecadosSupabase();
+    });
+  }
 });
+
+async function carregarRecadosSupabase() {
+  const wallContainer = document.getElementById('mural-lista');
+  if (!wallContainer || !window.supabaseClient) return;
+
+  try {
+    const { data, error } = await window.supabaseClient
+      .from('recados')
+      .select('*')
+      .order('id', { ascending: false });
+
+    if (!error && data && data.length > 0) {
+      wallContainer.innerHTML = data.map(msg => `
+        <div style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 1rem; padding: 1.1rem; margin-bottom: 0.85rem; text-align: left;">
+          <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--primary); margin-bottom: 0.3rem; font-size: 0.95rem;">
+            <span>${msg.autor}</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">${msg.criado_em ? new Date(msg.criado_em).toLocaleDateString('pt-BR') : 'Hoje'}</span>
+          </div>
+          <p style="margin: 0; color: var(--text-dark); font-style: italic; font-size: 0.9rem;">"${msg.mensagem}"</p>
+        </div>
+      `).join('');
+    }
+  } catch(e) {}
+}
 
 function fallbackCopyPixText(text) {
   const area = document.createElement("textarea");
@@ -87,4 +222,12 @@ function fallbackCopyPixText(text) {
   document.execCommand('copy');
   document.body.removeChild(area);
   alert("✨ Código Pix Copia e Cola copiado com sucesso! Abra o app do seu banco e escolha 'Pix Copia e Cola'.");
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.innerText = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4000);
 }

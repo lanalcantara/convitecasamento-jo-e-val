@@ -45,15 +45,16 @@
 </head>
 <body>
 
-  <!-- 🎵 PLAYER DA MÚSICA DO YOUTUBE (Oasis - Live Forever) -->
+  <!-- 🎵 1. MÚSICA DE FUNDO LOCAL E YOUTUBE EMBED -->
+  <audio id="bg-music" loop src="audio/live-forever.mp3"></audio>
   <div id="youtube-player" style="display:none;"></div>
   <script src="https://www.youtube.com/iframe_api"></script>
 
-  <!-- ✉️ 1. CAPA INICIAL DO CONVITE (#cover / #cover-overlay) -->
+  <!-- ✉️ CAPA INICIAL DO CONVITE (#cover / #cover-overlay) -->
   <div id="cover">
     <div class="card-capa">
       
-      <!-- Arranjo Floral Boho no Topo do Convite de Papel (SEM A FOTO DO CASAL) -->
+      <!-- Arranjo Floral Boho no Topo do Convite de Papel -->
       <img src="convite.jpg" alt="Flores Boho" class="img-floral-capa">
       
       <!-- Selo de Cera Rústico com Monograma J&V -->
@@ -63,14 +64,14 @@
       <h1 class="envelope-title">Josalva &amp; Valtair</h1>
       <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
 
-      <button class="btn-abrir" id="btn-abrir" onclick="abrirConviteComAnimacao()">
+      <button class="btn-abrir" id="btn-abrir" onclick="abrirConvite()">
         <span>Abrir Convite</span>
       </button>
 
     </div>
   </div>
 
-  <!-- 🌐 2. SITE PRINCIPAL BOHO RÚSTICO-CHIQUE -->
+  <!-- 🌐 SITE PRINCIPAL BOHO RÚSTICO-CHIQUE -->
   <div id="site-principal">
     
     <header class="main-header">
@@ -128,7 +129,7 @@
           </a>
         </div>
 
-        <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP -> SUPABASE TABELA PRESENCAS + WEB3FORMS EMAIL) -->
+        <!-- CARD 2: CONFIRMAÇÃO DE PRESENÇA (RSVP -> SUPABASE PRESENCAS + CAMPO ACOMPANHANTES) -->
         <div class="card-box">
           <h2 class="card-title">
             <i class="fa-regular fa-envelope-open"></i>
@@ -148,7 +149,19 @@
               <option value="Infelizmente não poderei comparecer">Infelizmente não poderei comparecer</option>
             </select>
 
-            <button type="submit" id="btn-rsvp" class="btn-acao">Confirmar Presença</button>
+            <!-- 👥 2. CAMPO DE ACOMPANHANTES NO FORMULÁRIO DE RSVP -->
+            <label style="font-size: 0.85rem; font-weight: 600; color: #8C3F2B; display: block; margin-top: 0.8rem; margin-bottom: 0.2rem;">Vai levar acompanhante? *</label>
+            <select id="rsvp-tem-acompanhante" onchange="toggleAcompanhantes(this.value)" style="width: 100%; padding: 0.8rem; border-radius: 0.75rem; border: 1px solid #D9C3B0; margin-bottom: 0.8rem;">
+              <option value="Não">Não, irei sozinho(a)</option>
+              <option value="Sim">Sim, irei acompanhado(a)</option>
+            </select>
+
+            <div id="box-qtd-acompanhantes" style="display: none; margin-bottom: 1rem;">
+              <label style="font-size: 0.85rem; font-weight: 600; color: #8C3F2B; display: block; margin-bottom: 0.2rem;">Quantos acompanhantes? *</label>
+              <input type="number" id="rsvp-qtd-acompanhantes" min="1" max="5" value="1" style="width: 100%; padding: 0.8rem; border-radius: 0.75rem; border: 1px solid #D9C3B0;">
+            </div>
+
+            <button type="submit" id="btn-rsvp" class="btn-acao" style="margin-top: 0.5rem;">Confirmar Presença</button>
           </form>
         </div>
 
@@ -157,7 +170,7 @@
       <!-- BLOCO LADO A LADO 2: PRESENTES PIX & MURAL DE RECADOS -->
       <div class="grid-2-col">
 
-        <!-- CARD 3: PRESENTES VIA PIX COM QR CODE EMV E BOTÃO DE COPIAR EMBUTIDO -->
+        <!-- CARD 3: PRESENTES VIA PIX -->
         <div class="card-box">
           <h2 class="card-title">
             <i class="fa-solid fa-gift"></i>
@@ -167,7 +180,6 @@
             Caso deseje nos presentear, preferimos contribuições em dinheiro via Pix para nos ajudar nessa nova fase!
           </p>
 
-          <!-- 1. IMAGEM DO QR CODE DO BANCO -->
           <div style="text-align: center; margin: 1rem 0;">
             <img 
               src="qrcode-pix.png" 
@@ -233,29 +245,5 @@
   <div id="toast" class="toast-msg"></div>
 
   <script src="script.js"></script>
-  <script>
-    let ytPlayer = null;
-
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player('youtube-player', {
-        height: '0', width: '0', videoId: 'TDe1DqxwJoc',
-        playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'TDe1DqxwJoc' }
-      });
-    }
-
-    function abrirConviteComAnimacao() {
-      const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
-      if (cover) {
-        cover.classList.add('envelope-opening');
-        setTimeout(() => { cover.style.display = 'none'; }, 1000);
-      }
-      if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-        try {
-          ytPlayer.setVolume(20);
-          ytPlayer.playVideo();
-        } catch(e) {}
-      }
-    }
-  </script>
 </body>
 </html>
