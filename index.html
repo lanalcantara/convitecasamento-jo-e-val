@@ -27,14 +27,14 @@
 </head>
 <body class="envelope-active">
 
-  <!-- Áudio Flutuante Oculto -->
+  <!-- Áudio Flutuante Oculto (Live Forever — Oasis) -->
   <audio id="bgAudio" loop preload="auto"></audio>
 
-  <!-- 1. CAPA SOBREPOSTA (DESAPARECE SUAVEMENTE AO CLICAR) -->
+  <!-- ✉️ 1. CAPA/ENVELOPE DE ENTRADA (BLOQUEIA O SITE ATÉ O CLIQUE) -->
   <div class="envelope-overlay" id="envelopeOverlay">
     <div class="envelope-card">
       
-      <!-- Arranjo Floral Rústico da Capa -->
+      <!-- Elemento Decorativo Floral Boho -->
       <div class="envelope-floral-box">
         <svg viewBox="0 0 240 128" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <circle cx="120" cy="64" r="54" fill="none" stroke="#E6DDD1" stroke-width="1.5" stroke-dasharray="4,3"/>
@@ -64,9 +64,9 @@
 
   <!-- 🎵 PLAYER DE ÁUDIO FLUTUANTE NO CANTO INFERIOR DIREITO -->
   <div class="floating-music-widget">
-    <button class="music-btn" id="musicBtn" title="Tocar / Pausar Música de Fundo" aria-label="Tocar ou pausar música de fundo">
+    <button class="music-btn" id="musicBtn" title="Tocar / Pausar Live Forever — Oasis" aria-label="Tocar ou pausar música de fundo">
       <i class="fa-solid fa-music" id="musicIcon"></i>
-      <span id="musicText">Oasis 🎵</span>
+      <span id="musicText">Live Forever — Oasis 🎵</span>
       <div class="equalizer-bars" id="eqBars">
         <div class="eq-bar"></div>
         <div class="eq-bar"></div>
@@ -75,50 +75,48 @@
     </button>
   </div>
 
-  <!-- 2. CONTEÚDO PRINCIPAL DO SITE (SEMPRE PRESENTE NO DOM) -->
+  <!-- 🌐 2. CONTEÚDO PRINCIPAL DO SITE (REVELADO APÓS ABERTURA) -->
   <div id="mainContent" style="display: none; opacity: 0; transition: opacity 0.7s ease;">
 
-    <!-- Cabeçalho -->
+    <!-- Header / Navbar -->
     <header class="navbar" id="navbar">
       <a href="#" class="nav-brand">J & V</a>
-      <nav class="nav-links" id="navLinks">
-        <a href="#comemoracao" class="nav-link">O Evento</a>
-        <a href="#confirmacao" class="nav-link">Confirmar</a>
-        <a href="#recados" class="nav-link">Mural</a>
-        <a href="#presentes" class="nav-link">Presentes</a>
-      </nav>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="font-size: 0.75rem; color: #78716C; font-weight: 500;">🎵 Live Forever — Oasis</span>
+        <nav class="nav-links" id="navLinks">
+          <a href="#comemoracao" class="nav-link">O Evento</a>
+          <a href="#confirmacao" class="nav-link">Confirmar</a>
+          <a href="#recados" class="nav-link">Mural</a>
+          <a href="#presentes" class="nav-link">Presentes</a>
+        </nav>
+      </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section com Foto do Casal no Marco Zero -->
     <section class="hero">
-      <p class="hero-tag">Você é nosso convidado especial</p>
-      <h1 class="hero-names-script">Josalva & Valtair</h1>
-      <p class="hero-welcome-text">
-        "Venha comemorar conosco esse momento de muita alegria e união entre amigos e familiares!"
-      </p>
-
-      <div class="hero-date-badge">
-        <i class="fa-regular fa-calendar-heart"></i>
-        <span>18 de Outubro de 2026 • 13:00h</span>
+      <div class="hero-photo-wrapper">
+        <svg viewBox="0 0 320 420" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="420" fill="#FAF4E8"/>
+          <circle cx="160" cy="180" r="120" fill="#F9EFEA"/>
+          <circle cx="160" cy="180" r="110" fill="none" stroke="#D8B468" stroke-width="2" stroke-dasharray="6,4"/>
+          <!-- Ilustração do Marco Zero & Casal Boho -->
+          <path d="M120 280 L160 140 L200 280 Z" fill="#8C3F2B" opacity="0.15"/>
+          <text x="160" y="170" font-family="'Great Vibes', cursive" font-size="72" fill="#8C3F2B" text-anchor="middle">J &amp; V</text>
+          <text x="160" y="220" font-family="'Playfair Display', serif" font-size="18" font-weight="600" fill="#2C221F" text-anchor="middle">Josalva &amp; Valtair</text>
+          <text x="160" y="250" font-family="'Inter', sans-serif" font-size="11" font-weight="600" letter-spacing="3" fill="#B06D55" text-anchor="middle">MARCO ZERO • 2026</text>
+        </svg>
       </div>
 
-      <!-- TIMER REGRESSIVO -->
-      <div class="countdown-container" id="countdown" data-wedding-date="2026-10-18T13:00:00">
-        <div class="timer-card">
-          <div class="timer-value" id="days">00</div>
-          <div class="timer-label">Dias</div>
-        </div>
-        <div class="timer-card">
-          <div class="timer-value" id="hours">00</div>
-          <div class="timer-label">Horas</div>
-        </div>
-        <div class="timer-card">
-          <div class="timer-value" id="minutes">00</div>
-          <div class="timer-label">Minutos</div>
-        </div>
-        <div class="timer-card">
-          <div class="timer-value" id="seconds">00</div>
-          <div class="timer-label">Segundos</div>
+      <div class="hero-text-content">
+        <span class="hero-tag">Você é nosso convidado especial</span>
+        <h1 class="hero-names-script">Josalva & Valtair</h1>
+        <p class="hero-welcome-text">
+          "Venha comemorar conosco esse momento de muita alegria e união entre amigos e familiares!"
+        </p>
+
+        <div class="hero-date-badge" style="margin-bottom: 0;">
+          <i class="fa-regular fa-calendar-heart"></i>
+          <span>18 de Outubro de 2026 • 13:00h</span>
         </div>
       </div>
     </section>
@@ -150,18 +148,18 @@
       </div>
     </section>
 
-    <!-- Confirmação de Presença -->
+    <!-- Confirmação de Presença (Envia para Supabase e Notificação patriciajosalva@gmail.com) -->
     <section id="confirmacao" class="rsvp-section">
       <div class="rsvp-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px; text-align: center;">Confirmação de Presença</h2>
-        <p style="font-size: 0.75rem; text-align: center; color: #78716C; margin-bottom: 20px;">Por favor, confirme sua presença para organizarmos tudo perfeitamente.</p>
+        <p style="font-size: 0.75rem; text-align: center; color: #78716C; margin-bottom: 20px;">Por favor, confirme sua presença. A notificação será enviada para os noivos.</p>
         
         <div id="formStatusBox" style="display:none; margin-bottom:16px; padding:12px; border-radius:12px; text-align:center; font-size:0.85rem;"></div>
 
         <form id="rsvpForm">
           <div class="form-group">
             <label class="form-label" for="guestName">Nome Completo *</label>
-            <input type="text" id="guestName" class="form-control" placeholder="Digite seu nome" required />
+            <input type="text" id="guestName" class="form-control" placeholder="Digite seu nome completo" required />
           </div>
 
           <div class="form-group">
@@ -200,17 +198,20 @@
       <div id="messagesWall"></div>
     </section>
 
-    <!-- Presentes Pix -->
+    <!-- Presentes Pix dos Noivos -->
     <section id="presentes" class="pix-section">
       <div class="pix-card">
         <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #8C3F2B; margin-bottom: 6px;">Presentes em Dinheiro (Pix)</h2>
         <p style="font-size: 0.75rem; color: #57534E; margin-bottom: 16px;">
-          Preferimos presentes em dinheiro via Pix para que possamos comprar o que quisermos para o nosso lar.
+          Caso deseje nos presentear, preferimos contribuições em dinheiro via Pix para que possamos comprar o que quisermos para a nossa nova jornada!
         </p>
         
         <div id="qrcodeCanvas" style="display: flex; justify-content: center; margin-bottom: 12px;"></div>
         
-        <div class="pix-key-box" id="pixKeyText">Chave Pix em breve</div>
+        <div class="pix-key-box">
+          Chave Pix (CPF): 091.602.964-61
+        </div>
+        <p style="font-size: 11px; color: #78716C; margin-bottom: 16px;">Beneficiário: Josalva / Valtair</p>
 
         <button class="btn-map" id="btnCopyPixMain" style="cursor: pointer; border: none;">
           📋 Copiar Chave Pix

@@ -58,14 +58,14 @@ function initEnvelopeOpening() {
     // 3. Desbloquear a rolagem da página
     document.body.classList.remove('envelope-active');
 
-    // 4. Reproduzir áudio em volume 0.2 (20%)
+    // 4. Reproduzir áudio "Live Forever — Oasis" em volume 0.2 (20%)
     if (bgAudio) {
       bgAudio.volume = 0.2;
       bgAudio.play().then(() => {
         if (musicBtn) musicBtn.classList.add('playing');
         if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
         if (musicText) musicText.innerText = 'Pausar';
-        showToast('Tocando "Stop Crying Your Heart Out" (Acústico) - Oasis 🎶');
+        showToast('Tocando "Live Forever" — Oasis 🎶');
       }).catch(err => {
         console.log('Autoplay bloqueado pelo navegador:', err);
       });
@@ -158,7 +158,7 @@ function initAudioPlayer() {
       bgAudio.pause();
       musicBtn.classList.remove('playing');
       if (musicIcon) musicIcon.className = 'fa-solid fa-music';
-      if (musicText) musicText.innerText = 'Oasis 🎵';
+      if (musicText) musicText.innerText = 'Live Forever — Oasis 🎵';
       isPlaying = false;
       showToast('Música de fundo pausada 🎵');
     } else {
@@ -168,7 +168,7 @@ function initAudioPlayer() {
         if (musicIcon) musicIcon.className = 'fa-solid fa-pause';
         if (musicText) musicText.innerText = 'Pausar';
         isPlaying = true;
-        showToast('Tocando "Stop Crying Your Heart Out" (Acústico) - Oasis 🎶');
+        showToast('Tocando "Live Forever" — Oasis 🎶');
       }).catch(() => {
         musicBtn.classList.add('playing');
         if (musicText) musicText.innerText = 'Pausar';
@@ -185,9 +185,9 @@ function initQRCodeAndPixKey() {
   const cfg = window.CONFIG || {};
   const pixKeyText = document.getElementById('pixKeyText');
 
-  const chavePix = cfg.CHAVE_PIX || 'SUA-CHAVE-PIX-AQUI';
+  const chavePix = cfg.CHAVE_PIX || '091.602.964-61';
 
-  if (pixKeyText) pixKeyText.innerText = chavePix;
+  if (pixKeyText) pixKeyText.innerText = 'Chave Pix (CPF): ' + chavePix;
 
   const qrContainer = document.getElementById('qrcodeCanvas');
   
@@ -298,7 +298,7 @@ function initRSVP() {
           formStatusBox.style.border = '1px solid #8C3F2B';
           formStatusBox.innerHTML = `
             ✨ <strong>Muito obrigado, ${name}!</strong><br>
-            Sua confirmação de presença na nossa comemoração foi registrada com sucesso! Esperamos por você! ❤️
+            Sua confirmação de presença foi registrada com sucesso! Notificação enviada para patriciajosalva@gmail.com ❤️
           `;
         }
         showToast(`Confirmação enviada com sucesso, ${name}! ✨`);
@@ -380,7 +380,7 @@ async function loadAndRenderMessages() {
   if (!messages || messages.length === 0) {
     messagesWall.innerHTML = `
       <div class="empty-state-box">
-        <p>Seja o primeiro a deixar uma mensagem carinhosa para os noivos! ❤️</p>
+        <p>Seja o primeiro a deixar uma mensagem carinhosa para Josalva & Valtair! ❤️</p>
       </div>
     `;
     return;
@@ -403,7 +403,7 @@ async function loadAndRenderMessages() {
 function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      showToast('Chave Pix copiada com sucesso! Cole no seu app bancário. 📋✨');
+      showToast('Chave Pix (CPF 091.602.964-61) copiada com sucesso! 📋✨');
     }).catch(() => fallbackCopyTextToClipboard(text));
   } else {
     fallbackCopyTextToClipboard(text);
@@ -420,7 +420,7 @@ function fallbackCopyTextToClipboard(text) {
 
   try {
     document.execCommand('copy');
-    showToast('Chave Pix copiada com sucesso! 📋✨');
+    showToast('Chave Pix (CPF 091.602.964-61) copiada com sucesso! 📋✨');
   } catch (err) {
     showToast('Chave Pix: ' + text);
   }
