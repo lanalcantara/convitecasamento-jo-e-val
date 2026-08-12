@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!-- Vercel Deployment Sync: 2026-08-12 -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,7 @@
   <!-- Google Fonts de Alta Costura -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
@@ -23,30 +22,23 @@
   <!-- 🎵 ÁUDIO DO OASIS (LIVE FOREVER) VIA ARCHIVE.ORG -->
   <audio id="bg-music" src="https://archive.org/download/OasisLiveForever_201610/Oasis%20-%20Live%20Forever.mp3" preload="auto" loop></audio>
 
-  <!-- ✉️ CAPA INICIAL DO CONVITE (#cover / #cover-overlay) -->
+  <!-- ✉️ CAPA INICIAL DO CONVITE (#cover) -->
   <div id="cover">
     <div class="card-capa">
-      
-      <!-- Arranjo Floral Boho no Topo do Convite de Papel -->
       <img src="convite.jpg" alt="Flores Boho" class="img-floral-capa">
-      
-      <!-- Selo de Cera Rústico com Monograma J&V -->
       <div class="wax-seal">J&amp;V</div>
-
       <p class="envelope-subtitle-script">Você está convidado</p>
       <h1 class="envelope-title">Josalva &amp; Valtair</h1>
       <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
 
-      <!-- BOTÃO COM FALLBACK INLINE GARANTIDO PARA ABRIR O CONVITE -->
       <button 
         id="btn-abrir" 
         class="btn-abrir" 
         onclick="abrirConviteComAnimacao()" 
         style="cursor: pointer;"
       >
-        <span>Abrir Convite</span>
+        Abrir Convite
       </button>
-
     </div>
   </div>
 
@@ -54,9 +46,9 @@
   <div id="site-principal">
     
     <header class="main-header">
-      <a href="#" class="brand-logo">J &amp; V</a>
+      <a href="#" class="logo-header">J &amp; V</a>
       <div class="header-music-info">
-        <i class="fa-solid fa-music" style="color: var(--primary);"></i>
+        <i class="fa-solid fa-music" style="color: #8C3F2B;"></i>
         <span>Live Forever — Oasis</span>
       </div>
     </header>
@@ -73,7 +65,7 @@
           <p class="hero-phrase">"Venha comemorar conosco esse momento de muita alegria e união entre amigos e familiares!"</p>
           
           <div class="hero-date-badge">
-            <i class="fa-regular fa-calendar-check" style="color: var(--primary);"></i>
+            <i class="fa-regular fa-calendar-check" style="color: #8C3F2B;"></i>
             <span>18 de Outubro de 2026 • 13:00h</span>
           </div>
         </div>
@@ -82,26 +74,26 @@
       <!-- GRID DOS CARDS PRINCIPAIS -->
       <div class="sections-grid">
         
-        <!-- CARD 1: RECEPTÇÃO & LOCALIZAÇÃO -->
+        <!-- CARD 1: RECEPÇÃO & LOCALIZAÇÃO -->
         <div class="card-section">
           <h2 class="card-title">
             <i class="fa-solid fa-location-dot"></i>
             <span>Recepção de Comemoração</span>
           </h2>
           
-          <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
-            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1; text-align: center;">
-              <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Data</p>
-              <p style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 2px;">18/10/2026</p>
+          <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.2rem;">
+            <div style="background: #F7F4EF; padding: 0.8rem; border-radius: 0.8rem; flex: 1; text-align: center;">
+              <p style="font-size: 0.75rem; color: #78716C; text-transform: uppercase;">Data</p>
+              <p style="font-size: 1.1rem; font-weight: 700; color: #8C3F2B; margin-top: 2px;">18/10/2026</p>
             </div>
-            <div style="background: var(--bg-main); padding: 1rem; border-radius: 1rem; flex: 1; text-align: center;">
-              <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Horário</p>
-              <p style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 2px;">13:00h</p>
+            <div style="background: #F7F4EF; padding: 0.8rem; border-radius: 0.8rem; flex: 1; text-align: center;">
+              <p style="font-size: 0.75rem; color: #78716C; text-transform: uppercase;">Horário</p>
+              <p style="font-size: 1.1rem; font-weight: 700; color: #8C3F2B; margin-top: 2px;">13:00h</p>
             </div>
           </div>
 
           <a href="https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
-            <button class="btn-acao">
+            <button class="btn-primary">
               <i class="fa-solid fa-map-location-dot"></i>
               <span>Abrir no Google Maps</span>
             </button>
@@ -114,7 +106,7 @@
             <i class="fa-regular fa-envelope-open"></i>
             <span>Confirmar Presença</span>
           </h2>
-          <p style="font-size: 0.825rem; color: var(--text-muted); margin-bottom: 1.2rem; text-align: center;">Notificação enviada para: patriciajosalva@gmail.com</p>
+          <p style="font-size: 0.8rem; color: #78716C; margin-bottom: 1rem; text-align: center;">Notificação enviada para: patriciajosalva@gmail.com</p>
 
           <form id="form-rsvp" style="text-align: left;">
             <label class="form-label" for="rsvp-nome">Nome Completo *</label>
@@ -126,18 +118,18 @@
               <option value="Infelizmente não poderei comparecer">Infelizmente não poderei comparecer</option>
             </select>
 
-            <label style="font-size: 0.85rem; font-weight: 600; color: #8C3F2B; display: block; margin-top: 0.8rem; margin-bottom: 0.2rem;">Vai levar acompanhante? *</label>
-            <select id="rsvp-tem-acompanhante" onchange="toggleAcompanhantes(this.value)" style="width: 100%; padding: 0.8rem; border-radius: 0.75rem; border: 1px solid #D9C3B0; margin-bottom: 0.8rem;">
+            <label class="form-label">Vai levar acompanhante? *</label>
+            <select id="rsvp-tem-acompanhante" onchange="toggleAcompanhantes(this.value)">
               <option value="Não">Não, irei sozinho(a)</option>
               <option value="Sim">Sim, irei acompanhado(a)</option>
             </select>
 
-            <div id="box-qtd-acompanhantes" style="display: none; margin-bottom: 1rem;">
-              <label style="font-size: 0.85rem; font-weight: 600; color: #8C3F2B; display: block; margin-bottom: 0.2rem;">Quantos acompanhantes? *</label>
-              <input type="number" id="rsvp-qtd-acompanhantes" min="1" max="5" value="1" style="width: 100%; padding: 0.8rem; border-radius: 0.75rem; border: 1px solid #D9C3B0;">
+            <div id="box-qtd-acompanhantes" style="display: none; margin-bottom: 0.8rem;">
+              <label class="form-label">Quantos acompanhantes? *</label>
+              <input type="number" id="rsvp-qtd-acompanhantes" min="1" max="5" value="1">
             </div>
 
-            <button type="submit" id="btn-rsvp" class="btn-acao" style="margin-top: 0.5rem;">Confirmar Presença</button>
+            <button type="submit" id="btn-rsvp" class="btn-primary" style="margin-top: 0.4rem;">Confirmar Presença</button>
           </form>
         </div>
 
@@ -147,31 +139,27 @@
             <i class="fa-solid fa-gift"></i>
             <span>Presentes em Dinheiro (Pix)</span>
           </h2>
-          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; text-align: center;">
+          <p style="font-size: 0.85rem; color: #78716C; margin-bottom: 0.8rem; text-align: center;">
             Caso deseje nos presentear, preferimos contribuições em dinheiro via Pix para nos ajudar nessa nova fase!
           </p>
 
-          <div style="text-align: center; margin: 1rem 0;">
+          <div style="text-align: center; margin: 0.8rem 0;">
             <img 
               src="qrcode-pix.png" 
               alt="QR Code Pix - Josalva Patricia" 
-              style="width: 180px; height: 180px; border-radius: 0.75rem; border: 1px solid #D9C3B0; padding: 0.5rem; background: #ffffff; display: inline-block;"
-              onError="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva%20Patricia%20Alexandr6009SAO%20PAULO62140510eBqAbNLnNd6304A435';"
+              style="width: 170px; height: 170px; border-radius: 0.75rem; border: 1px solid #D9C3B0; padding: 0.5rem; background: #ffffff; display: inline-block;"
+              onError="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva%20Patricia%20Alexandr6009SAO%20PAULO62140510eBqAbNLnNd6304A435';"
             >
-            <p style="font-size: 0.75rem; color: #78716C; margin-top: 0.4rem;">Aponte a câmera do aplicativo do seu banco para pagar</p>
+            <p style="font-size: 0.75rem; color: #78716C; margin-top: 0.3rem;">Aponte a câmera do aplicativo do seu banco para pagar</p>
           </div>
 
           <div class="pix-box">
-            <p style="font-size: 0.8rem; color: #78716C; margin-bottom: 0.2rem;">Chave Pix (CPF)</p>
-            <p style="font-size: 1.1rem; font-weight: bold; color: #8C3F2B; margin: 0;">091.602.964-61</p>
-            <p style="font-size: 0.8rem; color: #78716C; margin-top: 0.2rem;">Beneficiária: Josalva Patricia</p>
+            <p style="font-size: 0.75rem; color: #78716C; margin-bottom: 0.2rem;">Chave Pix (CPF)</p>
+            <p style="font-size: 1.05rem; font-weight: bold; color: #8C3F2B; margin: 0;">091.602.964-61</p>
+            <p style="font-size: 0.75rem; color: #78716C; margin-top: 0.2rem;">Beneficiária: Josalva Patricia</p>
           </div>
 
-          <button 
-            id="btn-copiar-pix" 
-            class="btn-acao" 
-            style="width: 100%; padding: 0.85rem; background-color: #8C3F2B; color: white; border: none; border-radius: 0.75rem; font-weight: bold; cursor: pointer;"
-          >
+          <button id="btn-copiar-pix" class="btn-primary">
             <i class="fa-regular fa-copy"></i>
             <span>Copiar Pix Copia e Cola</span>
           </button>
@@ -184,19 +172,19 @@
             <span>Mural de Recados</span>
           </h2>
           
-          <form id="messageForm" style="text-align: left; margin-bottom: 1.5rem;">
+          <form id="messageForm" style="text-align: left; margin-bottom: 1.2rem;">
             <label class="form-label" for="msgAuthor">Seu Nome *</label>
             <input type="text" id="msgAuthor" class="form-input" placeholder="Digite seu nome" required />
 
             <label class="form-label" for="msgContent">Sua Mensagem *</label>
             <textarea id="msgContent" class="form-input" rows="2" placeholder="Escreva uma mensagem carinhosa..." required></textarea>
 
-            <button type="submit" class="btn-acao">Publicar Mensagem</button>
+            <button type="submit" class="btn-primary" style="margin-top: 0.4rem;">Publicar Mensagem</button>
           </form>
 
           <div id="mural-lista">
-            <div style="border: 2px dashed var(--border-color); padding: 1.5rem 1rem; border-radius: 1rem; text-align: center;">
-              <p style="color: var(--text-muted); font-style: italic; font-size: 0.9rem;">Seja o primeiro a deixar um recado carinhoso para os noivos!</p>
+            <div style="border: 2px dashed #D9C3B0; padding: 1.2rem 1rem; border-radius: 0.8rem; text-align: center;">
+              <p style="color: #78716C; font-style: italic; font-size: 0.85rem;">Seja o primeiro a deixar um recado carinhoso para os noivos!</p>
             </div>
           </div>
         </div>
