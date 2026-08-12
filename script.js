@@ -1,30 +1,24 @@
 /* ==========================================================================
    JOSALVA & VALTAIR - CONVITE DE CASAMENTO BOHO CHIC
-   ÁUDIO NATIVO HTML5 (Live Forever - Oasis) & LÓGICA DO SITE
+   REPRODUÇÃO DE ÁUDIO "Live Forever - Oasis" (live-forever.mp3)
    ========================================================================== */
 
 const PAYLOAD_PIX_EMV_OFICIAL = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
 
-// Função de abertura do convite com reprodução de áudio nativo HTML5
+// Função de abertura do convite que dispara o MP3 de Live Forever - Oasis
 function abrirConviteComAnimacao() {
   const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
   const audio = document.getElementById('bg-music');
 
-  // 1. Aplica animação de abertura do convite
   if (cover) {
     cover.classList.add('aberto');
     cover.classList.add('envelope-opening');
     setTimeout(() => { cover.style.display = 'none'; }, 1000);
   }
 
-  // 2. Toca a música diretamente na interação do clique
   if (audio) {
     audio.volume = 0.3; // Volume agradável de fundo (30%)
-    audio.play().then(() => {
-      console.log("Música iniciada com sucesso!");
-    }).catch(err => {
-      console.error("Erro ao reproduzir áudio:", err);
-    });
+    audio.play().catch(err => console.log("Erro ao tocar áudio:", err));
   }
 }
 
@@ -40,7 +34,7 @@ function toggleAcompanhantes(valor) {
   }
 }
 
-// Vincula a função ao botão de abertura e inicializa Supabase e formulários
+// Vincula a função ao botão de abertura e inicializa o Supabase
 document.addEventListener('DOMContentLoaded', () => {
   const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('.btn-abrir-envelope');
   if (btnAbrir) {
