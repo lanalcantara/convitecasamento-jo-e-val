@@ -83,13 +83,13 @@ body {
   justify-content: center;
   padding: 1.5rem;
   perspective: 1200px;
-  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s ease;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s ease;
 }
 
-#cover-overlay.envelope-opening, #cover.envelope-opening {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+#cover-overlay.aberto, #cover.aberto, #cover-overlay.envelope-opening, #cover.envelope-opening {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .envelope-container, .card-capa {
@@ -103,10 +103,11 @@ body {
   overflow: hidden;
   text-align: center;
   padding: 2.5rem 2rem;
-  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
+#cover-overlay.aberto .envelope-container, #cover.aberto .card-capa,
 #cover-overlay.envelope-opening .envelope-container, #cover.envelope-opening .card-capa {
   transform: rotateX(25deg) translateY(-40px) scale(0.96);
 }

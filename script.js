@@ -2,11 +2,13 @@
 // 1. ÁUDIO DO OASIS & ABERTURA DO CONVITE
 // ==========================================
 function abrirConviteComAnimacao() {
-  const cover = document.getElementById('cover');
+  const cover = document.getElementById('cover') || document.getElementById('cover-overlay');
   const audio = document.getElementById('bg-music');
 
   if (cover) {
     cover.classList.add('aberto');
+    cover.classList.add('envelope-opening');
+    setTimeout(() => { cover.style.display = 'none'; }, 800);
   }
 
   if (audio) {
@@ -14,6 +16,10 @@ function abrirConviteComAnimacao() {
     audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));
   }
 }
+
+// Garante disponibilidade global da função no window
+window.abrirConviteComAnimacao = abrirConviteComAnimacao;
+window.abrirConvite = abrirConviteComAnimacao;
 
 function toggleAcompanhantes(valor) {
   const box = document.getElementById('box-qtd-acompanhantes');

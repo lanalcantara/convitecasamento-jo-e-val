@@ -36,7 +36,13 @@
       <h1 class="envelope-title">Josalva &amp; Valtair</h1>
       <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
 
-      <button class="btn-abrir" id="btn-abrir" onclick="abrirConviteComAnimacao()">
+      <!-- BOTÃO COM FALLBACK INLINE GARANTIDO PARA ABRIR O CONVITE -->
+      <button 
+        id="btn-abrir" 
+        class="btn-abrir" 
+        onclick="abrirConviteComAnimacao()" 
+        style="cursor: pointer;"
+      >
         <span>Abrir Convite</span>
       </button>
 
