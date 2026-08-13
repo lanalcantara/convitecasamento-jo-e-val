@@ -4,6 +4,7 @@
 window.abrirConviteComAnimacao = function() {
   const cover = document.getElementById('cover');
   const audio = document.getElementById('bg-music');
+  const btnIcon = document.getElementById('music-icon');
 
   // 1. Esconde a capa do convite
   if (cover) {
@@ -26,11 +27,17 @@ window.abrirConviteComAnimacao = function() {
       playPromise
         .then(() => {
           console.log("Música iniciada com sucesso!");
+          if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
         })
         .catch(error => {
           console.log("O navegador bloqueou a reprodução automática:", error);
+          if (btnIcon) btnIcon.className = 'fa-solid fa-music';
           // Fallback: tenta reproduzir novamente em qualquer clique subsequente na tela
-          document.addEventListener('click', () => { audio.play(); }, { once: true });
+          document.addEventListener('click', () => { 
+            audio.play().then(() => {
+              if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
+            }); 
+          }, { once: true });
         });
     }
   }
@@ -38,6 +45,49 @@ window.abrirConviteComAnimacao = function() {
 
 function abrirConviteComAnimacao() {
   window.abrirConviteComAnimacao();
+}
+
+// 2. CONTROLE MANUAL DE PLAY / PAUSE DO ÁUDIO
+window.toggleMusic = function() {
+  const audio = document.getElementById('bg-music');
+  const btnIcon = document.getElementById('music-icon');
+  
+  if (!audio) return;
+
+  if (audio.paused) {
+    audio.play().then(() => {
+      if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
+    }).catch(err => console.log("Erro ao tocar:", err));
+  } else {
+    audio.pause();
+    if (btnIcon) btnIcon.className = 'fa-solid fa-music';
+  }
+};
+
+// 3. ALTERAÇÃO DINÂMICA DO BOTÃO E ACOMPANHANTES NO RSVP
+function atualizarFormularioRsvp() {
+  const selectStatus = document.getElementById('rsvp-status');
+  const boxAcompanhanteSelect = document.getElementById('box-tem-acompanhante-wrapper') || document.getElementById('rsvp-tem-acompanhante-box');
+  const boxQtdAcompanhantes = document.getElementById('box-qtd-acompanhantes');
+  const btnSubmit = document.getElementById('btn-rsvp') || document.querySelector('#form-rsvp button[type="submit"]');
+
+  if (!selectStatus || !btnSubmit) return;
+
+  const valor = selectStatus.value;
+  const naoVai = valor.toLowerCase().includes('não') || valor.toLowerCase().includes('nao');
+
+  if (naoVai) {
+    btnSubmit.innerText = 'Enviar';
+    if (boxAcompanhanteSelect) boxAcompanhanteSelect.style.display = 'none';
+    if (boxQtdAcompanhantes) boxQtdAcompanhantes.style.display = 'none';
+  } else {
+    btnSubmit.innerText = 'Confirmar Presença';
+    if (boxAcompanhanteSelect) boxAcompanhanteSelect.style.display = 'block';
+    const selectAcomp = document.getElementById('rsvp-tem-acompanhante');
+    if (selectAcomp && selectAcomp.value === 'Sim') {
+      if (boxQtdAcompanhantes) boxQtdAcompanhantes.style.display = 'block';
+    }
+  }
 }
 
 function toggleAcompanhantes(valor) {
@@ -48,7 +98,7 @@ function toggleAcompanhantes(valor) {
 }
 
 // ==========================================
-// 2. MURAL DE RECADOS (SUPABASE)
+// 4. MURAL DE RECADOS (SUPABASE)
 // ==========================================
 async function carregarRecados() {
   const wallContainer = document.getElementById('mural-recados') || document.getElementById('mural-lista');
@@ -93,13 +143,20 @@ async function carregarRecados() {
 }
 
 // ==========================================
-// 3. EVENT LISTENERS E INICIALIZAÇÃO
+// 5. EVENT LISTENERS E INICIALIZAÇÃO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   // Vincula evento de abertura do convite
   const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('#cover button');
   if (btnAbrir) {
     btnAbrir.onclick = window.abrirConviteComAnimacao;
+  }
+
+  // Listener para dinâmica do RSVP
+  const selectStatus = document.getElementById('rsvp-status');
+  if (selectStatus) {
+    selectStatus.addEventListener('change', atualizarFormularioRsvp);
+    atualizarFormularioRsvp();
   }
 
   // Carrega recados do mural
@@ -130,8 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const nome = document.getElementById('rsvp-nome').value.trim();
       const status = document.getElementById('rsvp-status').value;
-      const temAcompanhante = document.getElementById('rsvp-tem-acompanhante').value;
-      const qtdAcompanhantes = (temAcompanhante === 'Sim') ? document.getElementById('rsvp-qtd-acompanhantes').value : '0';
+      const temAcompanhanteSelect = document.getElementById('rsvp-tem-acompanhante');
+      const temAcompanhante = temAcompanhanteSelect ? temAcompanhanteSelect.value : 'Não';
+      const qtdAcompanhantes = (temAcompanhante === 'Sim' && !status.toLowerCase().includes('não')) ? document.getElementById('rsvp-qtd-acompanhantes').value : '0';
 
       // 1. Envia notificação por e-mail via FormSubmit AJAX API
       try {
@@ -160,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           await supabaseClient.from('presencas').insert([{
             nome: nome,
-            confirmado: (status.includes('Sim')),
+            confirmado: (!status.toLowerCase().includes('não')),
             acompanhantes: parseInt(qtdAcompanhantes, 10) || 0
           }]);
         } catch (errSupa) {
@@ -168,9 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      exibirToast("Presença confirmada com sucesso!");
+      exibirToast(status.toLowerCase().includes('não') ? "Resposta enviada com sucesso!" : "Presença confirmada com sucesso!");
       formRsvp.reset();
-      toggleAcompanhantes('Não');
+      atualizarFormularioRsvp();
       if (btn) btn.disabled = false;
     });
   }

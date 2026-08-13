@@ -60,9 +60,11 @@
     
     <header>
       <a href="#" class="logo-header">J &amp; V</a>
-      <div class="header-music-info">
-        <i class="fa-solid fa-music" style="color: #8C3F2B;"></i>
-        <span>Live Forever — Oasis</span>
+      
+      <!-- BOTÃO DE PLAYER MANUAL DE ÁUDIO NO CABEÇALHO -->
+      <div class="header-music-info" onclick="toggleMusic()" style="cursor: pointer; background: #F7F4EF; padding: 0.4rem 0.8rem; border-radius: 9999px; border: 1px solid #E5D8CC; user-select: none;">
+        <i id="music-icon" class="fa-solid fa-music" style="color: #8C3F2B;"></i>
+        <span style="font-weight: 600; color: #8C3F2B;">Live Forever — Oasis</span>
       </div>
     </header>
 
@@ -156,11 +158,13 @@
               <option value="Infelizmente não poderei comparecer">Infelizmente não poderei comparecer</option>
             </select>
 
-            <label>Vai levar acompanhante? *</label>
-            <select id="rsvp-tem-acompanhante" onchange="toggleAcompanhantes(this.value)">
-              <option value="Não">Não, irei sozinho(a)</option>
-              <option value="Sim">Sim, irei acompanhado(a)</option>
-            </select>
+            <div id="box-tem-acompanhante-wrapper">
+              <label>Vai levar acompanhante? *</label>
+              <select id="rsvp-tem-acompanhante" onchange="toggleAcompanhantes(this.value)">
+                <option value="Não">Não, irei sozinho(a)</option>
+                <option value="Sim">Sim, irei acompanhado(a)</option>
+              </select>
+            </div>
 
             <div id="box-qtd-acompanhantes" style="display: none; margin-bottom: 0.8rem;">
               <label>Quantos acompanhantes? *</label>
