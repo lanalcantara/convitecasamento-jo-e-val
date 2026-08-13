@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // RSVP Form Submit Handler com Feedback de Carregamento e Mensagem de Sucesso
+  // RSVP Form Submit Handler com Formatação FormSubmit em Português (_language: pt, _template: box)
   const formRsvp = document.getElementById('form-rsvp') || document.querySelector('#form-rsvp form') || document.querySelector('form');
   
   if (formRsvp) {
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        // Envio para a API do FormSubmit (E-mail em tempo real)
+        // Envio de notificação para a noiva via FormSubmit API (100% em Português com template box)
         await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
           method: 'POST',
           headers: { 
@@ -219,13 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            _subject: `Resposta do Convite: ${nome}`,
-            _template: 'table',
+            _subject: `Confirmação de Presença: ${nome}`,
+            _template: 'box',      // Layout elegante em caixa
+            _language: 'pt',       // Idioma 100% em Português
             _captcha: 'false',
-            Nome: nome,
-            Status_Presenca: status,
-            Acompanhante: temAcomp,
-            Quantidade_Acompanhantes: qtdAcomp
+            
+            // Rótulos amigáveis e organizados em Português
+            "Nome do Convidado": nome,
+            "Status de Presença": status,
+            "Levará Acompanhante?": temAcomp,
+            "Quantidade de Acompanhantes": qtdAcomp,
+            "Data da Resposta": new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
           })
         });
 
