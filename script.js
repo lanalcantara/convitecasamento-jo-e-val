@@ -6,39 +6,37 @@ window.abrirConviteComAnimacao = function() {
   const audio = document.getElementById('bg-music');
   const btnIcon = document.getElementById('music-icon');
 
-  // 1. Esconde a capa do convite
+  // Esconde a capa
   if (cover) {
     cover.classList.add('aberto');
-    setTimeout(() => {
-      cover.style.display = 'none';
-    }, 600);
+    setTimeout(() => { cover.style.display = 'none'; }, 600);
   }
 
-  // 2. Libera a rolagem do site
   document.body.style.overflow = 'auto';
 
-  // 3. Executa a música atrelada ao evento direto de clique
+  // Dispara o áudio no clique
   if (audio) {
-    audio.volume = 0.35; // Volume suave de fundo em 35%
-    
-    // Tenta reproduzir e trata o desbloqueio do navegador
+    audio.volume = 0.35;
     const playPromise = audio.play();
+
     if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          console.log("Música iniciada com sucesso!");
-          if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
-        })
-        .catch(error => {
-          console.log("O navegador bloqueou a reprodução automática:", error);
-          if (btnIcon) btnIcon.className = 'fa-solid fa-music';
-          // Fallback: tenta reproduzir novamente em qualquer clique subsequente na tela
-          document.addEventListener('click', () => { 
-            audio.play().then(() => {
-              if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
-            }); 
-          }, { once: true });
-        });
+      playPromise.then(() => {
+        console.log("Música iniciada com sucesso!");
+        if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
+      }).catch(err => {
+        console.log("Erro de autoplay do navegador:", err);
+        if (btnIcon) btnIcon.className = 'fa-solid fa-music';
+        // Fallback: toca no próximo toque em qualquer lugar da tela (click + touchstart)
+        const tocarNoToque = () => {
+          audio.play().then(() => {
+            if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
+          });
+          document.removeEventListener('click', tocarNoToque);
+          document.removeEventListener('touchstart', tocarNoToque);
+        };
+        document.addEventListener('click', tocarNoToque);
+        document.addEventListener('touchstart', tocarNoToque);
+      });
     }
   }
 };
