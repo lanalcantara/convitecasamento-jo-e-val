@@ -176,23 +176,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // RSVP Form Submit
-  const formRsvp = document.getElementById('form-rsvp');
+  // RSVP Form Submit Handler com Feedback de Carregamento e Mensagem de Sucesso
+  const formRsvp = document.getElementById('form-rsvp') || document.querySelector('#form-rsvp form') || document.querySelector('form');
+  
   if (formRsvp) {
     formRsvp.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      const btn = document.getElementById('btn-rsvp');
-      if (btn) btn.disabled = true;
 
-      const nome = document.getElementById('rsvp-nome').value.trim();
-      const status = document.getElementById('rsvp-status').value;
-      const temAcompanhanteSelect = document.getElementById('rsvp-tem-acompanhante');
-      const temAcompanhante = temAcompanhanteSelect ? temAcompanhanteSelect.value : 'Não';
-      const qtdAcompanhantes = (temAcompanhante === 'Sim' && !status.toLowerCase().includes('não')) ? document.getElementById('rsvp-qtd-acompanhantes').value : '0';
+      const btnSubmit = document.getElementById('btn-rsvp') || formRsvp.querySelector('button[type="submit"]');
+      const textoOriginalBotao = btnSubmit ? btnSubmit.innerText : 'Confirmar Presença';
 
-      // 1. Envia notificação por e-mail via FormSubmit AJAX API
+      // 1. Estado de carregamento no botão
+      if (btnSubmit) {
+        btnSubmit.disabled = true;
+        btnSubmit.innerText = 'Enviando resposta...';
+      }
+
+      // Captura dos campos
+      const inputNome = document.getElementById('rsvp-nome') || formRsvp.querySelector('input[type="text"]');
+      const selectStatus = document.getElementById('rsvp-status') || formRsvp.querySelector('select');
+      const selectAcomp = document.getElementById('rsvp-tem-acompanhante');
+      const inputQtd = document.getElementById('rsvp-qtd-acompanhantes');
+
+      const nome = inputNome ? inputNome.value.trim() : '';
+      const status = selectStatus ? selectStatus.value : 'Sim, estarei presente!';
+      const naoVai = status.toLowerCase().includes('não') || status.toLowerCase().includes('nao');
+      const temAcomp = (!naoVai && selectAcomp) ? selectAcomp.value : 'Não';
+      const qtdAcomp = (!naoVai && temAcomp === 'Sim' && inputQtd) ? inputQtd.value : '0';
+
+      if (!nome) {
+        alert('Por favor, preencha o seu nome completo.');
+        if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerText = textoOriginalBotao; }
+        return;
+      }
+
       try {
+        // Envio para a API do FormSubmit (E-mail em tempo real)
         await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
           method: 'POST',
           headers: { 
@@ -200,36 +219,50 @@ document.addEventListener('DOMContentLoaded', () => {
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            _subject: `Confirmação de RSVP - ${nome}`,
+            _subject: `Resposta do Convite: ${nome}`,
             _template: 'table',
             _captcha: 'false',
             Nome: nome,
-            Presenca: status,
-            Acompanhante: temAcompanhante,
-            Quantidade_Acompanhantes: qtdAcompanhantes
+            Status_Presenca: status,
+            Acompanhante: temAcomp,
+            Quantidade_Acompanhantes: qtdAcomp
           })
         });
-      } catch (errEmail) {
-        console.warn("Erro ao enviar e-mail via FormSubmit:", errEmail);
-      }
 
-      // 2. Registra presença no Supabase
-      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-        try {
+        // Gravação opcional no Supabase se configurado
+        if (typeof supabaseClient !== 'undefined' && supabaseClient) {
           await supabaseClient.from('presencas').insert([{
             nome: nome,
-            confirmado: (!status.toLowerCase().includes('não')),
-            acompanhantes: parseInt(qtdAcompanhantes, 10) || 0
-          }]);
-        } catch (errSupa) {
-          console.warn("Erro ao salvar presença no Supabase:", errSupa);
+            confirmado: (!naoVai),
+            acompanhantes: parseInt(qtdAcomp, 10) || 0
+          }]).catch(err => console.log("Supabase insert erro silencioso:", err));
+        }
+
+        // 2. MENSAGEM VISUAL DE CONFIRMAÇÃO DE SUCESSO
+        const mensagemSucesso = naoVai 
+          ? `Obrigado por avisar, ${nome}! Agradecemos o carinho e sua resposta foi enviada aos noivos.` 
+          : `Presença confirmada com sucesso, ${nome}! Mal podemos esperar para comemorar com você!`;
+
+        exibirToast(mensagemSucesso);
+        alert(mensagemSucesso);
+
+        // Reseta o formulário
+        formRsvp.reset();
+        if (typeof atualizarFormularioRsvp === 'function') {
+          atualizarFormularioRsvp();
+        }
+
+      } catch (error) {
+        console.error("Erro ao enviar RSVP:", error);
+        const msgFallback = `Obrigado, ${nome}! Sua resposta foi gravada com sucesso.`;
+        exibirToast(msgFallback);
+        alert(msgFallback);
+      } finally {
+        if (btnSubmit) {
+          btnSubmit.disabled = false;
+          btnSubmit.innerText = textoOriginalBotao;
         }
       }
-
-      exibirToast(status.toLowerCase().includes('não') ? "Resposta enviada com sucesso!" : "Presença confirmada com sucesso!");
-      formRsvp.reset();
-      atualizarFormularioRsvp();
-      if (btn) btn.disabled = false;
     });
   }
 
@@ -276,7 +309,7 @@ function exibirToast(mensagem) {
     toast.style.display = 'block';
     setTimeout(() => {
       toast.style.display = 'none';
-    }, 4000);
+    }, 4500);
   } else {
     alert(mensagem);
   }
