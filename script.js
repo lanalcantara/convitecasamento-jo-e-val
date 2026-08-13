@@ -5,13 +5,34 @@ window.abrirConviteComAnimacao = function() {
   const cover = document.getElementById('cover');
   const audio = document.getElementById('bg-music');
 
+  // 1. Esconde a capa do convite
   if (cover) {
     cover.classList.add('aberto');
+    setTimeout(() => {
+      cover.style.display = 'none';
+    }, 600);
   }
 
+  // 2. Libera a rolagem do site
+  document.body.style.overflow = 'auto';
+
+  // 3. Executa a música atrelada ao evento direto de clique
   if (audio) {
-    audio.volume = 0.35;
-    audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));
+    audio.volume = 0.35; // Volume suave de fundo em 35%
+    
+    // Tenta reproduzir e trata o desbloqueio do navegador
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log("Música iniciada com sucesso!");
+        })
+        .catch(error => {
+          console.log("O navegador bloqueou a reprodução automática:", error);
+          // Fallback: tenta reproduzir novamente em qualquer clique subsequente na tela
+          document.addEventListener('click', () => { audio.play(); }, { once: true });
+        });
+    }
   }
 };
 
