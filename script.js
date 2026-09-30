@@ -79,32 +79,40 @@ window.abrirConviteComAnimacao = function() {
   const envelopeContainer = document.getElementById('envelope-container');
   const audio = document.getElementById('bg-music');
 
-  // 1. Toca o áudio imediatamente
-  if (audio) {
-    audio.volume = 0.4;
-    audio.play().then(() => {
-      atualizarEstadoMusica(true);
-    }).catch(err => console.log("Áudio acionado no clique:", err));
+  // Previne múltiplos acionamentos durante a animação
+  if (envelopeContainer && envelopeContainer.classList.contains('opening')) {
+    return;
   }
 
-  // 2. Dispara animação 3D da aba do envelope e elevação do convite
+  // 1. Dispara animação 3D da aba do envelope e elevação do convite
   if (envelopeContainer) {
     envelopeContainer.classList.add('opening');
   }
 
-  // 3. Efeito suave de transição para o site principal
+  // 2. Ao completar a animação de abertura do envelope (após ~1s), faz a transição e inicia a música
   setTimeout(() => {
     if (cover) {
       cover.classList.add('aberto');
     }
     document.body.style.overflow = 'auto';
-  }, 950);
 
+    // 🎵 Toca a música apenas ao completar a animação e revelar a página principal do convite
+    if (audio && audio.paused) {
+      audio.volume = 0.4;
+      audio.play().then(() => {
+        atualizarEstadoMusica(true);
+      }).catch(err => {
+        console.log("Áudio iniciado na transição para a página principal:", err);
+      });
+    }
+  }, 1000);
+
+  // 3. Oculta completamente a capa do envelope após o término do fade
   setTimeout(() => {
     if (cover) {
       cover.style.display = 'none';
     }
-  }, 1600);
+  }, 1700);
 };
 
 function abrirConviteComAnimacao() {
