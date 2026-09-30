@@ -272,49 +272,83 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        // 1. Envio de E-mail via FormSubmit API para patriciajosalva@gmail.com
-        await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            _subject: `Confirmação de Presença: ${nome}`,
-            _template: 'box',
-            _language: 'pt',
-            _captcha: 'false',
-            "Nome do Convidado": nome,
-            "Status de Presença": status,
-            "Levará Acompanhante?": temAcomp,
-            "Quantidade de Acompanhantes": qtdAcomp,
-            "Data da Resposta": new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
-          })
-        }).catch(err => console.log("FormSubmit envio:", err));
+        // 1. Gravação no Supabase PRIMEIRO (para contagem correta no e-mail)
+        let totalConfirmados = 0;
+        let totalPessoas = 0;
+        let totalRecusas = 0;
 
-        // 2. Gravação no Supabase (se as tabelas estiverem criadas no painel)
         if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-          await supabaseClient.from('confirmacoes').insert([{
+          // Insere o novo RSVP
+          const { error: insertError } = await supabaseClient.from('confirmacoes').insert([{
             nome_completo: nome,
             vai_comparecer: status,
             quantidade_acompanhantes: parseInt(qtdAcomp, 10) || 0,
             nomes_acompanhantes: temAcomp === 'Sim' ? `${qtdAcomp} acompanhante(s)` : 'Nenhum'
-          }]).catch(async () => {
+          }]);
+
+          if (insertError) {
             // Tentativa alternativa na tabela presencas
             await supabaseClient.from('presencas').insert([{
               nome: nome,
               confirmado: (!naoVai),
               status: status,
               acompanhantes: parseInt(qtdAcomp, 10) || 0
-            }]).catch(err => console.log("Supabase insert:", err));
-          });
+            }]).catch(err => console.log("Supabase insert alternativo:", err));
+          }
+
+          // 🔢 Busca contagem atualizada de todos os confirmados
+          const { data: todos } = await supabaseClient
+            .from('confirmacoes')
+            .select('vai_comparecer, quantidade_acompanhantes')
+            .order('id', { ascending: true });
+
+          if (todos && todos.length > 0) {
+            todos.forEach(r => {
+              const naoVaiEste = (r.vai_comparecer || '').toLowerCase().includes('não') || (r.vai_comparecer || '').toLowerCase().includes('nao');
+              if (naoVaiEste) {
+                totalRecusas += 1;
+              } else {
+                totalConfirmados += 1;
+                totalPessoas += 1 + (parseInt(r.quantidade_acompanhantes, 10) || 0);
+              }
+            });
+          }
         }
+
+        // Monta linha de contagem para o e-mail
+        const linhaContagem = totalConfirmados > 0
+          ? `${totalConfirmados} convidado(s) confirmado(s) • ${totalPessoas} pessoa(s) no total • ${totalRecusas} recusa(s)`
+          : '(banco de dados indisponível — verifique o painel Supabase)';
+
+        // 2. Envio de E-mail via FormSubmit com CONTAGEM incluída
+        await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _subject: naoVai
+              ? `❌ Recusa de Presença: ${nome}`
+              : `✅ Confirmação de Presença: ${nome}`,
+            _template: 'box',
+            _language: 'pt',
+            _captcha: 'false',
+            "👤 Nome do Convidado": nome,
+            "📋 Status": status,
+            "👥 Levará Acompanhante?": temAcomp,
+            "🔢 Qtd. Acompanhantes": qtdAcomp,
+            "🕐 Data da Resposta": new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+            "━━━━━━━━━━━━━━━━━━━━━━━": "CONTAGEM GERAL ATUALIZADA",
+            "📊 Resumo da Lista": linhaContagem
+          })
+        }).catch(err => console.log("FormSubmit envio:", err));
 
         if (navigator.vibrate) navigator.vibrate(50);
 
-        const mensagemSucesso = naoVai 
-          ? `Obrigado por avisar, ${nome}! Agradecemos o carinho e sua resposta foi registrada com sucesso.` 
-          : `🎉 Presença confirmada com sucesso, ${nome}! Mal podemos esperar para comemorar juntos!`;
+        const mensagemSucesso = naoVai
+          ? `Obrigado por avisar, ${nome}! Agradecemos o carinho e sua resposta foi registrada.`
+          : `🎉 Presença confirmada, ${nome}! Mal podemos esperar para comemorar juntos!`;
 
         exibirToast(mensagemSucesso);
         alert(mensagemSucesso);
@@ -326,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       } catch (error) {
         console.error("Erro ao processar confirmação:", error);
-        const msgFallback = `Obrigado, ${nome}! Sua resposta foi gravada com sucesso.`;
+        const msgFallback = `Obrigado, ${nome}! Sua resposta foi registrada com sucesso.`;
         exibirToast(msgFallback);
         alert(msgFallback);
       } finally {
