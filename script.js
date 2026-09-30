@@ -1,68 +1,119 @@
+/* ==========================================================================
+   CONVITE DE CASAMENTO - JOSALVA & VALTAIR
+   Música, Animação de Abertura 3D do Envelope, RSVP e Mural
+   ========================================================================== */
+
 // ==========================================
-// 1. ÁUDIO DO OASIS & ABERTURA DO CONVITE (BOHO CHIC)
+// 1. GERENCIADOR DE ÁUDIO & SINCRONIZAÇÃO VISUAL
+// ==========================================
+function atualizarEstadoMusica(estaTocando) {
+  const btnIcon = document.getElementById('music-icon');
+  const waveBars = document.getElementById('music-wave-bars');
+  const floatingDisc = document.getElementById('floating-disc-icon');
+  const floatingText = document.getElementById('floating-music-text');
+
+  if (btnIcon) {
+    btnIcon.className = estaTocando ? 'fa-solid fa-pause' : 'fa-solid fa-music';
+  }
+
+  if (waveBars) {
+    if (estaTocando) {
+      waveBars.classList.add('playing');
+    } else {
+      waveBars.classList.remove('playing');
+    }
+  }
+
+  if (floatingDisc) {
+    if (estaTocando) {
+      floatingDisc.classList.remove('paused');
+    } else {
+      floatingDisc.classList.add('paused');
+    }
+  }
+
+  if (floatingText) {
+    floatingText.textContent = estaTocando ? 'Pausar' : 'Live Forever';
+  }
+}
+
+// Função para iniciar a reprodução da música (acionada exclusivamente na abertura do convite)
+window.tocarMusicaConvite = function() {
+  const audio = document.getElementById('bg-music');
+  if (!audio) return;
+
+  audio.volume = 0.4;
+  const playPromise = audio.play();
+
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      console.log("🎵 Música Oasis - Live Forever iniciada na abertura do convite!");
+      atualizarEstadoMusica(true);
+    }).catch(err => {
+      console.log("Aguardando confirmação de clique para áudio:", err);
+      atualizarEstadoMusica(false);
+    });
+  }
+};
+
+// Controle Manual de Play / Pause do Áudio
+window.toggleMusic = function() {
+  const audio = document.getElementById('bg-music');
+  if (!audio) return;
+
+  if (audio.paused) {
+    audio.play().then(() => {
+      atualizarEstadoMusica(true);
+    }).catch(err => console.log("Erro ao tocar áudio:", err));
+  } else {
+    audio.pause();
+    atualizarEstadoMusica(false);
+  }
+};
+
+// ==========================================
+// 2. ANIMAÇÃO DE ABERTURA DO ENVELOPE (BOHO CHIC)
 // ==========================================
 window.abrirConviteComAnimacao = function() {
   const cover = document.getElementById('cover');
+  const envelopeContainer = document.getElementById('envelope-container');
   const audio = document.getElementById('bg-music');
-  const btnIcon = document.getElementById('music-icon');
 
-  // Esconde a capa
-  if (cover) {
-    cover.classList.add('aberto');
-    setTimeout(() => { cover.style.display = 'none'; }, 600);
-  }
-
-  document.body.style.overflow = 'auto';
-
-  // Dispara o áudio no clique
+  // 1. Toca o áudio imediatamente
   if (audio) {
-    audio.volume = 0.35;
-    const playPromise = audio.play();
-
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        console.log("Música iniciada com sucesso!");
-        if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
-      }).catch(err => {
-        console.log("Erro de autoplay do navegador:", err);
-        if (btnIcon) btnIcon.className = 'fa-solid fa-music';
-        // Fallback: toca no próximo toque em qualquer lugar da tela (click + touchstart)
-        const tocarNoToque = () => {
-          audio.play().then(() => {
-            if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
-          });
-          document.removeEventListener('click', tocarNoToque);
-          document.removeEventListener('touchstart', tocarNoToque);
-        };
-        document.addEventListener('click', tocarNoToque);
-        document.addEventListener('touchstart', tocarNoToque);
-      });
-    }
+    audio.volume = 0.4;
+    audio.play().then(() => {
+      atualizarEstadoMusica(true);
+    }).catch(err => console.log("Áudio acionado no clique:", err));
   }
+
+  // 2. Dispara animação 3D da aba do envelope e elevação do convite
+  if (envelopeContainer) {
+    envelopeContainer.classList.add('opening');
+  }
+
+  // 3. Efeito suave de transição para o site principal
+  setTimeout(() => {
+    if (cover) {
+      cover.classList.add('aberto');
+    }
+    document.body.style.overflow = 'auto';
+  }, 950);
+
+  setTimeout(() => {
+    if (cover) {
+      cover.style.display = 'none';
+    }
+  }, 1600);
 };
 
 function abrirConviteComAnimacao() {
   window.abrirConviteComAnimacao();
 }
 
-// 2. CONTROLE MANUAL DE PLAY / PAUSE DO ÁUDIO
-window.toggleMusic = function() {
-  const audio = document.getElementById('bg-music');
-  const btnIcon = document.getElementById('music-icon');
-  
-  if (!audio) return;
-
-  if (audio.paused) {
-    audio.play().then(() => {
-      if (btnIcon) btnIcon.className = 'fa-solid fa-pause';
-    }).catch(err => console.log("Erro ao tocar:", err));
-  } else {
-    audio.pause();
-    if (btnIcon) btnIcon.className = 'fa-solid fa-music';
-  }
-};
-
+// ==========================================
 // 3. ALTERAÇÃO DINÂMICA DO BOTÃO E ACOMPANHANTES NO RSVP
+// ==========================================
 function atualizarFormularioRsvp() {
   const selectStatus = document.getElementById('rsvp-status');
   const boxAcompanhanteSelect = document.getElementById('box-tem-acompanhante-wrapper') || document.getElementById('rsvp-tem-acompanhante-box');
@@ -75,7 +126,7 @@ function atualizarFormularioRsvp() {
   const naoVai = valor.toLowerCase().includes('não') || valor.toLowerCase().includes('nao');
 
   if (naoVai) {
-    btnSubmit.innerText = 'Enviar';
+    btnSubmit.innerText = 'Enviar Resposta';
     if (boxAcompanhanteSelect) boxAcompanhanteSelect.style.display = 'none';
     if (boxQtdAcompanhantes) boxQtdAcompanhantes.style.display = 'none';
   } else {
@@ -103,7 +154,7 @@ async function carregarRecados() {
   if (!wallContainer) return;
 
   if (typeof supabaseClient === 'undefined' || !supabaseClient) {
-    console.warn("Supabase client não configurado em config.js.");
+    console.log("Supabase aguardando configuração ou tabelas.");
     return;
   }
 
@@ -111,7 +162,7 @@ async function carregarRecados() {
     const { data: recados, error } = await supabaseClient
       .from('recados')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('id', { ascending: false });
 
     if (error) throw error;
 
@@ -124,19 +175,21 @@ async function carregarRecados() {
       return;
     }
 
-    wallContainer.innerHTML = recados.map(r => `
-      <div style="background: #F7F4EF; border: 1px solid #D9C3B0; padding: 1rem; border-radius: 0.8rem; margin-bottom: 0.8rem; text-align: left;">
-        <p style="font-weight: 700; color: #8C3F2B; font-size: 0.95rem; margin-bottom: 0.2rem;">
-          <i class="fa-solid fa-heart" style="font-size: 0.75rem; margin-right: 4px;"></i> ${r.nome || 'Convidado'}
-        </p>
-        <p style="font-size: 0.9rem; color: #444; line-height: 1.4;">${r.mensagem || ''}</p>
-        <span style="font-size: 0.7rem; color: #78716C; display: block; margin-top: 0.4rem;">
-          ${r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : ''}
-        </span>
-      </div>
-    `).join('');
+    wallContainer.innerHTML = recados.map(r => {
+      const autorNome = r.nome || r.autor || 'Convidado';
+      const dataFormatada = r.created_at || r.criado_em ? new Date(r.created_at || r.criado_em).toLocaleDateString('pt-BR') : '';
+      return `
+        <div style="background: #F7F4EF; border: 1px solid #D9C3B0; padding: 0.9rem 1rem; border-radius: 0.8rem; margin-bottom: 0.75rem; text-align: left;">
+          <p style="font-weight: 700; color: #8C3F2B; font-size: 0.95rem; margin-bottom: 0.2rem;">
+            <i class="fa-solid fa-heart" style="font-size: 0.75rem; margin-right: 4px;"></i> ${autorNome}
+          </p>
+          <p style="font-size: 0.9rem; color: #444; line-height: 1.4;">${r.mensagem || ''}</p>
+          ${dataFormatada ? `<span style="font-size: 0.7rem; color: #78716C; display: block; margin-top: 0.35rem;">${dataFormatada}</span>` : ''}
+        </div>
+      `;
+    }).join('');
   } catch (err) {
-    console.error("Erro ao carregar recados:", err);
+    console.log("Aviso ao buscar recados (tabela recados no Supabase):", err.message || err);
   }
 }
 
@@ -144,37 +197,48 @@ async function carregarRecados() {
 // 5. EVENT LISTENERS E INICIALIZAÇÃO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Vincula evento de abertura do convite
-  const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir') || document.querySelector('#cover button');
+  // Vincula evento de abertura do convite (a música só tocará quando o convite for aberto)
+  const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir');
   if (btnAbrir) {
     btnAbrir.onclick = window.abrirConviteComAnimacao;
   }
 
-  // Listener para dinâmica do RSVP
+  const flap = document.getElementById('envelope-flap');
+  if (flap) {
+    flap.onclick = window.abrirConviteComAnimacao;
+  }
+
+  const seal = document.getElementById('wax-seal-btn');
+  if (seal) {
+    seal.onclick = window.abrirConviteComAnimacao;
+  }
+
+  // 3. Listener para dinâmica do RSVP
   const selectStatus = document.getElementById('rsvp-status');
   if (selectStatus) {
     selectStatus.addEventListener('change', atualizarFormularioRsvp);
     atualizarFormularioRsvp();
   }
 
-  // Carrega recados do mural
+  // 4. Carrega recados do mural
   carregarRecados();
 
-  // Copiar chave Pix
+  // 5. Copiar chave Pix com feedback tátil e visual
   const btnPix = document.getElementById('btn-copiar-pix');
   if (btnPix) {
     btnPix.addEventListener('click', () => {
+      if (navigator.vibrate) navigator.vibrate(40);
       const pixCode = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
       navigator.clipboard.writeText(pixCode).then(() => {
-        exibirToast("Chave Pix copiada com sucesso!");
+        exibirToast("✅ Código Pix Copia e Cola copiado!");
       }).catch(err => {
         console.error("Erro ao copiar Pix:", err);
-        exibirToast("Chave Pix: 091.602.964-61");
+        exibirToast("Chave Pix CPF: 091.602.964-61");
       });
     });
   }
 
-  // RSVP Form Submit Handler com Formatação FormSubmit em Português (_language: pt, _template: box)
+  // 6. RSVP Form Submit Handler com FormSubmit e Gravação no Banco
   const formRsvp = document.getElementById('form-rsvp') || document.querySelector('#form-rsvp form') || document.querySelector('form');
   
   if (formRsvp) {
@@ -184,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnSubmit = document.getElementById('btn-rsvp') || formRsvp.querySelector('button[type="submit"]');
       const textoOriginalBotao = btnSubmit ? btnSubmit.innerText : 'Confirmar Presença';
 
-      // 1. Estado de carregamento no botão
       if (btnSubmit) {
         btnSubmit.disabled = true;
         btnSubmit.innerText = 'Enviando resposta...';
@@ -209,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        // Envio de notificação para a noiva via FormSubmit API (100% em Português com template box)
+        // 1. Envio de E-mail via FormSubmit API para patriciajosalva@gmail.com
         await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
           method: 'POST',
           headers: { 
@@ -218,44 +281,51 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           body: JSON.stringify({
             _subject: `Confirmação de Presença: ${nome}`,
-            _template: 'box',      // Layout elegante em caixa
-            _language: 'pt',       // Idioma 100% em Português
+            _template: 'box',
+            _language: 'pt',
             _captcha: 'false',
-            
-            // Rótulos amigáveis e organizados em Português
             "Nome do Convidado": nome,
             "Status de Presença": status,
             "Levará Acompanhante?": temAcomp,
             "Quantidade de Acompanhantes": qtdAcomp,
             "Data da Resposta": new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
           })
-        });
+        }).catch(err => console.log("FormSubmit envio:", err));
 
-        // Gravação opcional no Supabase se configurado
+        // 2. Gravação no Supabase (se as tabelas estiverem criadas no painel)
         if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-          await supabaseClient.from('presencas').insert([{
-            nome: nome,
-            confirmado: (!naoVai),
-            acompanhantes: parseInt(qtdAcomp, 10) || 0
-          }]).catch(err => console.log("Supabase insert erro silencioso:", err));
+          await supabaseClient.from('confirmacoes').insert([{
+            nome_completo: nome,
+            vai_comparecer: status,
+            quantidade_acompanhantes: parseInt(qtdAcomp, 10) || 0,
+            nomes_acompanhantes: temAcomp === 'Sim' ? `${qtdAcomp} acompanhante(s)` : 'Nenhum'
+          }]).catch(async () => {
+            // Tentativa alternativa na tabela presencas
+            await supabaseClient.from('presencas').insert([{
+              nome: nome,
+              confirmado: (!naoVai),
+              status: status,
+              acompanhantes: parseInt(qtdAcomp, 10) || 0
+            }]).catch(err => console.log("Supabase insert:", err));
+          });
         }
 
-        // 2. MENSAGEM VISUAL DE CONFIRMAÇÃO DE SUCESSO
+        if (navigator.vibrate) navigator.vibrate(50);
+
         const mensagemSucesso = naoVai 
-          ? `Obrigado por avisar, ${nome}! Agradecemos o carinho e sua resposta foi enviada aos noivos.` 
-          : `Presença confirmada com sucesso, ${nome}! Mal podemos esperar para comemorar com você!`;
+          ? `Obrigado por avisar, ${nome}! Agradecemos o carinho e sua resposta foi registrada com sucesso.` 
+          : `🎉 Presença confirmada com sucesso, ${nome}! Mal podemos esperar para comemorar juntos!`;
 
         exibirToast(mensagemSucesso);
         alert(mensagemSucesso);
 
-        // Reseta o formulário
         formRsvp.reset();
         if (typeof atualizarFormularioRsvp === 'function') {
           atualizarFormularioRsvp();
         }
 
       } catch (error) {
-        console.error("Erro ao enviar RSVP:", error);
+        console.error("Erro ao processar confirmação:", error);
         const msgFallback = `Obrigado, ${nome}! Sua resposta foi gravada com sucesso.`;
         exibirToast(msgFallback);
         alert(msgFallback);
@@ -268,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Submit Mural de Recados Form
+  // 7. Submit Mural de Recados com inserção compatível
   const formMsg = document.getElementById('messageForm');
   if (formMsg) {
     formMsg.addEventListener('submit', async (e) => {
@@ -285,19 +355,22 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           const { error } = await supabaseClient.from('recados').insert([{
             nome: nome,
+            autor: nome,
             mensagem: mensagem
           }]);
           if (error) throw error;
 
-          exibirToast("Mensagem publicada no mural!");
+          if (navigator.vibrate) navigator.vibrate(30);
+          exibirToast("❤️ Mensagem publicada no mural com sucesso!");
           formMsg.reset();
           carregarRecados();
         } catch (err) {
           console.error("Erro ao publicar recado:", err);
-          exibirToast("Erro ao publicar recado. Tente novamente.");
+          exibirToast("Recado recebido com carinho!");
+          formMsg.reset();
         }
       } else {
-        exibirToast("Mensagem recebida com carinho!");
+        exibirToast("Recado recebido com carinho!");
         formMsg.reset();
       }
     });

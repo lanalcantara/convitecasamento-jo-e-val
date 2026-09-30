@@ -6,7 +6,7 @@ const CONFIG = {
   // 1. DADOS DO EVENTO - RECEPÇÃO DE COMEMORAÇÃO
   COUPLE_NAMES: 'Josalva & Valtair',
   EVENT_TYPE: 'Recepção de Comemoração com Amigos e Familiares',
-  EVENT_DATE: '2026-10-18T13:00:00',
+  EVENT_DATE: '2026-10-30T18:00:00',
   GOOGLE_MAPS_URL: 'https://maps.app.goo.gl/yRGEsEoDAZ6Uun5n8',
 
   // 2. CHAVE PIX REAL DOS NOIVOS
@@ -16,7 +16,7 @@ const CONFIG = {
 
   // 3. MÚSICA DE FUNDO (Live Forever — Oasis)
   AUDIO_TITLE: 'Live Forever — Oasis 🎵',
-  AUDIO_URL: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-acoustic-guitar-113243.mp3',
+  AUDIO_URL: 'live-forever.mp3',
 
   // 4. CREDENCIAIS REAIS DO SUPABASE (Projeto: ssfgxswkdbrjvqcpxcfp)
   SUPABASE_URL: 'https://ssfgxswkdbrjvqcpxcfp.supabase.co',
@@ -27,3 +27,14 @@ const CONFIG = {
 };
 
 window.CONFIG = CONFIG;
+
+// Inicialização automática do cliente Supabase para o navegador
+if (typeof supabase !== 'undefined' && supabase.createClient) {
+  try {
+    window.supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    console.log("✅ Supabase inicializado com sucesso.");
+  } catch (err) {
+    console.warn("Aviso ao inicializar Supabase:", err);
+  }
+}
+

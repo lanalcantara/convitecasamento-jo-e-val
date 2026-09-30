@@ -2,7 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F7F4EF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
   <!-- TÍTULO E META TAGS OPEN GRAPH ATUALIZADAS (FORÇAR CACHE WHATSAPP) -->
   <title>Convite casamento Josalva &amp; Valtair</title>
@@ -12,8 +15,8 @@
   <meta property="og:title" content="Convite casamento Josalva &amp; Valtair">
   <meta property="og:description" content="Recepção de Comemoração com Amigos e Familiares">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://convitecasamento-jo-e-val.vercel.app/">
-  <meta property="og:image" content="https://convitecasamento-jo-e-val.vercel.app/foto-de-inicio.png?v=2">
+  <meta property="og:url" content="https://jo-e-val.vercel.app/">
+  <meta property="og:image" content="https://jo-e-val.vercel.app/foto-de-inicio.png?v=2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:title" content="Convite casamento Josalva &amp; Valtair">
@@ -32,39 +35,77 @@
 </head>
 <body>
 
-  <!-- 🎵 ÁUDIO DO OASIS (LIVE FOREVER) VIA URL DIRETA E ESTÁVEL DA CDN ARCHIVE.ORG -->
-  <audio id="bg-music" src="https://ia801503.us.archive.org/15/items/OasisLiveForever_201610/Oasis%20-%20Live%20Forever.mp3" preload="auto" loop></audio>
+  <!-- 🎵 ÁUDIO DO OASIS (LIVE FOREVER) COM FALLBACKS LOCAIS E REMOTOS -->
+  <audio id="bg-music" preload="auto" loop playsinline>
+    <source src="live-forever.mp3" type="audio/mpeg">
+    <source src="assets/live-forever.mp3" type="audio/mpeg">
+    <source src="https://archive.org/download/oasis-live-forever-official-hd-remastered-video-tde-1-dqxw-joc-1/Oasis%20-%20Live%20Forever%20%28Official%20HD%20Remastered%20Video%29%20%5BTDe1DqxwJoc%5D%20%281%29.mp3" type="audio/mpeg">
+  </audio>
 
-  <!-- CAPA INICIAL DO CONVITE (#cover) COM FOTO DO CASAL NA PRAIA (foto-de-inicio.png) -->
+  <!-- CAPA INICIAL DO CONVITE (#cover) COM ANIMAÇÃO 3D REALISTA DE ENVELOPE -->
   <div id="cover">
-    <div class="card-capa" style="position: relative; background: #FFFDF9; border: 1px solid #E5D8CC; border-radius: 1.5rem; padding: 2rem 1.5rem; text-align: center; max-width: 420px; margin: 0 auto; box-shadow: 0 10px 30px rgba(140, 63, 43, 0.08);">
+    <!-- Partículas e pétalas flutuantes de fundo -->
+    <div class="ambient-petals" id="ambient-petals"></div>
+
+    <div class="envelope-container" id="envelope-container">
       
-      <!-- CONTAINER COMBINADO: FLORAL + FOTO DO CASAL -->
-      <div class="header-capa-combinação" style="position: relative; width: 100%; min-height: 220px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
-        
-        <!-- Floral Boho de fundo/canto -->
-        <img src="convite.jpg" alt="Flores Boho" class="img-floral-capa" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;">
-        
-        <!-- Foto do Casal na Praia (foto-de-inicio.png) -->
-        <div class="box-foto-capa" style="position: relative; z-index: 2; width: 170px; height: 170px; border-radius: 50%; overflow: hidden; border: 3px solid #D9C3B0; box-shadow: 0 6px 15px rgba(0,0,0,0.1); margin-left: 20px;">
-          <img 
-            src="foto-de-inicio.png" 
-            alt="Josalva &amp; Valtair" 
-            style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
-            onError="this.onerror=null; this.src='assets/foto-de-inicio.png';"
-          >
+      <!-- ABA SUPERIOR DO ENVELOPE (FLAP 3D) -->
+      <div class="envelope-flap" id="envelope-flap" onclick="abrirConviteComAnimacao()">
+        <div class="flap-crease"></div>
+        <!-- SELO DE CERA 3D COM MONOGRAMA J&V -->
+        <div class="wax-seal-container" id="wax-seal-btn" title="Clique para abrir o convite">
+          <div class="wax-seal-pulse"></div>
+          <div class="wax-seal">
+            <span class="seal-text">J&amp;V</span>
+          </div>
+          <div class="seal-hint"><i class="fa-solid fa-sparkles"></i> Toque para abrir</div>
         </div>
       </div>
 
-      <!-- DEMAIS ELEMENTOS INTACTOS (NÃO REMOVER NADA) -->
-      <div class="wax-seal" style="margin: 0 auto 0.8rem auto;">J&amp;V</div>
-      <p class="envelope-subtitle-script">Você está convidado</p>
-      <h1 class="envelope-title">Josalva &amp; Valtair</h1>
-      <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
+      <!-- BOLSO FRONTAL DO ENVELOPE -->
+      <div class="envelope-pocket">
+        <div class="pocket-shadow"></div>
+      </div>
 
-      <button id="btn-abrir" class="btn-abrir" onclick="abrirConviteComAnimacao()" style="margin-top: 1.2rem; cursor: pointer;">
-        Abrir Convite
-      </button>
+      <!-- CARTÃO / CONVITE INTERNO QUE DESLIZA SUAVEMENTE -->
+      <div class="card-capa" id="invitation-card">
+        
+        <!-- CONTAINER COMBINADO: FLORAL + FOTO DO CASAL -->
+        <div class="header-capa-combinação" style="position: relative; width: 100%; min-height: 200px; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: center;">
+          
+          <!-- Floral Boho de fundo/canto -->
+          <img src="convite.jpg" alt="Flores Boho" class="img-floral-capa" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;">
+          
+          <!-- Foto do Casal na Praia (foto-de-inicio.png) -->
+          <div class="box-foto-capa" style="position: relative; z-index: 2; width: 160px; height: 160px; border-radius: 50%; overflow: hidden; border: 3px solid #D9C3B0; box-shadow: 0 6px 15px rgba(0,0,0,0.1); margin-left: 15px;">
+            <img 
+              src="foto-de-inicio.png" 
+              alt="Josalva &amp; Valtair" 
+              style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
+              onError="this.onerror=null; this.src='assets/foto-de-inicio.png';"
+            >
+          </div>
+        </div>
+
+        <p class="envelope-subtitle-script">Você está convidado</p>
+        <h1 class="envelope-title">Josalva &amp; Valtair</h1>
+        <p class="envelope-concept">Recepção de Comemoração com Amigos e Familiares</p>
+        
+        <!-- Badge da Data 30/10/2026 na Capa -->
+        <div class="capa-date-pill">
+          <i class="fa-regular fa-calendar-check" style="color: #8C3F2B;"></i>
+          <span>30 de Outubro de 2026 (Sexta-feira) • 18h00</span>
+        </div>
+
+        <button id="btn-abrir" class="btn-abrir" onclick="abrirConviteComAnimacao()" style="margin-top: 1.1rem; cursor: pointer;">
+          <i class="fa-solid fa-envelope-open" style="margin-right: 6px;"></i> Abrir Convite
+        </button>
+
+        <p class="envelope-music-tag">
+          <i class="fa-solid fa-music"></i> Ao abrir, a música tocará
+        </p>
+      </div>
+
     </div>
   </div>
 
@@ -75,11 +116,23 @@
       <a href="#" class="logo-header">J &amp; V</a>
       
       <!-- BOTÃO DE PLAYER MANUAL DE ÁUDIO NO CABEÇALHO -->
-      <div class="header-music-info" onclick="toggleMusic()" style="cursor: pointer; background: #F7F4EF; padding: 0.4rem 0.8rem; border-radius: 9999px; border: 1px solid #E5D8CC; user-select: none;">
+      <div class="header-music-info" id="header-music-btn" onclick="toggleMusic()" style="cursor: pointer; background: #F7F4EF; padding: 0.45rem 0.9rem; border-radius: 9999px; border: 1px solid #E5D8CC; user-select: none; display: flex; align-items: center; gap: 8px;">
+        <div class="music-wave-bars" id="music-wave-bars">
+          <span class="bar b1"></span>
+          <span class="bar b2"></span>
+          <span class="bar b3"></span>
+          <span class="bar b4"></span>
+        </div>
         <i id="music-icon" class="fa-solid fa-music" style="color: #8C3F2B;"></i>
-        <span style="font-weight: 600; color: #8C3F2B;">Live Forever — Oasis</span>
+        <span class="music-text" style="font-weight: 600; color: #8C3F2B; font-size: 0.85rem;">Live Forever — Oasis</span>
       </div>
     </header>
+
+    <!-- BOTÃO FLUTUANTE DE ÁUDIO QUANDO A PÁGINA ROLA -->
+    <div id="floating-music-toggle" class="floating-music-btn" onclick="toggleMusic()" title="Tocar / Pausar Música">
+      <i class="fa-solid fa-compact-disc disc-spinning" id="floating-disc-icon"></i>
+      <span id="floating-music-text">Live Forever</span>
+    </div>
 
     <main class="container">
 
@@ -94,7 +147,7 @@
           
           <div class="hero-date-badge">
             <i class="fa-regular fa-calendar-check" style="color: #8C3F2B;"></i>
-            <span>18 de Outubro de 2026 • 13:00h</span>
+            <span>30 de Outubro de 2026 (Sexta-feira) • 18h00</span>
           </div>
         </div>
       </section>
@@ -113,11 +166,11 @@
           <div class="info-grid" style="display: flex; gap: 1rem; margin-bottom: 1.2rem;">
             <div class="info-box" style="flex: 1; background: #F7F4EF; padding: 0.8rem; border-radius: 0.75rem; text-align: center; border: 1px solid #E5D8CC;">
               <span style="font-size: 0.75rem; color: #78716C; font-weight: 600; display: block;">DATA</span>
-              <strong style="color: #8C3F2B; font-size: 1.1rem;">18/10/2026</strong>
+              <strong style="color: #8C3F2B; font-size: 1.05rem;">30/10 (Sexta)</strong>
             </div>
             <div class="info-box" style="flex: 1; background: #F7F4EF; padding: 0.8rem; border-radius: 0.75rem; text-align: center; border: 1px solid #E5D8CC;">
               <span style="font-size: 0.75rem; color: #78716C; font-weight: 600; display: block;">HORÁRIO</span>
-              <strong style="color: #8C3F2B; font-size: 1.1rem;">13:00h</strong>
+              <strong style="color: #8C3F2B; font-size: 1.1rem;">18h00</strong>
             </div>
           </div>
 
