@@ -37,25 +37,6 @@ function atualizarEstadoMusica(estaTocando) {
   }
 }
 
-// Função para iniciar a reprodução da música (acionada exclusivamente na abertura do convite)
-window.tocarMusicaConvite = function() {
-  const audio = document.getElementById('bg-music');
-  if (!audio) return;
-
-  audio.volume = 0.4;
-  const playPromise = audio.play();
-
-  if (playPromise !== undefined) {
-    playPromise.then(() => {
-      console.log("🎵 Música Oasis - Live Forever iniciada na abertura do convite!");
-      atualizarEstadoMusica(true);
-    }).catch(err => {
-      console.log("Aguardando confirmação de clique para áudio:", err);
-      atualizarEstadoMusica(false);
-    });
-  }
-};
-
 // Controle Manual de Play / Pause do Áudio
 window.toggleMusic = function() {
   const audio = document.getElementById('bg-music');
@@ -84,35 +65,40 @@ window.abrirConviteComAnimacao = function() {
     return;
   }
 
+  // Prepara o elemento de áudio dentro do evento de clique sem reproduzir nada ainda
+  if (audio) {
+    try { audio.load(); } catch (e) {}
+  }
+
   // 1. Dispara animação 3D da aba do envelope e elevação do convite
   if (envelopeContainer) {
     envelopeContainer.classList.add('opening');
   }
 
-  // 2. Ao completar a animação de abertura do envelope (após ~1s), faz a transição e inicia a música
+  // 2. Transição visual suave para a página principal (fade out da capa)
   setTimeout(() => {
     if (cover) {
       cover.classList.add('aberto');
     }
     document.body.style.overflow = 'auto';
+  }, 1000);
 
-    // 🎵 Toca a música apenas ao completar a animação e revelar a página principal do convite
+  // 3. Conclusão total da ação de abrir: capa removida e página principal 100% visível -> TOCA A MÚSICA
+  setTimeout(() => {
+    if (cover) {
+      cover.style.display = 'none';
+    }
+
+    // 🎵 A música toca EXCLUSIVAMENTE aqui: após o convite abrir completamente e a página principal estar visível
     if (audio && audio.paused) {
       audio.volume = 0.4;
       audio.play().then(() => {
         atualizarEstadoMusica(true);
       }).catch(err => {
-        console.log("Áudio iniciado na transição para a página principal:", err);
+        console.log("Áudio iniciado após abertura completa do convite:", err);
       });
     }
-  }, 1000);
-
-  // 3. Oculta completamente a capa do envelope após o término do fade
-  setTimeout(() => {
-    if (cover) {
-      cover.style.display = 'none';
-    }
-  }, 1700);
+  }, 1600);
 };
 
 function abrirConviteComAnimacao() {
@@ -205,6 +191,16 @@ async function carregarRecados() {
 // 5. EVENT LISTENERS E INICIALIZAÇÃO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+  // Garante que o áudio comece estritamente pausado na abertura do site
+  const audio = document.getElementById('bg-music');
+  if (audio) {
+    try {
+      audio.pause();
+      audio.currentTime = 0;
+    } catch (e) {}
+  }
+  atualizarEstadoMusica(false);
+
   // Vincula evento de abertura do convite (a música só tocará quando o convite for aberto)
   const btnAbrir = document.querySelector('.btn-abrir') || document.getElementById('btn-abrir');
   if (btnAbrir) {

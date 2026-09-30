@@ -26,17 +26,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261030_v5">
   
   <!-- Supabase Client SDK e Configuração -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js"></script>
+  <script src="config.js?v=20261030_v5"></script>
 </head>
 <body>
 
-  <!-- 🎵 ÁUDIO DO OASIS (LIVE FOREVER) COM FALLBACKS LOCAIS E REMOTOS -->
-  <audio id="bg-music" preload="auto" loop playsinline>
+  <!-- 🎵 ÁUDIO DO OASIS (LIVE FOREVER) COM PRELOAD NONE PARA NÃO TOCAR ANTES DE ABRIR -->
+  <audio id="bg-music" preload="none" loop playsinline>
     <source src="live-forever.mp3" type="audio/mpeg">
     <source src="assets/live-forever.mp3" type="audio/mpeg">
     <source src="https://archive.org/download/oasis-live-forever-official-hd-remastered-video-tde-1-dqxw-joc-1/Oasis%20-%20Live%20Forever%20%28Official%20HD%20Remastered%20Video%29%20%5BTDe1DqxwJoc%5D%20%281%29.mp3" type="audio/mpeg">
@@ -311,6 +315,6 @@
   <!-- Toast Notification -->
   <div id="toast" class="toast-msg"></div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20261030_abrir_v5"></script>
 </body>
 </html>
