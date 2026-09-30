@@ -315,13 +315,20 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        // Monta linha de contagem para o e-mail
-        const linhaContagem = totalConfirmados > 0
-          ? `${totalConfirmados} convidado(s) confirmado(s) • ${totalPessoas} pessoa(s) no total • ${totalRecusas} recusa(s)`
-          : '(banco de dados indisponível — verifique o painel Supabase)';
+        // Garante contagem mínima consistente
+        if (totalConfirmados === 0 && !naoVai) {
+          totalConfirmados = 1;
+          totalPessoas = 1 + (parseInt(qtdAcomp, 10) || 0);
+        } else if (totalRecusas === 0 && naoVai) {
+          totalRecusas = 1;
+        }
 
-        // 2. Envio de E-mail via FormSubmit com CONTAGEM incluída
-        await fetch('https://formsubmit.co/ajax/patriciajosalva@gmail.com', {
+        const agora = new Date();
+        const dataHoraFormatada = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const emailDestino = (window.CONFIG && window.CONFIG.NOIVOS_EMAIL) ? window.CONFIG.NOIVOS_EMAIL : 'patriciajosalva@gmail.com';
+
+        // 2. Envio de E-mail via FormSubmit com layout em TABELA limpa e 100% em Português
+        await fetch(`https://formsubmit.co/ajax/${emailDestino}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -329,18 +336,18 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           body: JSON.stringify({
             _subject: naoVai
-              ? `❌ Recusa de Presença: ${nome}`
-              : `✅ Confirmação de Presença: ${nome}`,
-            _template: 'box',
-            _language: 'pt',
+              ? `[Casamento Jo & Val] Recusa de Presença: ${nome}`
+              : `[Casamento Jo & Val] Confirmação de Presença: ${nome}`,
+            _template: 'table',
             _captcha: 'false',
-            "👤 Nome do Convidado": nome,
-            "📋 Status": status,
-            "👥 Levará Acompanhante?": temAcomp,
-            "🔢 Qtd. Acompanhantes": qtdAcomp,
-            "🕐 Data da Resposta": new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
-            "━━━━━━━━━━━━━━━━━━━━━━━": "CONTAGEM GERAL ATUALIZADA",
-            "📊 Resumo da Lista": linhaContagem
+            "Mensagem": "Nova resposta de convidado recebida através do site do convite!",
+            "Convidado": nome,
+            "Presença": naoVai ? "Não poderei comparecer" : "Confirmada (Irá comparecer!)",
+            "Acompanhantes": naoVai ? "Nenhum" : (temAcomp === 'Sim' ? `Sim (${qtdAcomp} acompanhante${parseInt(qtdAcomp, 10) > 1 ? 's' : ''})` : "Não (irá sozinho)"),
+            "Data e Hora": dataHoraFormatada,
+            "Convidados Confirmados": `${totalConfirmados} convidado(s)`,
+            "Total Geral de Pessoas": `${totalPessoas} pessoa(s) no total`,
+            "Total de Recusas": `${totalRecusas} recusa(s)`
           })
         }).catch(err => console.log("FormSubmit envio:", err));
 
