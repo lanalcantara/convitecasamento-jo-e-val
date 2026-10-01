@@ -23,7 +23,10 @@ const CONFIG = {
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZmd4c3drZGJyanZxY3B4Y2ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1NDY4ODAsImV4cCI6MjEwMjEyMjg4MH0.rI9k432ZbR8174zmdIA-NnP7dR0Ew6JVsp-Ol1sfsuU',
 
   // 5. ENVIADOR DE E-MAIL E DESTINATÁRIO
-  NOIVOS_EMAIL: 'patriciajosalva@gmail.com'
+  NOIVOS_EMAIL: 'patriciajosalva@gmail.com',
+
+  // 6. DATA DE CORTE PARA CONTAGEM (Ignora todos os testes anteriores e começa do zero a partir de agora)
+  DATA_INICIO_CONTAGEM: '2026-10-01T18:00:00Z'
 };
 
 window.CONFIG = CONFIG;

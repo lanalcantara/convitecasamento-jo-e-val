@@ -344,10 +344,22 @@ document.addEventListener('DOMContentLoaded', () => {
           // 🔢 Busca contagem atualizada de todos os confirmados no banco
           const { data: presencasRows } = await supabaseClient
             .from('presencas')
-            .select('status, qtd_acompanhantes');
+            .select('status, qtd_acompanhantes, created_at, nome_completo');
 
-          if (presencasRows && presencasRows.length > 0) {
-            presencasRows.forEach(r => {
+          // Data de corte para zerar os testes anteriores
+          const dataCorte = (window.CONFIG && window.CONFIG.DATA_INICIO_CONTAGEM)
+            ? new Date(window.CONFIG.DATA_INICIO_CONTAGEM)
+            : new Date('2026-10-01T18:00:00Z');
+
+          // Filtra ignorando os testes anteriores à data de corte
+          const linhasValidas = (presencasRows || []).filter(r => {
+            if (r.nome_completo && r.nome_completo.toLowerCase().includes('diagnostico')) return false;
+            if (!r.created_at) return true;
+            return new Date(r.created_at) >= dataCorte;
+          });
+
+          if (linhasValidas && linhasValidas.length > 0) {
+            linhasValidas.forEach(r => {
               const st = (r.status || '').toLowerCase();
               const naoVaiEste = st.includes('não') || st.includes('nao');
               if (naoVaiEste) {
@@ -360,9 +372,10 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             const { data: confRows } = await supabaseClient
               .from('confirmacoes')
-              .select('vai_comparecer, quantidade_acompanhantes');
+              .select('vai_comparecer, quantidade_acompanhantes, created_at');
             if (confRows && confRows.length > 0) {
-              confRows.forEach(r => {
+              const confValidas = confRows.filter(r => !r.created_at || new Date(r.created_at) >= dataCorte);
+              confValidas.forEach(r => {
                 const naoVaiEste = (r.vai_comparecer || '').toLowerCase().includes('não') || (r.vai_comparecer || '').toLowerCase().includes('nao');
                 if (naoVaiEste) {
                   totalRecusas += 1;
