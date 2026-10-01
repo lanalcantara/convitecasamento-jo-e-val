@@ -141,16 +141,69 @@ function toggleAcompanhantes(valor) {
 }
 
 // ==========================================
-// 4. MURAL DE RECADOS (SUPABASE)
+// 4. MURAL DE RECADOS (SUPABASE + CACHE LOCAL)
 // ==========================================
+const MURAL_STORAGE_KEY = 'casamento_jo_e_val_recados_locais';
+
+function obterRecadosLocais() {
+  try {
+    return JSON.parse(localStorage.getItem(MURAL_STORAGE_KEY) || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function salvarRecadoLocal(recado) {
+  try {
+    const lista = obterRecadosLocais();
+    lista.unshift(recado);
+    localStorage.setItem(MURAL_STORAGE_KEY, JSON.stringify(lista.slice(0, 50)));
+  } catch (e) {}
+}
+
+function renderizarMural(lista) {
+  const wallContainer = document.getElementById('mural-recados') || document.getElementById('mural-lista');
+  if (!wallContainer) return;
+
+  if (!lista || lista.length === 0) {
+    wallContainer.innerHTML = `
+      <div style="border: 2px dashed #D9C3B0; padding: 1.2rem 1rem; border-radius: 0.8rem; text-align: center;">
+        <p style="color: #78716C; font-style: italic; font-size: 0.85rem;">Seja o primeiro a deixar um recado carinhoso para os noivos!</p>
+      </div>
+    `;
+    return;
+  }
+
+  wallContainer.innerHTML = lista.map(r => {
+    const autorNome = r.nome || r.autor || 'Convidado';
+    const dataFormatada = r.created_at || r.criado_em 
+      ? new Date(r.created_at || r.criado_em).toLocaleDateString('pt-BR') 
+      : new Date().toLocaleDateString('pt-BR');
+    return `
+      <div style="background: #F7F4EF; border: 1px solid #D9C3B0; padding: 0.9rem 1rem; border-radius: 0.8rem; margin-bottom: 0.75rem; text-align: left; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+          <p style="font-weight: 700; color: #8C3F2B; font-size: 0.95rem; margin: 0;">
+            <i class="fa-solid fa-heart" style="font-size: 0.75rem; margin-right: 4px; color: #C85A32;"></i> ${autorNome}
+          </p>
+          <span style="font-size: 0.7rem; color: #78716C;">${dataFormatada}</span>
+        </div>
+        <p style="font-size: 0.9rem; color: #444; line-height: 1.4; margin: 0; white-space: pre-wrap;">${r.mensagem || ''}</p>
+      </div>
+    `;
+  }).join('');
+}
+
 async function carregarRecados() {
   const wallContainer = document.getElementById('mural-recados') || document.getElementById('mural-lista');
   if (!wallContainer) return;
 
-  if (typeof supabaseClient === 'undefined' || !supabaseClient) {
-    console.log("Supabase aguardando configuração ou tabelas.");
-    return;
+  // Renderiza imediatamente o cache local para o convidado nunca ver vazio
+  const locais = obterRecadosLocais();
+  if (locais.length > 0) {
+    renderizarMural(locais);
   }
+
+  if (typeof supabaseClient === 'undefined' || !supabaseClient) return;
 
   try {
     const { data: recados, error } = await supabaseClient
@@ -158,32 +211,16 @@ async function carregarRecados() {
       .select('*')
       .order('id', { ascending: false });
 
-    if (error) throw error;
-
-    if (!recados || recados.length === 0) {
-      wallContainer.innerHTML = `
-        <div style="border: 2px dashed #D9C3B0; padding: 1.2rem 1rem; border-radius: 0.8rem; text-align: center;">
-          <p style="color: #78716C; font-style: italic; font-size: 0.85rem;">Seja o primeiro a deixar um recado carinhoso para os noivos!</p>
-        </div>
-      `;
-      return;
+    if (!error && recados && recados.length > 0) {
+      const textos = new Set(recados.map(r => (r.mensagem || '') + (r.nome || r.autor || '')));
+      const extras = locais.filter(l => !textos.has((l.mensagem || '') + (l.nome || l.autor || '')));
+      renderizarMural([...extras, ...recados]);
+    } else if (locais.length === 0) {
+      renderizarMural([]);
     }
-
-    wallContainer.innerHTML = recados.map(r => {
-      const autorNome = r.nome || r.autor || 'Convidado';
-      const dataFormatada = r.created_at || r.criado_em ? new Date(r.created_at || r.criado_em).toLocaleDateString('pt-BR') : '';
-      return `
-        <div style="background: #F7F4EF; border: 1px solid #D9C3B0; padding: 0.9rem 1rem; border-radius: 0.8rem; margin-bottom: 0.75rem; text-align: left;">
-          <p style="font-weight: 700; color: #8C3F2B; font-size: 0.95rem; margin-bottom: 0.2rem;">
-            <i class="fa-solid fa-heart" style="font-size: 0.75rem; margin-right: 4px;"></i> ${autorNome}
-          </p>
-          <p style="font-size: 0.9rem; color: #444; line-height: 1.4;">${r.mensagem || ''}</p>
-          ${dataFormatada ? `<span style="font-size: 0.7rem; color: #78716C; display: block; margin-top: 0.35rem;">${dataFormatada}</span>` : ''}
-        </div>
-      `;
-    }).join('');
   } catch (err) {
-    console.log("Aviso ao buscar recados (tabela recados no Supabase):", err.message || err);
+    console.log("Aviso ao buscar recados no Supabase:", err.message || err);
+    if (locais.length === 0) renderizarMural([]);
   }
 }
 
@@ -349,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const agora = new Date();
         const dataHoraFormatada = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-        // 2. Envio de E-mail via FormSubmit com layout em TABELA limpa e 100% em Português
+        // 2. Envio de E-mail via FormSubmit com layout BOX em destaque e dados no topo
         try {
           const fsRes = await fetch(`https://formsubmit.co/ajax/${emailDestino}`, {
             method: 'POST',
@@ -359,18 +396,17 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({
               _subject: naoVai
-                ? `[Casamento Jo & Val] Recusa de Presença: ${nome}`
-                : `[Casamento Jo & Val] Confirmação de Presença: ${nome}`,
-              _template: 'table',
+                ? `❌ [RECUSA] ${nome} NÃO comparecerá • Total: ${totalPessoas} pessoas`
+                : `🎉 [CONFIRMADO] ${nome} ${temAcomp === 'Sim' ? `(+${qtdAcomp} acomp.)` : '(Sem acomp.)'} • TOTAL: ${totalPessoas} PESSOAS`,
+              _template: 'box',
               _captcha: 'false',
-              "Mensagem": "Nova resposta de convidado recebida através do site do convite!",
-              "Convidado": nome,
-              "Presença": naoVai ? "Não poderei comparecer" : "Confirmada (Irá comparecer!)",
-              "Acompanhantes": naoVai ? "Nenhum" : (temAcomp === 'Sim' ? `Sim (${qtdAcomp} acompanhante${parseInt(qtdAcomp, 10) > 1 ? 's' : ''})` : "Não (irá sozinho)"),
-              "Data e Hora": dataHoraFormatada,
-              "Convidados Confirmados": `${totalConfirmados} convidado(s)`,
-              "Total Geral de Pessoas": `${totalPessoas} pessoa(s) no total`,
-              "Total de Recusas": `${totalRecusas} recusa(s)`
+              "1. CONVIDADO": nome,
+              "2. PRESENÇA": naoVai ? "NÃO, NÃO PODERÁ COMPARECER ❌" : "SIM, PRESENÇA CONFIRMADA! 🎉",
+              "3. LEVARÁ ACOMPANHANTE?": naoVai ? "Não se aplica" : (temAcomp === 'Sim' ? `SIM — LEVARÁ ${qtdAcomp} ACOMPANHANTE(S) 👥` : "NÃO — IRÁ SOZINHO(A) 👤"),
+              "4. TOTAL GERAL DE PESSOAS": `🎯 ${totalPessoas} PESSOA(S) NO TOTAL (Titulares + Acompanhantes)`,
+              "5. CONVIDADOS TITULARES": `${totalConfirmados} convidado(s) principal(is)`,
+              "6. TOTAL DE RECUSAS": `${totalRecusas} recusa(s)`,
+              "7. DATA E HORA DO ENVIO": dataHoraFormatada
             })
           });
           const fsData = await fsRes.json().catch(() => ({}));
@@ -409,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. Submit Mural de Recados com inserção compatível
+  // 7. Submit Mural de Recados com renderização instantânea e persistência
   const formMsg = document.getElementById('messageForm');
   if (formMsg) {
     formMsg.addEventListener('submit', async (e) => {
@@ -422,27 +458,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!nome || !mensagem) return;
 
-      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-        try {
-          const { error } = await supabaseClient.from('recados').insert([{
-            nome: nome,
-            autor: nome,
-            mensagem: mensagem
-          }]);
-          if (error) throw error;
+      const novoRecado = {
+        nome: nome,
+        autor: nome,
+        mensagem: mensagem,
+        created_at: new Date().toISOString()
+      };
 
-          if (navigator.vibrate) navigator.vibrate(30);
-          exibirToast("❤️ Mensagem publicada no mural com sucesso!");
-          formMsg.reset();
-          carregarRecados();
-        } catch (err) {
-          console.error("Erro ao publicar recado:", err);
-          exibirToast("Recado recebido com carinho!");
-          formMsg.reset();
-        }
-      } else {
-        exibirToast("Recado recebido com carinho!");
-        formMsg.reset();
+      // 1. Salva no cache local e atualiza o mural na tela instantaneamente
+      salvarRecadoLocal(novoRecado);
+      carregarRecados();
+      formMsg.reset();
+
+      if (navigator.vibrate) navigator.vibrate(30);
+      exibirToast("❤️ Mensagem publicada no mural com sucesso!");
+
+      // 2. Grava no Supabase se a tabela existir
+      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+        supabaseClient.from('recados').insert([{
+          nome: nome,
+          autor: nome,
+          mensagem: mensagem
+        }]).then(({ error }) => {
+          if (error) console.log("Aviso Supabase recados:", error.message);
+        }).catch(err => console.log("Aviso Supabase recados:", err));
       }
     });
   }
