@@ -276,50 +276,69 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        // 1. Gravação no Supabase PRIMEIRO (para contagem correta no e-mail)
+        // 1. Gravação no Supabase (tabela presencas existente e confirmacoes como compatibilidade)
         let totalConfirmados = 0;
         let totalPessoas = 0;
         let totalRecusas = 0;
+        const emailDestino = (window.CONFIG && window.CONFIG.NOIVOS_EMAIL) ? window.CONFIG.NOIVOS_EMAIL : 'patriciajosalva@gmail.com';
 
         if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-          // Insere o novo RSVP
-          const { error: insertError } = await supabaseClient.from('confirmacoes').insert([{
+          // 1.1 Insere na tabela 'presencas' (tabela ativa existente no banco)
+          const { error: presencasError } = await supabaseClient.from('presencas').insert([{
+            nome_completo: nome,
+            status: status,
+            email_notificacao: emailDestino,
+            se_acompanhante: temAcomp,
+            qtd_acompanhantes: parseInt(qtdAcomp, 10) || 0
+          }]);
+
+          if (presencasError) {
+            console.warn("Aviso ao inserir em presencas:", presencasError.message);
+          }
+
+          // 1.2 Tenta também na tabela 'confirmacoes' para compatibilidade caso exista
+          await supabaseClient.from('confirmacoes').insert([{
             nome_completo: nome,
             vai_comparecer: status,
             quantidade_acompanhantes: parseInt(qtdAcomp, 10) || 0,
             nomes_acompanhantes: temAcomp === 'Sim' ? `${qtdAcomp} acompanhante(s)` : 'Nenhum'
-          }]);
+          }]).catch(() => {});
 
-          if (insertError) {
-            // Tentativa alternativa na tabela presencas
-            await supabaseClient.from('presencas').insert([{
-              nome: nome,
-              confirmado: (!naoVai),
-              status: status,
-              acompanhantes: parseInt(qtdAcomp, 10) || 0
-            }]).catch(err => console.log("Supabase insert alternativo:", err));
-          }
+          // 🔢 Busca contagem atualizada de todos os confirmados no banco
+          const { data: presencasRows } = await supabaseClient
+            .from('presencas')
+            .select('status, qtd_acompanhantes');
 
-          // 🔢 Busca contagem atualizada de todos os confirmados
-          const { data: todos } = await supabaseClient
-            .from('confirmacoes')
-            .select('vai_comparecer, quantidade_acompanhantes')
-            .order('id', { ascending: true });
-
-          if (todos && todos.length > 0) {
-            todos.forEach(r => {
-              const naoVaiEste = (r.vai_comparecer || '').toLowerCase().includes('não') || (r.vai_comparecer || '').toLowerCase().includes('nao');
+          if (presencasRows && presencasRows.length > 0) {
+            presencasRows.forEach(r => {
+              const st = (r.status || '').toLowerCase();
+              const naoVaiEste = st.includes('não') || st.includes('nao');
               if (naoVaiEste) {
                 totalRecusas += 1;
               } else {
                 totalConfirmados += 1;
-                totalPessoas += 1 + (parseInt(r.quantidade_acompanhantes, 10) || 0);
+                totalPessoas += 1 + (parseInt(r.qtd_acompanhantes, 10) || 0);
               }
             });
+          } else {
+            const { data: confRows } = await supabaseClient
+              .from('confirmacoes')
+              .select('vai_comparecer, quantidade_acompanhantes');
+            if (confRows && confRows.length > 0) {
+              confRows.forEach(r => {
+                const naoVaiEste = (r.vai_comparecer || '').toLowerCase().includes('não') || (r.vai_comparecer || '').toLowerCase().includes('nao');
+                if (naoVaiEste) {
+                  totalRecusas += 1;
+                } else {
+                  totalConfirmados += 1;
+                  totalPessoas += 1 + (parseInt(r.quantidade_acompanhantes, 10) || 0);
+                }
+              });
+            }
           }
         }
 
-        // Garante contagem mínima consistente
+        // Garante contagem mínima consistente se o banco estiver vazio ou offline
         if (totalConfirmados === 0 && !naoVai) {
           totalConfirmados = 1;
           totalPessoas = 1 + (parseInt(qtdAcomp, 10) || 0);
@@ -329,31 +348,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const agora = new Date();
         const dataHoraFormatada = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        const emailDestino = (window.CONFIG && window.CONFIG.NOIVOS_EMAIL) ? window.CONFIG.NOIVOS_EMAIL : 'patriciajosalva@gmail.com';
 
         // 2. Envio de E-mail via FormSubmit com layout em TABELA limpa e 100% em Português
-        await fetch(`https://formsubmit.co/ajax/${emailDestino}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            _subject: naoVai
-              ? `[Casamento Jo & Val] Recusa de Presença: ${nome}`
-              : `[Casamento Jo & Val] Confirmação de Presença: ${nome}`,
-            _template: 'table',
-            _captcha: 'false',
-            "Mensagem": "Nova resposta de convidado recebida através do site do convite!",
-            "Convidado": nome,
-            "Presença": naoVai ? "Não poderei comparecer" : "Confirmada (Irá comparecer!)",
-            "Acompanhantes": naoVai ? "Nenhum" : (temAcomp === 'Sim' ? `Sim (${qtdAcomp} acompanhante${parseInt(qtdAcomp, 10) > 1 ? 's' : ''})` : "Não (irá sozinho)"),
-            "Data e Hora": dataHoraFormatada,
-            "Convidados Confirmados": `${totalConfirmados} convidado(s)`,
-            "Total Geral de Pessoas": `${totalPessoas} pessoa(s) no total`,
-            "Total de Recusas": `${totalRecusas} recusa(s)`
-          })
-        }).catch(err => console.log("FormSubmit envio:", err));
+        try {
+          const fsRes = await fetch(`https://formsubmit.co/ajax/${emailDestino}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              _subject: naoVai
+                ? `[Casamento Jo & Val] Recusa de Presença: ${nome}`
+                : `[Casamento Jo & Val] Confirmação de Presença: ${nome}`,
+              _template: 'table',
+              _captcha: 'false',
+              "Mensagem": "Nova resposta de convidado recebida através do site do convite!",
+              "Convidado": nome,
+              "Presença": naoVai ? "Não poderei comparecer" : "Confirmada (Irá comparecer!)",
+              "Acompanhantes": naoVai ? "Nenhum" : (temAcomp === 'Sim' ? `Sim (${qtdAcomp} acompanhante${parseInt(qtdAcomp, 10) > 1 ? 's' : ''})` : "Não (irá sozinho)"),
+              "Data e Hora": dataHoraFormatada,
+              "Convidados Confirmados": `${totalConfirmados} convidado(s)`,
+              "Total Geral de Pessoas": `${totalPessoas} pessoa(s) no total`,
+              "Total de Recusas": `${totalRecusas} recusa(s)`
+            })
+          });
+          const fsData = await fsRes.json().catch(() => ({}));
+          if (fsData.success === 'false' || fsData.success === false) {
+            console.warn("FormSubmit status:", fsData.message);
+          }
+        } catch (fsErr) {
+          console.log("FormSubmit envio aviso:", fsErr);
+        }
 
         if (navigator.vibrate) navigator.vibrate(50);
 
