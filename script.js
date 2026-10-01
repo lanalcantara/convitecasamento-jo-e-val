@@ -264,18 +264,72 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Carrega recados do mural
   carregarRecados();
 
-  // 5. Copiar chave Pix com feedback tátil e visual
+  // Função universal de cópia compatível com mobile, webviews e desktop
+  function copiarTextoUniversal(texto) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(texto).catch(() => copiarFallback(texto));
+    }
+    return copiarFallback(texto);
+  }
+
+  function copiarFallback(texto) {
+    return new Promise((resolve, reject) => {
+      try {
+        const textArea = document.createElement("textarea");
+        textArea.value = texto;
+        textArea.style.position = "fixed";
+        textArea.style.top = "-9999px";
+        textArea.style.left = "-9999px";
+        textArea.setAttribute("readonly", "");
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        textArea.setSelectionRange(0, 99999);
+        const copiado = document.execCommand("copy");
+        document.body.removeChild(textArea);
+        if (copiado) resolve();
+        else reject(new Error("Falha ao copiar"));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  // 5. Copiar chave Pix com feedback tátil e visual completo
   const btnPix = document.getElementById('btn-copiar-pix');
   if (btnPix) {
-    btnPix.addEventListener('click', () => {
-      if (navigator.vibrate) navigator.vibrate(40);
+    btnPix.addEventListener('click', async () => {
+      if (navigator.vibrate) navigator.vibrate(50);
       const pixCode = "00020126330014BR.GOV.BCB.PIX0111091602964615204000053039865802BR5925Josalva Patricia Alexandr6009SAO PAULO62140510eBqAbNLnNd6304A435";
-      navigator.clipboard.writeText(pixCode).then(() => {
-        exibirToast("✅ Código Pix Copia e Cola copiado!");
-      }).catch(err => {
+      
+      try {
+        await copiarTextoUniversal(pixCode);
+
+        // 1. Feedback direto no próprio botão
+        const textoOriginal = btnPix.innerHTML;
+        btnPix.style.background = "#2E7D32";
+        btnPix.style.color = "#FFFFFF";
+        btnPix.innerHTML = '<i class="fa-solid fa-check" style="margin-right: 0.4rem;"></i><span>Código Pix Copiado!</span>';
+
+        // 2. Feedback no aviso fixo abaixo do botão
+        const avisoFixo = document.getElementById('pix-copiado-aviso');
+        if (avisoFixo) {
+          avisoFixo.style.display = 'block';
+        }
+
+        // 3. Feedback flutuante na tela (Toast)
+        exibirToast('<i class="fa-solid fa-circle-check" style="color: #4CAF50; margin-right: 6px;"></i> <strong>Código Pix Copiado!</strong><br>Abra o app do seu banco e cole.');
+
+        setTimeout(() => {
+          btnPix.style.background = "";
+          btnPix.style.color = "";
+          btnPix.innerHTML = textoOriginal;
+        }, 4000);
+
+      } catch (err) {
         console.error("Erro ao copiar Pix:", err);
-        exibirToast("Chave Pix CPF: 091.602.964-61");
-      });
+        prompt("Copie o código Pix abaixo:", pixCode);
+      }
     });
   }
 
@@ -399,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const agora = new Date();
         const dataHoraFormatada = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-        // 2. Envio de E-mail via FormSubmit com layout BOX em destaque e dados no topo
+        // 2. Envio de E-mail via FormSubmit com layout em tabela limpa e assunto sem filtros de spam
         try {
           const fsRes = await fetch(`https://formsubmit.co/ajax/${emailDestino}`, {
             method: 'POST',
@@ -409,17 +463,17 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({
               _subject: naoVai
-                ? `❌ [RECUSA] ${nome} NÃO comparecerá • Total: ${totalPessoas} pessoas`
-                : `🎉 [CONFIRMADO] ${nome} ${temAcomp === 'Sim' ? `(+${qtdAcomp} acomp.)` : '(Sem acomp.)'} • TOTAL: ${totalPessoas} PESSOAS`,
-              _template: 'box',
+                ? `[Casamento Jo & Val] Recusa: ${nome} - Total: ${totalPessoas} pessoas`
+                : `[Casamento Jo & Val] Confirmacao: ${nome} ${temAcomp === 'Sim' ? `(+${qtdAcomp} acomp.)` : '(Sem acomp.)'} - TOTAL: ${totalPessoas} PESSOAS`,
+              _template: 'table',
               _captcha: 'false',
-              "1. CONVIDADO": nome,
-              "2. PRESENÇA": naoVai ? "NÃO, NÃO PODERÁ COMPARECER ❌" : "SIM, PRESENÇA CONFIRMADA! 🎉",
-              "3. LEVARÁ ACOMPANHANTE?": naoVai ? "Não se aplica" : (temAcomp === 'Sim' ? `SIM — LEVARÁ ${qtdAcomp} ACOMPANHANTE(S) 👥` : "NÃO — IRÁ SOZINHO(A) 👤"),
-              "4. TOTAL GERAL DE PESSOAS": `🎯 ${totalPessoas} PESSOA(S) NO TOTAL (Titulares + Acompanhantes)`,
-              "5. CONVIDADOS TITULARES": `${totalConfirmados} convidado(s) principal(is)`,
-              "6. TOTAL DE RECUSAS": `${totalRecusas} recusa(s)`,
-              "7. DATA E HORA DO ENVIO": dataHoraFormatada
+              "Convidado": nome,
+              "Presença": naoVai ? "Não comparecerá" : "Confirmada (Irá comparecer!)",
+              "Acompanhantes": naoVai ? "Não se aplica" : (temAcomp === 'Sim' ? `Sim (${qtdAcomp} acompanhante(s))` : "Não (irá sozinho)"),
+              "Total Geral de Pessoas": `${totalPessoas} pessoa(s) no total`,
+              "Convidados Titulares": `${totalConfirmados} convidado(s)`,
+              "Total de Recusas": `${totalRecusas} recusa(s)`,
+              "Data e Hora": dataHoraFormatada
             })
           });
           const fsData = await fsRes.json().catch(() => ({}));
@@ -503,12 +557,13 @@ document.addEventListener('DOMContentLoaded', () => {
 function exibirToast(mensagem) {
   const toast = document.getElementById('toast');
   if (toast) {
-    toast.textContent = mensagem;
-    toast.style.display = 'block';
-    setTimeout(() => {
-      toast.style.display = 'none';
+    toast.innerHTML = mensagem;
+    toast.classList.add('show');
+    if (window.toastTimeout) clearTimeout(window.toastTimeout);
+    window.toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
     }, 4500);
   } else {
-    alert(mensagem);
+    alert(mensagem.replace(/<[^>]*>?/gm, ''));
   }
 }

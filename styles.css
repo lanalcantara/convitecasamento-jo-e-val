@@ -662,24 +662,36 @@ footer.main-footer {
 }
 
 /* ==========================================================================
-   TOAST NOTIFICATION (CENTRALIZADO NO MOBILE)
+/* ==========================================================================
+   TOAST NOTIFICATION (CENTRALIZADO NO MOBILE & DESKTOP)
    ========================================================================== */
 .toast-msg {
   position: fixed !important;
   bottom: max(24px, env(safe-area-inset-bottom)) !important;
   left: 50% !important;
-  transform: translateX(-50%) !important;
+  transform: translateX(-50%) translateY(30px) !important;
   width: calc(100% - 32px) !important;
-  max-width: 380px !important;
+  max-width: 400px !important;
   background: #2C221F !important;
   color: #FFFFFF !important;
-  padding: 12px 18px !important;
+  padding: 14px 20px !important;
   border-radius: 12px !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
-  border-left: 4px solid #C59B4E !important;
-  z-index: 999999 !important;
-  display: none !important;
-  font-size: 0.88rem !important;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.35) !important;
+  border-left: 5px solid #2E7D32 !important;
+  z-index: 9999999 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
   text-align: center !important;
   line-height: 1.4 !important;
+  pointer-events: none !important;
+}
+
+.toast-msg.show {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(-50%) translateY(0) !important;
+  pointer-events: auto !important;
 }
